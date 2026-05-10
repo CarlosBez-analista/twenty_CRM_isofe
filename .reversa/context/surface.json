@@ -1,0 +1,67 @@
+{
+  "generated_at": "2026-05-10T23:25:00Z",
+  "project_root": "c:/app-dev/twenty_CRM_isofe",
+  "languages": [
+    { "name": "TypeScript", "extensions": [".ts", ".tsx"], "file_count": 17737 },
+    { "name": "JSON", "extensions": [".json"], "file_count": 16407 },
+    { "name": "MDX", "extensions": [".mdx"], "file_count": 2434 },
+    { "name": "JavaScript", "extensions": [".js", ".cjs", ".mjs"], "file_count": 1000 }
+  ],
+  "primary_language": "TypeScript",
+  "frameworks": [
+    { "name": "Nx", "version": "22.5.4", "source": "package.json" },
+    { "name": "React", "version": "18.2.0", "source": "package.json" },
+    { "name": "NestJS", "version": "11.1.16", "source": "packages/twenty-server/package.json" },
+    { "name": "GraphQL", "version": "16.8.1", "source": "package.json" },
+    { "name": "TypeORM", "version": "0.3.20", "source": "packages/twenty-server/package.json" },
+    { "name": "Vite", "version": "7.0.0", "source": "package.json" }
+  ],
+  "package_manager": "yarn (4.13.0)",
+  "entry_points": [
+    { "path": "packages/twenty-server/src/main.ts", "type": "server_entry" },
+    { "path": "packages/twenty-front/src/main.tsx", "type": "app_entry" }
+  ],
+  "config_files": [
+    "nx.json",
+    "package.json",
+    "tsconfig.base.json",
+    ".yarnrc.yml",
+    "yarn.lock"
+  ],
+  "ci_cd": [
+    ".github/workflows/"
+  ],
+  "docker": {
+    "dockerfile": ".dockerignore",
+    "compose": "packages/twenty-docker/docker-compose.yml"
+  },
+  "database_hints": [
+    { "path": "packages/twenty-server/src/database/pg/", "type": "migrations_dir" },
+    { "path": "packages/twenty-server/src/database/clickHouse/", "type": "migrations_dir" }
+  ],
+  "test_framework": "Jest / Vitest",
+  "test_file_count": 1318,
+  "modules": [
+    "twenty-server",
+    "twenty-front",
+    "twenty-ui",
+    "twenty-sdk",
+    "twenty-shared",
+    "twenty-utils",
+    "twenty-zapier",
+    "twenty-emails",
+    "twenty-docs",
+    "twenty-website",
+    "twenty-cli"
+  ],
+  "total_files": 40125,
+  "organization_suggestion": {
+    "granularity": "module",
+    "rationale": "A base de código está organizada em um monorepo Nx com pacotes bem definidos e, internamente, tanto o front quanto o server utilizam pastas de módulos baseadas em domínio.",
+    "signals": [
+      { "type": "top_level_package_folders", "evidence": ["packages/twenty-front/", "packages/twenty-server/"] },
+      { "type": "domain_module_folders", "evidence": ["packages/twenty-server/src/modules/", "packages/twenty-front/src/modules/"] }
+    ],
+    "features": []
+  }
+}

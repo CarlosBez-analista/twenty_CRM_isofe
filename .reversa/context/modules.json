@@ -1,0 +1,172 @@
+{
+  "generated_at": "2026-05-10T23:37:35Z",
+  "modules": [
+    {
+      "name": "company",
+      "path": "packages/twenty-server/src/modules/company",
+      "purpose": "Gestão de entidades organizacionais (Empresas/Contas)",
+      "primary_files": [
+        "packages/twenty-server/src/modules/company/standard-objects/company.workspace-entity.ts",
+        "packages/twenty-server/src/modules/contact-creation-manager/services/create-company.service.ts",
+        "packages/twenty-front/src/modules/companies/types/Company.ts"
+      ],
+      "functions": [
+        {
+          "name": "createOrRestoreCompanies",
+          "file": "packages/twenty-server/src/modules/contact-creation-manager/services/create-company.service.ts",
+          "params": [
+            "companies: CompanyToCreate[]",
+            "workspaceId: string"
+          ],
+          "returns": "Promise<{ [domainName: string]: string }>",
+          "confidence": "confirmed"
+        }
+      ],
+      "entities": [
+        {
+          "name": "CompanyWorkspaceEntity",
+          "fields": [
+            { "name": "id", "type": "string", "required": true },
+            { "name": "name", "type": "string | null", "required": false },
+            { "name": "domainName", "type": "LinksMetadata", "required": true },
+            { "name": "employees", "type": "number | null", "required": false },
+            { "name": "address", "type": "AddressMetadata", "required": true },
+            { "name": "position", "type": "number", "required": true }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        {
+          "description": "Empresas são identificadas unicamente pelo domínio normalizado.",
+          "location": "packages/twenty-server/src/modules/contact-creation-manager/services/create-company.service.ts:75",
+          "confidence": "confirmed"
+        }
+      ],
+      "dependencies": [
+        "person",
+        "workspace-member",
+        "opportunity",
+        "note",
+        "task",
+        "attachment",
+        "timeline"
+      ],
+      "algorithms": [
+        {
+          "name": "Domain Enrichment",
+          "description": "Busca informações de nome e cidade via API externa baseada no domínio.",
+          "confidence": "confirmed"
+        }
+      ],
+      "complexity": "medium"
+    },
+    {
+      "name": "person",
+      "path": "packages/twenty-server/src/modules/person",
+      "purpose": "Gestão de contatos e indivíduos",
+      "primary_files": [
+        "packages/twenty-server/src/modules/person/standard-objects/person.workspace-entity.ts",
+        "packages/twenty-server/src/modules/contact-creation-manager/services/create-company-and-contact.service.ts",
+        "packages/twenty-front/src/modules/people/types/Person.ts"
+      ],
+      "functions": [
+        {
+          "name": "createCompaniesAndPeople",
+          "file": "packages/twenty-server/src/modules/contact-creation-manager/services/create-company-and-contact.service.ts",
+          "params": [
+            "connectedAccount: ConnectedAccountEntity",
+            "contactsToCreate: Contact[]",
+            "workspaceId: string",
+            "source: FieldActorSource",
+            "accountOwner: WorkspaceMemberWorkspaceEntity | null"
+          ],
+          "returns": "Promise<DeepPartial<PersonWorkspaceEntity>[]>",
+          "confidence": "confirmed"
+        }
+      ],
+      "entities": [
+        {
+          "name": "PersonWorkspaceEntity",
+          "fields": [
+            { "name": "id", "type": "string", "required": true },
+            { "name": "name", "type": "FullNameMetadata | null", "required": false },
+            { "name": "emails", "type": "EmailsMetadata", "required": true },
+            { "name": "jobTitle", "type": "string | null", "required": false },
+            { "name": "phones", "type": "PhonesMetadata", "required": true },
+            { "name": "companyId", "type": "string | null", "required": false }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        {
+          "description": "Contatos são vinculados a empresas automaticamente via domínio de e-mail se for e-mail profissional.",
+          "location": "packages/twenty-server/src/modules/contact-creation-manager/services/create-company-and-contact.service.ts:293",
+          "confidence": "confirmed"
+        }
+      ],
+      "dependencies": [
+        "company",
+        "workspace-member",
+        "opportunity",
+        "note",
+        "task",
+        "attachment",
+        "messaging",
+        "calendar",
+        "timeline"
+      ],
+      "algorithms": [
+        {
+          "name": "Name Parsing",
+          "description": "Extrai nome e sobrenome heuristicamente do handle do e-mail ou display name.",
+          "confidence": "confirmed"
+        }
+      ],
+      "complexity": "medium"
+    },
+    {
+      "name": "opportunity",
+      "path": "packages/twenty-server/src/modules/opportunity",
+      "purpose": "Gestão de oportunidades de negócio e pipeline de vendas",
+      "primary_files": [
+        "packages/twenty-server/src/modules/opportunity/standard-objects/opportunity.workspace-entity.ts",
+        "packages/twenty-server/src/engine/workspace-manager/twenty-standard-application/utils/view/compute-standard-opportunity-views.util.ts"
+      ],
+      "functions": [],
+      "entities": [
+        {
+          "name": "OpportunityWorkspaceEntity",
+          "fields": [
+            { "name": "id", "type": "string", "required": true },
+            { "name": "name", "type": "string | null", "required": false },
+            { "name": "amount", "type": "CurrencyMetadata | null", "required": false },
+            { "name": "stage", "type": "string", "required": true },
+            { "name": "closeDate", "type": "Date | null", "required": false },
+            { "name": "companyId", "type": "string | null", "required": false }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        {
+          "description": "Kanban de oportunidades agrupa por estágio e soma o campo amount.",
+          "location": "packages/twenty-server/src/engine/workspace-manager/twenty-standard-application/utils/view/compute-standard-opportunity-views.util.ts:37",
+          "confidence": "confirmed"
+        }
+      ],
+      "dependencies": [
+        "company",
+        "person",
+        "workspace-member",
+        "note",
+        "task",
+        "attachment",
+        "timeline"
+      ],
+      "algorithms": [],
+      "complexity": "low"
+    }
+  ]
+}
