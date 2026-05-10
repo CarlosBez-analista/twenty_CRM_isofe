@@ -167,6 +167,70 @@
       ],
       "algorithms": [],
       "complexity": "low"
+    },
+    {
+      "name": "task",
+      "path": "packages/twenty-server/src/modules/task",
+      "purpose": "Gestão de tarefas, lembretes e acompanhamentos",
+      "primary_files": [
+        "packages/twenty-server/src/modules/task/standard-objects/task.workspace-entity.ts",
+        "packages/twenty-server/src/modules/task/standard-objects/task-target.workspace-entity.ts",
+        "packages/twenty-server/src/modules/task/query-hooks/task-post-query-hook.service.ts"
+      ],
+      "functions": [
+        {
+          "name": "postQuery",
+          "file": "packages/twenty-server/src/modules/task/query-hooks/task-post-query-hook.service.ts",
+          "params": [
+            "context: WorkspaceQueryHookContext",
+            "next: () => Promise<any>"
+          ],
+          "returns": "Promise<any>",
+          "confidence": "confirmed"
+        }
+      ],
+      "entities": [
+        {
+          "name": "TaskWorkspaceEntity",
+          "fields": [
+            { "name": "id", "type": "string", "required": true },
+            { "name": "title", "type": "string | null", "required": false },
+            { "name": "bodyV2", "type": "RichTextMetadata | null", "required": false },
+            { "name": "dueAt", "type": "Date | null", "required": false },
+            { "name": "status", "type": "string | null", "required": false },
+            { "name": "assigneeId", "type": "string | null", "required": false }
+          ],
+          "confidence": "confirmed"
+        },
+        {
+          "name": "TaskTargetWorkspaceEntity",
+          "fields": [
+            { "name": "id", "type": "string", "required": true },
+            { "name": "taskId", "type": "string | null", "required": false },
+            { "name": "targetPersonId", "type": "string | null", "required": false },
+            { "name": "targetCompanyId", "type": "string | null", "required": false },
+            { "name": "targetOpportunityId", "type": "string | null", "required": false }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        {
+          "description": "Utiliza uma entidade polimórfica (TaskTarget) para vincular tarefas a diferentes tipos de objetos.",
+          "location": "packages/twenty-server/src/modules/task/standard-objects/task-target.workspace-entity.ts",
+          "confidence": "confirmed"
+        }
+      ],
+      "dependencies": [
+        "company",
+        "person",
+        "opportunity",
+        "workspace-member",
+        "attachment",
+        "timeline"
+      ],
+      "algorithms": [],
+      "complexity": "medium"
     }
   ]
 }

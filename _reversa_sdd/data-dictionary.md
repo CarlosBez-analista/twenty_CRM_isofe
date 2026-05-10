@@ -119,3 +119,46 @@ Representa uma oportunidade de negócio ou venda no CRM.
 | `Opportunity` | 1:N | `TimelineActivity` | `timelineActivities` | Histórico de atividades. |
 
 ---
+
+## Módulo: Task
+
+### Entidade: `Task` (Standard Object)
+Representa uma tarefa, lembrete ou item de checklist.
+
+| Campo | Tipo Legado | Tipo Físico (DB) | Obrigatório | Descrição | Escala |
+|-------|-------------|------------------|:-----------:|-----------|:------:|
+| `id` | `UUID` | `uuid` | ✅ | Identificador único universal. | 🟢 |
+| `createdAt` | `DateTime` | `timestamp` | ✅ | Data de criação. | 🟢 |
+| `updatedAt` | `DateTime` | `timestamp` | ✅ | Última atualização. | 🟢 |
+| `deletedAt` | `DateTime` | `timestamp` | ❌ | Data de exclusão. | 🟢 |
+| `title` | `TEXT` | `varchar` | ❌ | Título da tarefa. | 🟢 |
+| `bodyV2` | `RICH_TEXT` | `jsonb` | ❌ | Conteúdo detalhado da tarefa. | 🟢 |
+| `dueAt` | `DATE_TIME` | `timestamp` | ❌ | Prazo para conclusão. | 🟢 |
+| `status` | `SELECT` | `varchar` | ✅ | Status (`TODO`, `IN_PROGRESS`, `DONE`). | 🟢 |
+| `position` | `POSITION` | `integer` | ✅ | Ordem de exibição. | 🟢 |
+| `assigneeId` | `UUID` | `uuid` | ❌ | ID do responsável pela tarefa. | 🟢 |
+| `createdBy` | `ACTOR` | `jsonb` | ✅ | Dados do criador. | 🟢 |
+| `updatedBy` | `ACTOR` | `jsonb` | ✅ | Dados de quem atualizou. | 🟢 |
+| `searchVector` | `TSVECTOR` | `tsvector` | ✅ | Vetor de busca textual. | 🟢 |
+
+### Entidade: `TaskTarget` (Standard Object - Link)
+Entidade de ligação polimórfica que conecta tarefas a outros objetos.
+
+| Campo | Tipo Legado | Tipo Físico (DB) | Obrigatório | Descrição | Escala |
+|-------|-------------|------------------|:-----------:|-----------|:------:|
+| `id` | `UUID` | `uuid` | ✅ | ID do vínculo. | 🟢 |
+| `taskId` | `UUID` | `uuid` | ✅ | ID da tarefa pai. | 🟢 |
+| `targetPersonId` | `UUID` | `uuid` | ❌ | ID do contato alvo. | 🟢 |
+| `targetCompanyId` | `UUID` | `uuid` | ❌ | ID da empresa alvo. | 🟢 |
+| `targetOpportunityId` | `UUID` | `uuid` | ❌ | ID da oportunidade alvo. | 🟢 |
+
+### Relacionamentos (Task)
+
+| Origem | Tipo | Destino | Campo Relacionado | Descrição |
+|--------|------|---------|-------------------|-----------|
+| `Task` | N:1 | `WorkspaceMember` | `assignee` | Usuário responsável pela execução. |
+| `Task` | 1:N | `TaskTarget` | `taskTargets` | Vínculos com outros objetos do sistema. |
+| `Task` | 1:N | `Attachment` | `attachments` | Arquivos anexados à tarefa. |
+| `Task` | 1:N | `TimelineActivity` | `timelineActivities` | Registro na linha do tempo. |
+
+---

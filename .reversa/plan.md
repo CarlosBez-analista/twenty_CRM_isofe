@@ -21,7 +21,7 @@
 - [x] **Archaeologist** — Análise do módulo `company`
 - [x] **Archaeologist** — Análise do módulo `person`
 - [x] **Archaeologist** — Análise do módulo `opportunity`
-- [ ] **Archaeologist** — Análise do módulo `task`
+- [x] **Archaeologist** — Análise do módulo `task`
 - [ ] **Archaeologist** — Análise do módulo `workflow`
 - [ ] **Archaeologist** — Análise do módulo `messaging`
 - [ ] **Archaeologist** — Análise do módulo `calendar`

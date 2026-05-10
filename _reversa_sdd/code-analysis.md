@@ -87,3 +87,32 @@ A entidade central é a `OpportunityWorkspaceEntity`:
 
 ---
 
+## Módulo: Task
+**Status:** 🟢 ANALISADO
+**Complexidade:** Média
+**Responsabilidade:** Gestão de tarefas, lembretes e acompanhamentos.
+
+### Arquitetura e Fluxo de Controle
+O módulo `task` segue o padrão de `standard-object` do Twenty CRM. Ele é projetado para ser um módulo transversal, conectando-se a quase todos os outros objetos principais (Company, Person, Opportunity) através de uma entidade de ligação polimórfica chamada `TaskTarget`.
+
+A lógica de manipulação de dados utiliza `query-hooks` para garantir a integridade em operações de deleção e restauração em massa.
+
+### Algoritmos e Lógicas Principais
+1. **Relacionamento Polimórfico (Targeting):** Diferente de um vínculo direto, o sistema utiliza `TaskTarget` para permitir que uma única tarefa seja associada a múltiplos objetos de diferentes tipos simultaneamente.
+2. **Máquina de Estados Simples:** O campo `status` utiliza um enum (`TODO`, `IN_PROGRESS`, `DONE`) para controlar o ciclo de vida da tarefa.
+3. **Gerenciamento de Posição:** Utiliza o campo `position` para permitir a reordenação manual de tarefas em listas e quadros Kanban.
+4. **Indexação de Busca:** O `searchVector` é gerado a partir do `title` (peso alto) e do `bodyV2` (conteúdo rico).
+
+### Estruturas de Dados
+A entidade central é a `TaskWorkspaceEntity`:
+- **Rich Text:** O campo `bodyV2` armazena o conteúdo da tarefa em formato estruturado (RichTextMetadata).
+- **DateTime:** O campo `dueAt` armazena a data de vencimento.
+- **Relacionamento com Usuário:** Vincula-se a `WorkspaceMember` através do campo `assignee`.
+- **Anexos:** Relacionamento direto com o módulo de `attachment`.
+
+### Metadados e Configurações
+- **Visões Padrão:** O sistema gera automaticamente visões de "Todas as Tarefas", "Por Status" (Kanban) e "Atribuídas a Mim".
+- **Configuração de Status:** Cada status possui uma cor associada (`TODO`: sky, `IN_PROGRESS`: purple, `DONE`: green).
+- **Segurança:** Utiliza metadados de `Actor` para rastrear criação e última modificação.
+
+---

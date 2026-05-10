@@ -31,7 +31,8 @@
       "modules_analyzed": [
         "company",
         "person",
-        "opportunity"
+        "opportunity",
+        "task"
       ]
     }
   },
