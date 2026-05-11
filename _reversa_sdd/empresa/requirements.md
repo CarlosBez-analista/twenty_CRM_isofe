@@ -81,12 +81,17 @@ Cenário: Soft-delete de uma empresa
 
 ## 9. Esclarecimentos
 
-> Nenhuma sessão de dúvidas registrada ainda. Rode `/reversa-clarify` quando houver `[DÚVIDA]` pendente.
+> Sessão de dúvidas respondida pelo usuário em 2026-05-11.
+
+| Ponto | Resposta do usuário | Classificação |
+|-------|---------------------|---------------|
+| Regra de exclusão com oportunidades abertas | Sim, por padrão não pode excluir empresa com oportunidade em andamento. | 🟢 CONFIRMADO |
+| Campo `position` | Atualmente sequencial. Roadmap: drag-and-drop com atualização automática, global por workspace. | 🟡 INFERIDO (roadmap) |
 
 ## 10. Lacunas
 
-- 🔴 [DÚVIDA] Existe alguma regra de negócio que impeça uma empresa de ser excluída se ela tiver oportunidades em andamento (abertas)?
-- 🔴 [DÚVIDA] O campo `position` (ordem de exibição) é atualizado automaticamente ao arrastar itens na interface ou apenas sequencial?
+- 🟢 **[RESOLVIDA]** Regra de exclusão: empresa com oportunidades ativas **não pode ser excluída**. (Respondida em 2026-05-11)
+- 🟡 **[ROADMAP]** Campo `position` drag-and-drop global por workspace.
 
 ## 11. Histórico de alterações
 

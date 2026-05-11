@@ -82,12 +82,17 @@ Cenário: Restauração de contato removido
 
 ## 9. Esclarecimentos
 
-> Nenhuma sessão de dúvidas registrada ainda. Rode `/reversa-clarify` quando houver `[DÚVIDA]` pendente.
+> Sessão de dúvidas respondida pelo usuário em 2026-05-11.
+
+| Ponto | Resposta | Classificação |
+|-------|----------|---------------|
+| Desduplicação de e-mail | Sistema exibe **alerta** mas permite criação dupla se usuário confirmar. E-mail **não é campo obrigatório**. | 🟢 CONFIRMADO |
+| Campo `position` | Temporariamente por Pasta/Categoria. Roadmap: drag-and-drop global por workspace via batch update de IDs. Ordem padrão crescente. | 🟡 INFERIDO (roadmap) |
 
 ## 10. Lacunas
 
-- 🔴 [DÚVIDA] Como o sistema lida com a desduplicação se o mesmo e-mail for inserido em duas pessoas diferentes?
-- 🔴 [DÚVIDA] O campo `position` é global por workspace ou filtrado por alguma visualização?
+- 🟢 **[RESOLVIDA]** Desduplicação de e-mail: alerta + confirmação opcional pelo usuário. (Respondida em 2026-05-11)
+- 🟡 **[ROADMAP]** Campo `position` drag-and-drop via batch update de IDs, global por workspace.
 
 ## 11. Histórico de alterações
 

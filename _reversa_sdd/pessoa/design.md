@@ -66,5 +66,5 @@ Baseada em `Person.ts` (packages/twenty-front).
 
 ## 5. Lacunas de Design
 
-- 🔴 [DÚVIDA] O tratamento de Avatares utiliza S3 local ou provedor externo?
-- 🔴 [DÚVIDA] Existe lógica de normalização de telefone (E.164) antes da persistência?
+- 🟢 **[RESOLVIDA] Storage de Avatares:** Por padrão usa storage local. Provídores configuráveis via `.env`: Cloudinary, Backblaze, Bun.ai, Google Cloud, S3. ✅ Respondida em 2026-05-11.
+- 🟢 **[RESOLVIDA] Normalização de Telefone:** Implementar máscara dinâmica no padrão brasileiro `(DD) 99999-9999`, aplicando formatação em tempo real. Não usa E.164 — usa máscara visual BR. ✅ Respondida em 2026-05-11.

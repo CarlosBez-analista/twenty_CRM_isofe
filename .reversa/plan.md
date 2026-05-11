@@ -51,9 +51,9 @@
 
 ## Fase 5: Revisão ✅
 
-- [ ] **Revisor** — Revisão cruzada de specs
-- [ ] **Revisor** — Resolução de lacunas com o usuário
-- [ ] **Revisor** — Relatório de confiança final
+- [x] **Revisor** — Revisão cruzada de specs
+- [x] **Revisor** — Resolução de lacunas com o usuário (42 perguntas respondidas em 3 arquivos)
+- [x] **Revisor** — Relatório de confiança final (`confidence-report.md`)
 
 ---
 

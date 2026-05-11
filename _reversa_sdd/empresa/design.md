@@ -67,5 +67,5 @@ O módulo de Empresa não mantém um estado transicional complexo (como uma Oppo
 - Eventos de Webhook disparados no barramento de eventos internos: `company.created`, `company.updated`, `company.deleted`.
 
 ## Riscos e Lacunas
-- 🔴 **Desduplicação:** Não está claro se o sistema impede proativamente a criação de empresas com o mesmo `domainName` (Restrição UNIQUE). Necessita de validação humana ou testes.
+- 🟢 **Desduplicação:** O `domainName` deve ser ÚNICO por projeto/empresa (constraint UNIQUE). Um cliente pode ter múltiplos domainNames, mas nunca pode haver dois registros com o mesmo domínio em projetos distintos. ✅ Respondida pelo usuário em 2026-05-11.
 - 🟡 **Enriquecimento Síncrono vs Assíncrono:** Assumimos que o enriquecimento de dados pelo `domainName` acontece por background job, mas a confirmação do mecanismo exato requer inspeção de pacotes externos.

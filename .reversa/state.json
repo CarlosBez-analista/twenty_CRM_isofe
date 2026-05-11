@@ -8,16 +8,15 @@
   "doc_level": "detalhado",
   "output_folder": "_reversa_sdd",
   "forward_folder": "_reversa_forward",
-  "phase": "revisao",
+  "phase": "concluido",
   "completed": [
     "reconhecimento",
     "escavacao",
     "interpretacao",
-    "geracao"
-  ],
-  "pending": [
+    "geracao",
     "revisao"
   ],
+  "pending": [],
   "checkpoints": {
     "scout": {
       "completed_at": "2026-05-10T23:25:00Z",
@@ -64,6 +63,25 @@
         "_reversa_sdd/erd-complete.md",
         "_reversa_sdd/traceability/spec-impact-matrix.md",
         "_reversa_sdd/deployment.md"
+      ]
+    },
+    "reviewer": {
+      "completed_at": "2026-05-11T21:38:00Z",
+      "specs_reviewed": 13,
+      "questions_generated": 42,
+      "questions_answered": 42,
+      "reclassifications": {
+        "red_to_green": 21,
+        "red_to_yellow": 17,
+        "red_remaining": 4
+      },
+      "confidence_general": "75%",
+      "files": [
+        "_reversa_sdd/confidence-report.md",
+        "_reversa_sdd/gaps.md",
+        "_reversa_sdd/questions_core.md",
+        "_reversa_sdd/questions_integrations.md",
+        "_reversa_sdd/questions_infra.md"
       ]
     }
   },
