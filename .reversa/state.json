@@ -3,18 +3,18 @@
   "project": "twenty-crm-erp",
   "user_name": "Bez",
   "chat_language": "pt-br",
-  "doc_language": "Português",
+  "doc_language": "Portugu\u00eas",
   "answer_mode": "chat",
   "doc_level": "detalhado",
   "output_folder": "_reversa_sdd",
   "forward_folder": "_reversa_forward",
-  "phase": "escavacao",
+  "phase": "geracao",
   "completed": [
-    "reconhecimento"
+    "reconhecimento",
+    "escavacao",
+    "interpretacao"
   ],
   "pending": [
-    "escavacao",
-    "interpretacao",
     "geracao",
     "revisao"
   ],
@@ -37,7 +37,33 @@
         "messaging",
         "calendar",
         "note",
-        "attachment"
+        "attachment",
+        "workspace-member",
+        "connected-account",
+        "timeline",
+        "dashboard"
+      ]
+    },
+    "detective": {
+      "completed_at": "2026-05-11T01:03:00Z",
+      "files": [
+        "_reversa_sdd/domain.md",
+        "_reversa_sdd/state-machines.md",
+        "_reversa_sdd/permissions.md",
+        "_reversa_sdd/adrs/0001-clickhouse-metered-billing.md",
+        "_reversa_sdd/adrs/0002-batch-role-resolution-dataloader.md"
+      ]
+    },
+    "architect": {
+      "completed_at": "2026-05-11T01:55:00Z",
+      "files": [
+        "_reversa_sdd/architecture.md",
+        "_reversa_sdd/c4-context.md",
+        "_reversa_sdd/c4-containers.md",
+        "_reversa_sdd/c4-components.md",
+        "_reversa_sdd/erd-complete.md",
+        "_reversa_sdd/traceability/spec-impact-matrix.md",
+        "_reversa_sdd/deployment.md"
       ]
     }
   },
@@ -178,5 +204,6 @@
     ".reversa\\plan.md",
     ".reversa\\version",
     ".reversa\\_config\\manifest.yaml"
-  ]
+  ],
+  "redator_progress": "empresa/tasks.md"
 }
