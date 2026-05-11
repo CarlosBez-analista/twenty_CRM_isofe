@@ -3,19 +3,19 @@
   "project": "twenty-crm-erp",
   "user_name": "Bez",
   "chat_language": "pt-br",
-  "doc_language": "Portugu\u00eas",
+  "doc_language": "Português",
   "answer_mode": "chat",
   "doc_level": "detalhado",
   "output_folder": "_reversa_sdd",
   "forward_folder": "_reversa_forward",
-  "phase": "geracao",
+  "phase": "revisao",
   "completed": [
     "reconhecimento",
     "escavacao",
-    "interpretacao"
+    "interpretacao",
+    "geracao"
   ],
   "pending": [
-    "geracao",
     "revisao"
   ],
   "checkpoints": {
@@ -74,7 +74,8 @@
     "gemini-cli",
     "antigravity",
     "opencode",
-    "cline"
+    "cline",
+    "github-copilot"
   ],
   "agents": [
     "reversa",
@@ -205,5 +206,5 @@
     ".reversa\\version",
     ".reversa\\_config\\manifest.yaml"
   ],
-  "redator_progress": "empresa/tasks.md"
+  "redator_progress": "dashboard/edge-cases.md"
 }

@@ -43,10 +43,11 @@
 
 ## Fase 4: Geração 📝
 
-- [ ] **Redator** — Specs SDD por componente
-- [ ] **Redator** — OpenAPI (se aplicável)
-- [ ] **Redator** — User Stories (se aplicável)
-- [ ] **Redator** — Code/Spec Matrix
+- [x] **Redator** — Specs SDD por componente (`empresa`, `pessoa`, `oportunidade`, `tarefa`, `fluxo-de-trabalho`, `mensagens`)
+- [x] **Redator** — Specs SDD das units restantes
+- [x] **Redator** — OpenAPI (GraphQL Schema é o contrato principal)
+- [x] **Redator** — User Stories (Principais fluxos de valor gerados)
+- [x] **Redator** — Code/Spec Matrix (Gerada em traceability/)
 
 ## Fase 5: Revisão ✅
 
