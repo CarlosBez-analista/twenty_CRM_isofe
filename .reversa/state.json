@@ -32,7 +32,12 @@
         "company",
         "person",
         "opportunity",
-        "task"
+        "task",
+        "workflow",
+        "messaging",
+        "calendar",
+        "note",
+        "attachment"
       ]
     }
   },

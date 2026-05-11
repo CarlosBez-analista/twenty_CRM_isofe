@@ -1,106 +1,105 @@
 <p align="center">
   <a href="https://www.twenty.com">
-    <img src="./packages/twenty-website/public/images/core/logo.svg" width="100px" alt="Twenty logo" />
+    <img src="./packages/twenty-website/public/images/core/logo.svg" width="100px" alt="Logo Twenty" />
   </a>
 </p>
 
-<h2 align="center" >The #1 Open-Source CRM </h2>
+<h2 align="center" >O #1 CRM Open-Source</h2>
 
-<p align="center"><a href="https://twenty.com">🌐 Website</a> · <a href="https://docs.twenty.com">📚 Documentation</a> · <a href="https://github.com/orgs/twentyhq/projects/1"><img src="./packages/twenty-website/public/images/readme/planner-icon.svg" width="12" height="12"/> Roadmap </a> · <a href="https://discord.gg/cx5n4Jzs57"><img src="./packages/twenty-website/public/images/readme/discord-icon.svg" width="12" height="12"/> Discord</a> · <a href="https://www.figma.com/file/xt8O9mFeLl46C5InWwoMrN/Twenty"><img src="./packages/twenty-website/public/images/readme/figma-icon.png"  width="12" height="12"/>  Figma</a> · <a href="./REVERSA_STATUS.md">🕵️ Reversa Status</a></p>
+<p align="center"><a href="https://twenty.com">🌐 Website</a> · <a href="https://docs.twenty.com">📚 Documentação</a> · <a href="https://github.com/orgs/twentyhq/projects/1"><img src="./packages/twenty-website/public/images/readme/planner-icon.svg" width="12" height="12"/> Roadmap</a> · <a href="https://discord.gg/cx5n4Jzs57"><img src="./packages/twenty-website/public/images/readme/discord-icon.svg" width="12" height="12"/> Discord</a> · <a href="https://www.figma.com/file/xt8O9mFeLl46C5InWwoMrN/Twenty"><img src="./packages/twenty-website/public/images/readme/figma-icon.png"  width="12" height="12"/>  Figma</a> · <a href="./REVERSA_STATUS.md">🕵️ Status Reversa</a></p>
 
 <br />
-
 
 <p align="center">
   <a href="https://www.twenty.com">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/twentyhq/twenty/refs/heads/main/packages/twenty-website/public/images/readme/github-cover-dark.png" />
       <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/twentyhq/twenty/refs/heads/main/packages/twenty-website/public/images/readme/github-cover-light.png" />
-      <img src="./packages/twenty-website/public/images/readme/github-cover-light.png" alt="Cover" />
+      <img src="./packages/twenty-website/public/images/readme/github-cover-light.png" alt="Capa" />
     </picture>
   </a>
 </p>
 
 <br />
 
-# Installation
+# Instalação
 
-See:
-🚀 [Self-hosting](https://docs.twenty.com/developers/self-host/capabilities/docker-compose)
-🖥️ [Local Setup](https://docs.twenty.com/developers/contribute/capabilities/local-setup)
+Veja:
+🚀 [Auto-hospedagem](https://docs.twenty.com/developers/self-host/capabilities/docker-compose)
+🖥️ [Configuração Local](https://docs.twenty.com/developers/contribute/capabilities/local-setup)
 
-# Why Twenty
+# Por que Twenty
 
-We built Twenty for three reasons:
+Construímos Twenty por três razões:
 
-**CRMs are too expensive, and users are trapped.** Companies use locked-in customer data to hike prices. It shouldn't be that way.
+**CRMs são muito caros, e os usuários estão presos.** Empresas usam dados de clientes bloqueados para aumentar preços. Não deveria ser assim.
 
-**A fresh start is required to build a better experience.** We can learn from past mistakes and craft a cohesive experience inspired by new UX patterns from tools like Notion, Airtable or Linear.
+**Um novo começo é necessário para construir uma experiência melhor.** Podemos aprender com erros do passado e criar uma experiência coesa inspirada por novos padrões de UX de ferramentas como Notion, Airtable ou Linear.
 
-**We believe in open-source and community.** Hundreds of developers are already building Twenty together. Once we have plugin capabilities, a whole ecosystem will grow around it.
+**Acreditamos em open-source e comunidade.** Centenas de desenvolvedores já estão construindo Twenty juntos. Quando tivermos capacidade de plugins, todo um ecossistema crescerá ao seu redor.
 
 <br />
 
-# What You Can Do With Twenty
+# O Que Você Pode Fazer Com Twenty
 
-Please feel free to flag any specific needs you have by creating an issue.
+Sinta-se à vontade para sinalizar qualquer necessidade específica criando uma issue.
 
-Below are a few features we have implemented to date:
+Abaixo estão algumas funcionalidades que implementamos até o momento:
 
-+ [Personalize layouts with filters, sort, group by, kanban and table views](#personalize-layouts-with-filters-sort-group-by-kanban-and-table-views)
-+ [Customize your objects and fields](#customize-your-objects-and-fields)
-+ [Create and manage permissions with custom roles](#create-and-manage-permissions-with-custom-roles)
-+ [Automate workflow with triggers and actions](#automate-workflow-with-triggers-and-actions)
-+ [Emails, calendar events, files, and more](#emails-calendar-events-files-and-more)
++ [Personalizar layouts com filtros, ordenação, agrupamento, kanban e visualizações em tabela](#personalizar-layouts-com-filtros-ordenação-agrupamento-kanban-e-visualizações-em-tabela)
++ [Personalizar seus objetos e campos](#personalizar-seus-objetos-e-campos)
++ [Criar e gerenciar permissões com funções personalizadas](#criar-e-gerenciar-permissões-com-funções-personalizadas)
++ [Automatizar fluxos de trabalho com gatilhos e ações](#automatizar-fluxos-de-trabalho-com-gatilhos-e-ações)
++ [E-mails, eventos de calendário, arquivos e mais](#e-mails-eventos-de-calendário-arquivos-e-mais)
 
 
-## Personalize layouts with filters, sort, group by, kanban and table views
+## Personalizar layouts com filtros, ordenação, agrupamento, kanban e visualizações em tabela
 
 <p align="center">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/twentyhq/twenty/refs/heads/main/packages/twenty-website/public/images/readme/views-dark.png" />
       <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/twentyhq/twenty/refs/heads/main/packages/twenty-website/public/images/readme/views-light.png" />
-      <img src="./packages/twenty-website/public/images/readme/views-light.png" alt="Companies Kanban Views" />
+      <img src="./packages/twenty-website/public/images/readme/views-light.png" alt="Visualizações Kanban de Empresas" />
     </picture>
 </p>
 
-## Customize your objects and fields
+## Personalizar seus objetos e campos
 
 <p align="center">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/twentyhq/twenty/refs/heads/main/packages/twenty-website/public/images/readme/data-model-dark.png" />
       <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/twentyhq/twenty/refs/heads/main/packages/twenty-website/public/images/readme/data-model-light.png" />
-      <img src="./packages/twenty-website/public/images/readme/data-model-light.png" alt="Setting Custom Objects" />
+      <img src="./packages/twenty-website/public/images/readme/data-model-light.png" alt="Configurando Objetos Personalizados" />
     </picture>
 </p>
 
-## Create and manage permissions with custom roles
+## Criar e gerenciar permissões com funções personalizadas
 
 <p align="center">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/twentyhq/twenty/refs/heads/main/packages/twenty-website/public/images/readme/permissions-dark.png" />
       <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/twentyhq/twenty/refs/heads/main/packages/twenty-website/public/images/readme/permissions-light.png" />
-      <img src="./packages/twenty-website/public/images/readme/permissions-light.png" alt="Permissions" />
+      <img src="./packages/twenty-website/public/images/readme/permissions-light.png" alt="Permissões" />
     </picture>
 </p>
 
-## Automate workflow with triggers and actions
+## Automatizar fluxos de trabalho com gatilhos e ações
 
 <p align="center">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/twentyhq/twenty/refs/heads/main/packages/twenty-website/public/images/readme/workflows-dark.png" />
       <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/twentyhq/twenty/refs/heads/main/packages/twenty-website/public/images/readme/workflows-light.png" />
-      <img src="./packages/twenty-website/public/images/readme/workflows-light.png" alt="Workflows" />
+      <img src="./packages/twenty-website/public/images/readme/workflows-light.png" alt="Fluxos de Trabalho" />
     </picture>
 </p>
 
-## Emails, calendar events, files, and more
+## E-mails, eventos de calendário, arquivos e mais
 
 <p align="center">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/twentyhq/twenty/refs/heads/main/packages/twenty-website/public/images/readme/plus-other-features-dark.png" />
       <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/twentyhq/twenty/refs/heads/main/packages/twenty-website/public/images/readme/plus-other-features-light.png" />
-      <img src="./packages/twenty-website/public/images/readme/plus-other-features-light.png" alt="Other Features" />
+      <img src="./packages/twenty-website/public/images/readme/plus-other-features-light.png" alt="Outras Funcionalidades" />
     </picture>
 </p>
 
@@ -109,12 +108,11 @@ Below are a few features we have implemented to date:
 # Stack
 - [TypeScript](https://www.typescriptlang.org/)
 - [Nx](https://nx.dev/)
-- [NestJS](https://nestjs.com/), with [BullMQ](https://bullmq.io/), [PostgreSQL](https://www.postgresql.org/), [Redis](https://redis.io/)
-- [React](https://reactjs.org/), with [Jotai](https://jotai.org/), [Linaria](https://linaria.dev/) and [Lingui](https://lingui.dev/)
+- [NestJS](https://nestjs.com/), com [BullMQ](https://bullmq.io/), [PostgreSQL](https://www.postgresql.org/), [Redis](https://redis.io/)
+- [React](https://reactjs.org/), com [Jotai](https://jotai.org/), [Linaria](https://linaria.dev/) e [Lingui](https://lingui.dev/)
 
 
-
-# Thanks
+# Agradecimentos
 
 <p align="center">
   <a href="https://www.chromatic.com/"><img src="./packages/twenty-website/public/images/readme/chromatic.png" height="30" alt="Chromatic" /></a>
@@ -124,14 +122,14 @@ Below are a few features we have implemented to date:
   <a href="https://e2b.dev/"><img src="./packages/twenty-website/public/images/readme/e2b.svg" height="30" alt="E2B" /></a>
 </p>
 
-  Thanks to these amazing services that we use and recommend for UI testing (Chromatic), code review (Greptile), catching bugs (Sentry) and translating (Crowdin).
+  Agradecemos a estes serviços incríveis que usamos e recomendamos para testes de UI (Chromatic), revisão de código (Greptile), captura de bugs (Sentry) e tradução (Crowdin).
 
 
-# Join the Community
+# Junte-se à Comunidade
 
-- Star the repo
-- Subscribe to releases (watch -> custom -> releases)
-- Follow us on [Twitter](https://twitter.com/twentycrm) or [LinkedIn](https://www.linkedin.com/company/twenty/)
-- Join our [Discord](https://discord.gg/cx5n4Jzs57)
-- Improve translations on [Crowdin](https://twenty.crowdin.com/twenty)
-- [Contributions](https://github.com/twentyhq/twenty/contribute) are, of course, most welcome!
+- Estrelle o repositório
+- Inscreva-se nas releases (watch -> custom -> releases)
+- Siga-nos no [Twitter](https://twitter.com/twentycrm) ou [LinkedIn](https://www.linkedin.com/company/twenty/)
+- Entre no nosso [Discord](https://discord.gg/cx5n4Jzs57)
+- Melhore as traduções no [Crowdin](https://twenty.crowdin.com/twenty)
+- [Contribuições](https://github.com/twentyhq/twenty/contribute) são, é claro, muito bem-vindas!

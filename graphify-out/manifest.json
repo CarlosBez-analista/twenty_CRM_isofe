@@ -64712,8 +64712,12 @@
     "hash": "722b15e42e1d4e052a10790230dfb9df"
   },
   "C:\\app-dev\\twenty_CRM_isofe\\README.md": {
-    "mtime": 1778447551.3599956,
-    "hash": "2eb3b0f49c7ca7091613a04083bb2807"
+    "mtime": 1778457686.8500674,
+    "hash": "ac828e533ace888057d68b45994b811e"
+  },
+  "C:\\app-dev\\twenty_CRM_isofe\\REVERSA_STATUS.md": {
+    "mtime": 1778457679.4438443,
+    "hash": "0b5bf867dd90e162f0d1c5cddde08afb"
   },
   "C:\\app-dev\\twenty_CRM_isofe\\packages\\create-twenty-app\\README.md": {
     "mtime": 1778447551.362016,
@@ -74874,6 +74878,58 @@
   "C:\\app-dev\\twenty_CRM_isofe\\packages\\twenty-zapier\\CHANGELOG.md": {
     "mtime": 1778447564.5639827,
     "hash": "110441d9932480b199f79c7f49860b05"
+  },
+  "C:\\app-dev\\twenty_CRM_isofe\\_reversa_sdd\\code-analysis.md": {
+    "mtime": 1778457140.434616,
+    "hash": "7f725b085b695cc6482cc38422e4ea43"
+  },
+  "C:\\app-dev\\twenty_CRM_isofe\\_reversa_sdd\\data-dictionary.md": {
+    "mtime": 1778457152.224228,
+    "hash": "4cb186aa740a446574998bdb6e6b7c48"
+  },
+  "C:\\app-dev\\twenty_CRM_isofe\\_reversa_sdd\\dependencies.md": {
+    "mtime": 1778455524.928641,
+    "hash": "dfa60b2492f861ad3338fb54bc2941a3"
+  },
+  "C:\\app-dev\\twenty_CRM_isofe\\_reversa_sdd\\inventory.md": {
+    "mtime": 1778455517.4426136,
+    "hash": "284f425ad772270fe00d15058fe01d75"
+  },
+  "C:\\app-dev\\twenty_CRM_isofe\\_reversa_sdd\\company\\legacy-mapping.md": {
+    "mtime": 1778456125.8492322,
+    "hash": "f878064475fc999a2b16be2982406d42"
+  },
+  "C:\\app-dev\\twenty_CRM_isofe\\_reversa_sdd\\flowcharts\\company-createOrRestoreCompanies.md": {
+    "mtime": 1778456115.762453,
+    "hash": "247b09ea2284a5a3fecffef5d23e3596"
+  },
+  "C:\\app-dev\\twenty_CRM_isofe\\_reversa_sdd\\flowcharts\\company.md": {
+    "mtime": 1778456108.5097764,
+    "hash": "63dd6ec71a8301b0e41ebc3aeec7d45c"
+  },
+  "C:\\app-dev\\twenty_CRM_isofe\\_reversa_sdd\\flowcharts\\opportunity.md": {
+    "mtime": 1778456523.7363503,
+    "hash": "6881250b86fd4ff7c3c47d9c3b8b2cda"
+  },
+  "C:\\app-dev\\twenty_CRM_isofe\\_reversa_sdd\\flowcharts\\person-createCompaniesAndPeople.md": {
+    "mtime": 1778456239.492473,
+    "hash": "ae218b2d68d5cbd0268dec315b0534c3"
+  },
+  "C:\\app-dev\\twenty_CRM_isofe\\_reversa_sdd\\flowcharts\\person.md": {
+    "mtime": 1778456232.0490043,
+    "hash": "b76a34f7b3562ecb17c2940f633c1f73"
+  },
+  "C:\\app-dev\\twenty_CRM_isofe\\_reversa_sdd\\flowcharts\\task.md": {
+    "mtime": 1778457158.785092,
+    "hash": "850448052e5bc11b1cc64aa0ad4bddaa"
+  },
+  "C:\\app-dev\\twenty_CRM_isofe\\_reversa_sdd\\opportunity\\legacy-mapping.md": {
+    "mtime": 1778456530.3612795,
+    "hash": "02b5684d5dc02d97c9df9eac244a28b2"
+  },
+  "C:\\app-dev\\twenty_CRM_isofe\\_reversa_sdd\\person\\legacy-mapping.md": {
+    "mtime": 1778456250.2628803,
+    "hash": "36c48b29428f2ee64847f03781842424"
   },
   "C:\\app-dev\\twenty_CRM_isofe\\packages\\twenty-server\\src\\engine\\workspace-manager\\dev-seeder\\data\\sample-files\\sample-contract.pdf": {
     "mtime": 1778447562.2513466,

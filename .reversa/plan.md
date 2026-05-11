@@ -22,13 +22,15 @@
 - [x] **Archaeologist** — Análise do módulo `person`
 - [x] **Archaeologist** — Análise do módulo `opportunity`
 - [x] **Archaeologist** — Análise do módulo `task`
-- [ ] **Archaeologist** — Análise do módulo `workflow`
-- [ ] **Archaeologist** — Análise do módulo `messaging`
-- [ ] **Archaeologist** — Análise do módulo `calendar`
-- [ ] **Archaeologist** — Análise do módulo `note`
-- [ ] **Archaeologist** — Análise do módulo `attachment`
-- [ ] **Archaeologist** — Análise do módulo `workspace-member`
-- [ ] **Archaeologist** — Análise do módulo `connected-account`
+- [x] **Archaeologist** — Análise do módulo `workflow`
+- [x] **Archaeologist** — Análise do módulo `messaging`
+- [x] **Archaeologist** — Análise do módulo `calendar`
+- [x] **Archaeologist** — Análise do módulo `note`
+- [x] **Archaeologist** — Análise do módulo `attachment`
+- [x] **Archaeologist** — Análise do módulo `workspace-member`
+- [x] **Archaeologist** — Análise do módulo `connected-account`
+- [x] **Archaeologist** — Análise do módulo `timeline`
+- [x] **Archaeologist** — Análise do módulo `dashboard`
 
 ## Fase 3: Interpretação 🧠
 
