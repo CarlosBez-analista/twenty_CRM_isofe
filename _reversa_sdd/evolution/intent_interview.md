@@ -20,14 +20,14 @@ Não há resposta errada — o objetivo é capturar sua visão.
 > Para quem é o produto? Quem vai operar o CRM+ERP no dia a dia?
 
 **Opções:**
-- [ ] (A) Pequenas empresas brasileiras — foco: simplicidade, NF-e, moeda BRL
-- [ ] (B) Médias empresas B2B — foco: multi-filial, controle de estoque, aprovação de compras
+- [x ] (A) Pequenas empresas brasileiras — foco: simplicidade, NF-e, moeda BRL
+- [ x] (B) Médias empresas B2B — foco: multi-filial, controle de estoque, aprovação de compras
 - [ ] (C) Uso interno da própria operação (produto para consumo próprio)
-- [ ] (D) Outro
+- [ x] (D) Outro
 
 > **Resposta / Contexto:**
 >
-> _(escreva aqui)_
+> _(Atender pequenas e medias empresas (física ou online) com foco em ter um ERP + CRM completo e integrado e institutos educacionais e institutos sociais que necessitam de um sistema de gestão completo _)_
 
 ---
 
