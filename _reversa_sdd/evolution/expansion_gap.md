@@ -114,6 +114,49 @@
 
 ---
 
+## 4A. Design System — Lacunas para o ERP
+
+> **Prioridade:** 🔴 Bloqueia implementação de qualquer tela ERP.
+> **Pré-requisito de:** `/reversa-design-system` e toda a Fase 1 de frontend.
+> **Fonte:** análise do `twenty-ui` vs requisitos visuais dos módulos ERP.
+
+### 4A.1 Identidade visual dual (CRM vs ERP)
+
+| Gap | Descrição | Ação |
+|-----|-----------|------|
+| `twenty-ui` projetado para CRM | Tokens, espaçamentos e composições assumem layout de relacionamentos (cards, sidebars, timeline). Módulos ERP têm padrões visuais diferentes: tabelas densas, formulários multi-step, layouts de impressão | Mapear delta de tokens antes de criar qualquer tela ERP |
+| Sem semântica de cor para contexto ERP | O sistema de cores atual cobre estados CRM (lead quente, oportunidade aberta). ERP precisa de estados fiscais (emitido, cancelado, contingência), estados de estoque (OK, mínimo, zerado) e estados de aprovação (rascunho, aprovado, reprovado) | Adicionar tokens semânticos: `--color-erp-fiscal-*`, `--color-erp-stock-*`, `--color-erp-approval-*` |
+| Sem tokens de tipografia para densidade informacional | Tabelas ERP (itens de pedido, extrato financeiro) exigem tamanhos menores e espaçamento mais compacto que o padrão CRM | Definir variante `size="compact"` nos componentes de tabela |
+
+### 4A.2 Componentes ausentes no `twenty-ui`
+
+| Componente | Módulos que precisam | Complexidade |
+|-----------|---------------------|-------------|
+| `DataTable` com paginação server-side e colunas fixas | Pedidos, Estoque, Financeiro, Relatórios | 🔴 Alta |
+| `MultiStepForm` com stepper horizontal | Onboarding de perfil, Emissão NF-e, Cadastro de Família | 🔴 Alta |
+| `SplitView` (master-detail: Pedido + Itens) | PedidoDeVenda, RegistroDeAtendimento | 🟡 Média |
+| `StatusBadge` com variantes fiscais e ERP | Pedidos, NF-e, ContaAReceber | 🟡 Média |
+| `PrintLayout` | DANFE, relatório de impacto para financiadores, DRE | 🟡 Média |
+| `NumberInput` com máscara monetária (R$) | Financeiro, Pedidos, Orçamento | 🟢 Baixa |
+| `CpfInput` com máscara e validação | Cadastro de Beneficiários (Perfil Social) | 🟢 Baixa |
+| `QRCodeDisplay` | Agendamento de Serviço (check-in) | 🟢 Baixa |
+
+### 4A.3 Telas/fluxos sem estratégia visual definida
+
+| Tela / Fluxo | Problema | Ação |
+|-------------|---------|------|
+| Seletor de perfil (Empresarial / Social) | ✅ **DECIDIDO** — perfil é configurado pelo Admin no painel de configurações do workspace, não no onboarding. Suporta mudança futura sem fricção no cadastro. | Implementar em `Settings > Workspace > Perfil ERP` |
+| Portal de voluntário | ✅ **DECIDIDO** — rota interna `/volunteer` dentro do app Twenty, reutilizando `twenty-ui`. Mais simples de manter. | Criar rota protegida por token em `twenty-front/src/pages/volunteer/` |
+| Portal de transparência (financiadores) | ✅ **DECIDIDO** — subdomínio separado (ex: `transparencia.dominio.com`). App leve com API pública anonimizada do ClickHouse. | Criar pacote `packages/twenty-transparency` ou app Next.js standalone |
+
+### 4A.4 Ícones
+
+> ✅ **Não é lacuna.** O Twenty usa `tabler-icons`, que já inclui ícones ERP adequados: `IconShoppingCart`, `IconPackage`, `IconReceipt`, `IconCurrencyReal`, `IconTruckDelivery`, `IconChartBar`. Nenhuma adição necessária.
+
+---
+
+---
+
 ## 5. Permissões
 
 | Gap | Descrição | Ação |

@@ -110,11 +110,41 @@
 
 ---
 
-## Proxima Fase Recomendada
+## Etapa 10 - Design System ERP (Pre-requisito de Frontend)
 
-**Fase 0 - Spike e Fundacao Tecnica**
+> **Prioridade:** executa antes do `/reversa-design-system` e antes de qualquer tela ERP.
+> Lacunas registradas em `expansion_gap.md` secao 4A.
 
-1. Criar `packages/twenty-erp`.
-2. Criar spike de `PedidoWorkspaceEntity`.
-3. Validar Timeline, busca full-text, GraphQL e soft-delete.
-4. Investigar GAP-M02 antes do workflow `CLOSED_WON -> Pedido`.
+- [x] Executar `/reversa-design-system` para extrair tokens existentes do `twenty-ui`.
+- [x] Mapear delta de tokens semanticos necessarios para ERP: `--t-erp-fiscal-*`, `--t-erp-stock-*`, `--t-erp-approval-*`, `--t-erp-social-*`.
+- [x] Listar componentes ausentes no `twenty-ui` com prioridade de implementacao (ver `_reversa_sdd/design-system/design-system.md`).
+- [x] Definir estrategia visual para seletor de perfil — **Admin panel** (Settings > Workspace > Perfil ERP).
+- [x] Definir portal de voluntario — **rota interna** `/volunteer` com `twenty-ui`.
+- [x] Definir portal de transparencia — **subdominio separado** (`transparencia.dominio.com`).
+
+---
+
+## Fase 0 - Spike e Fundacao Tecnica
+
+> **Status:** pendente — discutir abordagem na proxima sessao (`/reversa-requirements` ou `/reversa-coding`).
+> **Pre-requisito concluido:** Etapa 10 (Design System ERP) ✅
+
+- [ ] Criar `packages/twenty-erp` via Nx generator.
+- [ ] Criar spike de `PedidoWorkspaceEntity` (minimal: numero, status, empresa).
+- [ ] Validar que herda Timeline, busca full-text, GraphQL e soft-delete automaticamente.
+- [ ] Investigar GAP-M02: `WorkflowExecutorService` — passagem de contexto entre steps antes de implementar `CLOSED_WON -> Pedido`.
+- [ ] Definir abordagem: `/reversa-requirements` (levantamento formal) ou `/reversa-coding` (execucao direta do handoff.md).
+
+---
+
+## Decisoes Pendentes (Nao Avancar Sem Resposta)
+
+> Ver tambem `handoff.md` secao 5.
+
+| ID | Decisao | Urgencia |
+|----|---------|---------|
+| D1 | Parceiro fiscal: Focus NF-e ou Nuvem Fiscal | 🔴 Antes de E1-22 |
+| D2 | LLM para agente IA WhatsApp | 🟡 Antes da Fase 3 |
+| D3 | Nome do produto final | 🟡 Antes do lancamento |
+| D4 | Modelo de negocio: open source + premium ou fechado | 🔴 Antes do V1 |
+| D5 | Metodologia SROI | 🔴 Antes de S2-17 |

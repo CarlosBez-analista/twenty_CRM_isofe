@@ -101,6 +101,22 @@
         "_reversa_sdd/evolution/handoff.md"
       ],
       "next_phase": "Fase 0 - agente codificador"
+    },
+    "design-system": {
+      "completed_at": "2026-05-13T00:00:00Z",
+      "output_folder": "_reversa_sdd/design-system/",
+      "source": "packages/twenty-ui/src/theme-constants/theme-light.css",
+      "tokens_extracted": ["accent", "background", "border", "font", "spacing", "shadow", "animation", "icon", "tag", "color-named"],
+      "components_mapped": ["Button", "IconButton", "Tag", "Chip", "Avatar", "Pill"],
+      "delta_erp_tokens": 17,
+      "components_to_build": 8,
+      "files": [
+        "_reversa_sdd/design-system/design-system.md",
+        "_reversa_sdd/design-system/color-palette.md",
+        "_reversa_sdd/design-system/typography.md",
+        "_reversa_sdd/design-system/spacing.md",
+        "_reversa_sdd/design-system/tokens.md"
+      ]
     }
   },
   "engines": [
@@ -242,5 +258,11 @@
     ".reversa\\version",
     ".reversa\\_config\\manifest.yaml"
   ],
-  "redator_progress": "dashboard/edge-cases.md"
+  "redator_progress": "dashboard/edge-cases.md",
+  "next_session_agenda": {
+    "topic": "Fase 0 - Spike Tecnico do twenty-erp",
+    "decision_needed": "Iniciar com /reversa-requirements (levantamento formal) ou /reversa-coding (execucao direta do handoff.md)",
+    "context": "Etapa 10 (Design System ERP) concluida. Tokens delta mapeados, 8 componentes listados, 3 decisoes de estrategia visual tomadas.",
+    "blocked_by": ["D1 parceiro fiscal", "GAP-M02 WorkflowExecutorService"]
+  }
 }
