@@ -72,6 +72,24 @@ Se o usuario ja declarou a intencao, como "Twenty CRM -> CRM+ERP", use isso e pe
 
 ## Processo
 
+### 0. Inicializar tasks e rastreabilidade
+
+Antes de gerar artefatos finais, crie mentalmente uma lista de tarefas da evolucao e use essa lista para produzir `tasks.md` ao final. A lista deve cobrir, no minimo:
+
+- leitura do estado, brief e fontes obrigatorias;
+- confirmacao da intencao de produto;
+- separacao entre base herdada, expansao e repensar;
+- gap analysis;
+- especificacao do produto alvo;
+- novas capacidades;
+- arquitetura alvo;
+- roadmap;
+- handoff para agente codificador;
+- rastreabilidade fonte -> decisao/artefato;
+- registro de checkpoint, quando `.reversa/state.json` existir.
+
+Nao deixe `tasks.md` com etapas pendentes quando os artefatos correspondentes ja tiverem sido gerados. Se uma etapa depender de decisao humana futura, marque como `[~]` e liste a decisao em `handoff.md`.
+
 ### 1. Separar base herdada e expansao
 
 Classifique tudo em tres grupos:
@@ -122,9 +140,42 @@ Organize em fases:
 
 Cada fase deve ter objetivo, entregaveis, dependencias e criterio de pronto.
 
+### 7. Gerar rastreabilidade da evolucao
+
+Crie `traceability.md` em `<output_folder>/evolution/` com uma matriz que conecte fontes, decisoes e artefatos:
+
+| Fonte | Evidencia/decisao extraida | Artefato impactado | Tipo | Confianca |
+|-------|----------------------------|--------------------|------|-----------|
+
+Inclua pelo menos:
+- fontes de brief (`brief/repo_brief.md`, `brief/llm_context_pack.md`) quando existirem;
+- fontes de discovery (`inventory.md`, `architecture.md`, `domain.md`, `permissions.md`, `state-machines.md`, `traceability/`) quando usadas;
+- fontes de ideacao em `evolution/ideas/`, quando existirem;
+- decisoes humanas confirmadas;
+- decisoes humanas pendentes;
+- lacunas que bloqueiam a fase seguinte.
+
+Use a escala de confianca:
+- 🟢 CONFIRMADO;
+- 🟡 INFERIDO;
+- 🔴 LACUNA.
+
+### 8. Gerar tasks de handoff
+
+Crie `tasks.md` em `<output_folder>/evolution/` com:
+
+- checklist das etapas executadas, marcadas como `[x]`, `[/]`, `[~]` ou `[ ]`;
+- tabela de artefatos gerados com status;
+- bloqueios conhecidos e decisoes pendentes;
+- proxima fase recomendada;
+- primeiro lote de tarefas executaveis para o agente codificador.
+
+Este arquivo e parte do contrato de handoff. Ele deve refletir o estado real dos artefatos no momento do encerramento.
+
 ## Saida
 
 Crie estes arquivos em `<output_folder>/evolution/`:
+- `tasks.md`
 - `product_intent.md`
 - `current_product_base.md`
 - `expansion_gap.md`
@@ -132,6 +183,7 @@ Crie estes arquivos em `<output_folder>/evolution/`:
 - `new_capabilities.md`
 - `target_product_architecture.md`
 - `evolution_roadmap.md`
+- `traceability.md`
 - `handoff.md`
 
 ## Diretiva non-destructive
@@ -141,6 +193,35 @@ Escreva somente em `<output_folder>/evolution/`.
 Se qualquer arquivo ja existir, nao sobrescreva sem confirmar com o usuario. Ofereca:
 1. Manter e abortar.
 2. Gerar nova versao em `<output_folder>/evolution/<YYYYMMDD-HHMM>/`.
+
+## Checkpoint
+
+Se `.reversa/state.json` existir, atualize-o de forma conservadora, preservando todos os campos existentes e adicionando/atualizando apenas:
+
+```json
+"checkpoints": {
+  "evolve": {
+    "completed_at": "<ISO-8601>",
+    "output_folder": "<output_folder>/evolution/",
+    "product_target": "<resumo curto>",
+    "files": [
+      "<output_folder>/evolution/tasks.md",
+      "<output_folder>/evolution/product_intent.md",
+      "<output_folder>/evolution/current_product_base.md",
+      "<output_folder>/evolution/expansion_gap.md",
+      "<output_folder>/evolution/target_product_spec.md",
+      "<output_folder>/evolution/new_capabilities.md",
+      "<output_folder>/evolution/target_product_architecture.md",
+      "<output_folder>/evolution/evolution_roadmap.md",
+      "<output_folder>/evolution/traceability.md",
+      "<output_folder>/evolution/handoff.md"
+    ],
+    "next_phase": "agente codificador"
+  }
+}
+```
+
+Se nao for possivel atualizar o state, registre o motivo em `tasks.md` e informe no encerramento.
 
 ## Encerramento
 
@@ -152,6 +233,8 @@ Ao terminar, apresente:
 > Base preservada: [N] capacidades
 > Novas capacidades: [N]
 > Lacunas criticas: [N]
+> Rastreabilidade: `traceability.md`
+> Tasks: `tasks.md`
 >
 > Proximo passo: abrir `handoff.md` no agente que vai construir o novo produto."
 

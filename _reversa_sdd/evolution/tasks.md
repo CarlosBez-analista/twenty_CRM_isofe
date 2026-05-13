@@ -1,9 +1,11 @@
-# Tasks — Reversa Evolve: CRM → CRM + ERP
+# Tasks - Reversa Evolve: CRM -> CRM + ERP
 
 > **Projeto:** twenty-crm-erp
 > **Fase:** Evolve
 > **Iniciado em:** 2026-05-11
+> **Atualizado em:** 2026-05-13
 > **Diretriz central:** O CRM serve ao ERP.
+> **Status:** concluido para handoff da Fase 0.
 
 ---
 
@@ -11,124 +13,108 @@
 
 - `[ ]` Pendente
 - `[/]` Em progresso
-- `[x]` Concluído
-- `[~]` Bloqueado / aguardando decisão
+- `[x]` Concluido
+- `[~]` Bloqueado / aguardando decisao
 
 ---
 
-## Etapa 1 — Coleta de Intenção
+## Etapa 1 - Coleta de Intencao
 
-- [x] Ativar `/reversa-evolve` e iniciar entrevista de intenção
-- [x] Criar `intent_interview.md` com 8 questões estruturadas
-- [ ] **[USUÁRIO]** Preencher `intent_interview.md` com visão do produto
-- [ ] **[USUÁRIO]** Popular pasta `_reversa_sdd/evolution/ideas/` com pesquisas e referências
+- [x] Ativar `/reversa-evolve` e iniciar entrevista de intencao.
+- [x] Criar `intent_interview.md` com 8 questoes estruturadas.
+- [x] Consolidar intencao do produto em `product_intent.md`.
+- [x] Ler referencias em `_reversa_sdd/evolution/ideas/`.
 
----
+## Etapa 2 - Analise da Base Existente
 
-## Etapa 2 — Análise da Base Existente
+- [x] Ler SDD completo e mapear capacidades atuais do Twenty CRM.
+- [x] Classificar capacidades como Preservar / Expandir / Repensar.
+- [x] Gerar `current_product_base.md`.
 
-> Depende: `intent_interview.md` preenchida
+## Etapa 3 - Mapeamento de Lacunas
 
-- [ ] Ler SDD completo e mapear capacidades atuais do Twenty CRM
-- [ ] Classificar cada capacidade: Preservar / Expandir / Repensar
-- [ ] Gerar `current_product_base.md`
+- [x] Cruzar capacidades atuais vs modulos ERP desejados.
+- [x] Identificar gaps funcionais, dados, arquitetura, UI, permissoes, integracoes e compliance.
+- [x] Gerar `expansion_gap.md`.
 
----
+## Etapa 4 - Especificacao do Produto Alvo
 
-## Etapa 3 — Mapeamento de Lacunas (GAP Analysis)
+- [x] Definir visao do produto CRM+ERP dual-perfil.
+- [x] Definir personas e perfis de workspace.
+- [x] Mapear fluxos CRM -> ERP empresarial e social.
+- [x] Gerar `target_product_spec.md`.
 
-> Depende: Etapa 2
+## Etapa 5 - Novas Capacidades
 
-- [ ] Cruzar capacidades atuais vs módulos ERP desejados (Q2)
-- [ ] Identificar gaps funcionais, de dados, arquitetura, UI, compliance
-- [ ] Gerar `expansion_gap.md` com matriz de gaps
+- [x] Detalhar modulos ERP novos, responsabilidades, entidades e regras.
+- [x] Mapear conexoes com entidades existentes do CRM.
+- [x] Gerar `new_capabilities.md`.
 
----
+## Etapa 6 - Arquitetura Alvo
 
-## Etapa 4 — Especificação do Produto Alvo
+- [x] Propor topologia do sistema sobre monorepo Twenty.
+- [x] Definir limites entre CRM Core e ERP em `packages/twenty-erp`.
+- [x] Mapear dados compartilhados vs dados por modulo.
+- [x] Definir estrategia de autorizacao multi-modulo.
+- [x] Gerar `target_product_architecture.md`.
 
-> Depende: Etapas 2 e 3
+## Etapa 7 - Roadmap de Evolucao
 
-- [ ] Escrever visão do produto expandido em 1 página
-- [ ] Definir personas (CRM user vs ERP operator)
-- [ ] Mapear fluxo CRM → ERP (Oportunidade → Pedido → Fatura)
-- [ ] Gerar `target_product_spec.md`
+- [x] Organizar roadmap em Fase 0 a Fase 5.
+- [x] Definir entregaveis, dependencias e criterios de pronto por fase.
+- [x] Gerar `evolution_roadmap.md`.
 
----
+## Etapa 8 - Handoff e Rastreabilidade
 
-## Etapa 5 — Novas Capacidades
+- [x] Consolidar decisoes arquiteturais em `handoff.md`.
+- [x] Listar dependencias, riscos, decisoes pendentes e gaps criticos.
+- [x] Indicar proximo passo imediato: Fase 0 / agente codificador.
+- [x] Gerar `traceability.md` da evolucao.
+- [x] Atualizar este `tasks.md` para refletir o estado real dos artefatos.
 
-> Depende: Q2 preenchida
+## Etapa 9 - Checkpoint
 
-- [ ] Detalhar cada módulo ERP novo (responsabilidade, entidades, APIs, regras)
-- [ ] Mapear conexões com entidades existentes do CRM
-- [ ] Gerar `new_capabilities.md`
-
----
-
-## Etapa 6 — Arquitetura Alvo
-
-> Depende: Etapas 4 e 5 + resposta Q4 (stack)
-
-- [ ] Propor topologia do sistema (monolito modular vs microsserviços vs híbrido)
-- [ ] Definir limites entre módulos CRM e ERP
-- [ ] Mapear dados compartilhados vs dados por módulo
-- [ ] Definir estratégia de autorização multi-módulo
-- [ ] Gerar `target_product_architecture.md`
-
----
-
-## Etapa 7 — Roadmap de Evolução
-
-> Depende: Etapa 6
-
-- [ ] Organizar em 5 fases: Fundações → Núcleo ERP → Integração CRM↔ERP → Operação → Hardening
-- [ ] Definir critérios de pronto por fase
-- [ ] Gerar `evolution_roadmap.md`
+- [x] Registrar checkpoint `evolve` em `.reversa/state.json`.
+- [ ] Commit e push para `https://github.com/CarlosBez-analista/twenty_CRM_isofe.git`.
 
 ---
 
-## Etapa 8 — Handoff
+## Bloqueios Para Fases Futuras
 
-> Depende: Todas as etapas anteriores
-
-- [ ] Consolidar decisões arquiteturais em `handoff.md`
-- [ ] Listar dependências e riscos top 5
-- [ ] Indicar próximo agente a acionar (`/reversa-migrate` ou `/reversa-reconstructor`)
-- [ ] Gerar `handoff.md`
-
----
-
-## Etapa 9 — Revisão e Push
-
-- [ ] Revisar todos os artefatos gerados
-- [ ] Commit e push para `https://github.com/CarlosBez-analista/twenty_CRM_isofe.git`
-- [ ] Atualizar `state.json` com checkpoint do evolve
+| ID | Status | Bloqueio | Impacto |
+|----|--------|----------|---------|
+| GAP-M02 | [~] | Investigar `WorkflowExecutorService` antes de automatizar `Opportunity CLOSED_WON -> Pedido`. | Bloqueia workflow automatico de Pedido. |
+| D1 | [~] | Escolher Focus NF-e ou Nuvem Fiscal. | Bloqueia implementacao fiscal NF-e/NFS-e. |
+| D4 | [~] | Decidir modelo de negocio: open source + premium ou fechado. | Bloqueia decisao de empacotamento/publicacao do V1. |
+| D5 | [~] | Definir metodologia SROI. | Bloqueia indicadores sociais de impacto financeiro. |
+| D2 | [~] | Escolher LLM para agente IA/WhatsApp. | Bloqueia canal IA/WhatsApp da Fase 3. |
 
 ---
 
-## Blockers Conhecidos
-
-| ID | Blocker | Depende de |
-|----|---------|------------|
-| B01 | Stack não definida | Resposta Q4 do usuário |
-| B02 | Módulos ERP V1 não confirmados | Resposta Q2 do usuário |
-| B03 | Nível de ousadia arquitetural | Resposta Q5 do usuário |
-| B04 | Compliance fiscal (NF-e / NFS-e) | Resposta Q8 do usuário |
-
----
-
-## Artefatos de Saída Esperados
+## Artefatos Gerados
 
 | Arquivo | Status |
 |---------|--------|
-| `evolution/intent_interview.md` | ✅ Criado |
-| `evolution/tasks.md` | ✅ Criado |
-| `evolution/ideas/` | ✅ Pasta criada |
-| `evolution/current_product_base.md` | ⏳ Pendente |
-| `evolution/expansion_gap.md` | ⏳ Pendente |
-| `evolution/target_product_spec.md` | ⏳ Pendente |
-| `evolution/new_capabilities.md` | ⏳ Pendente |
-| `evolution/target_product_architecture.md` | ⏳ Pendente |
-| `evolution/evolution_roadmap.md` | ⏳ Pendente |
-| `evolution/handoff.md` | ⏳ Pendente |
+| `evolution/intent_interview.md` | [x] Criado |
+| `evolution/tasks.md` | [x] Atualizado |
+| `evolution/ideas/` | [x] Populado |
+| `evolution/product_intent.md` | [x] Criado |
+| `evolution/current_product_base.md` | [x] Criado |
+| `evolution/expansion_gap.md` | [x] Criado |
+| `evolution/target_product_spec.md` | [x] Criado |
+| `evolution/new_capabilities.md` | [x] Criado |
+| `evolution/target_product_architecture.md` | [x] Criado |
+| `evolution/evolution_roadmap.md` | [x] Criado |
+| `evolution/traceability.md` | [x] Criado |
+| `evolution/handoff.md` | [x] Criado |
+
+---
+
+## Proxima Fase Recomendada
+
+**Fase 0 - Spike e Fundacao Tecnica**
+
+1. Criar `packages/twenty-erp`.
+2. Criar spike de `PedidoWorkspaceEntity`.
+3. Validar Timeline, busca full-text, GraphQL e soft-delete.
+4. Investigar GAP-M02 antes do workflow `CLOSED_WON -> Pedido`.

@@ -56,6 +56,18 @@ Se qualquer arquivo de saida ja existir, nao sobrescreva sem confirmar com o usu
 
 ## Processo
 
+### 0. Inicializar rastreabilidade da execucao
+
+Antes de gerar conteudo final, crie mentalmente uma lista de tarefas para o brief e use essa lista para produzir `tasks.md` ao final. A lista deve cobrir, no minimo:
+
+- leitura do estado e resolucao de `<output_folder>`;
+- verificacao de fontes disponiveis;
+- geracao de cada artefato de saida;
+- montagem da rastreabilidade fonte -> artefato;
+- registro de checkpoint, quando `.reversa/state.json` existir.
+
+Nao deixe `tasks.md` com itens pendentes quando os artefatos ja tiverem sido gerados. Se algo nao foi possivel, marque como bloqueado e explique o motivo.
+
 ### 1. Mapear o produto/repo
 
 Identifique o que o software faz, para quem, qual dor resolve, tipo de produto, stack principal, modo de execucao e artefatos de entrada/saida relevantes.
@@ -85,6 +97,30 @@ Crie uma versao densa, pronta para colar em outro agente. Inclua identidade do p
 
 Transforme o repositorio em referencia reutilizavel: ideias a copiar, limites a evitar, modulos base para outro app, ordem de construcao recomendada e decisoes arquiteturais iniciais.
 
+### 6. Gerar rastreabilidade
+
+Crie `traceability.md` em `<output_folder>/brief/` com uma matriz que conecte as fontes lidas aos artefatos gerados:
+
+| Fonte | Tipo | Usado em | Cobertura | Observacoes |
+|-------|------|----------|-----------|-------------|
+
+Use `Cobertura = completo`, `parcial` ou `lacuna`. Inclua pelo menos:
+- artefatos `_reversa_sdd/` usados;
+- arquivos de configuracao e manifests usados;
+- pastas ou entrypoints de codigo amostrados;
+- lacunas importantes que reduziram confianca.
+
+### 7. Gerar tasks de handoff
+
+Crie `tasks.md` em `<output_folder>/brief/` com:
+
+- checklist das tarefas executadas, marcadas como `[x]`, `[/]`, `[~]` ou `[ ]`;
+- tabela de artefatos gerados com status;
+- proximos passos recomendados;
+- bloqueios/lacunas, se houver.
+
+Este arquivo e parte do contrato de handoff. Nao pode ficar desatualizado em relacao aos arquivos realmente criados.
+
 ## Saida
 
 Crie estes arquivos em `<output_folder>/brief/`:
@@ -93,6 +129,32 @@ Crie estes arquivos em `<output_folder>/brief/`:
 - `architecture_digest.md`: resumo estrutural.
 - `domain_logic_digest.md`: resumo logico.
 - `build_like_this.md`: guia para usar o repo como modelo.
+- `traceability.md`: matriz fonte -> artefato do brief.
+- `tasks.md`: checklist executavel e status do brief.
+
+## Checkpoint
+
+Se `.reversa/state.json` existir, atualize-o de forma conservadora, preservando todos os campos existentes e adicionando/atualizando apenas:
+
+```json
+"checkpoints": {
+  "brief": {
+    "completed_at": "<ISO-8601>",
+    "output_folder": "<output_folder>/brief/",
+    "files": [
+      "<output_folder>/brief/repo_brief.md",
+      "<output_folder>/brief/llm_context_pack.md",
+      "<output_folder>/brief/architecture_digest.md",
+      "<output_folder>/brief/domain_logic_digest.md",
+      "<output_folder>/brief/build_like_this.md",
+      "<output_folder>/brief/traceability.md",
+      "<output_folder>/brief/tasks.md"
+    ]
+  }
+}
+```
+
+Se nao for possivel atualizar o state, registre o motivo em `tasks.md` e informe no encerramento.
 
 ## Encerramento
 
@@ -106,6 +168,8 @@ Ao terminar, apresente:
 > - `architecture_digest.md`
 > - `domain_logic_digest.md`
 > - `build_like_this.md`
+> - `traceability.md`
+> - `tasks.md`
 >
 > Melhor proximo passo: usar `llm_context_pack.md` como contexto em outro agente ou rodar `/reversa-evolve` se quiser transformar esse repositorio em um produto expandido."
 

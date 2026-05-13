@@ -83,6 +83,24 @@
         "_reversa_sdd/questions_integrations.md",
         "_reversa_sdd/questions_infra.md"
       ]
+    },
+    "evolve": {
+      "completed_at": "2026-05-13T15:28:07.1483246-03:00",
+      "output_folder": "_reversa_sdd/evolution/",
+      "product_target": "Plataforma CRM+ERP dual-perfil sobre base Twenty",
+      "files": [
+        "_reversa_sdd/evolution/tasks.md",
+        "_reversa_sdd/evolution/product_intent.md",
+        "_reversa_sdd/evolution/current_product_base.md",
+        "_reversa_sdd/evolution/expansion_gap.md",
+        "_reversa_sdd/evolution/target_product_spec.md",
+        "_reversa_sdd/evolution/new_capabilities.md",
+        "_reversa_sdd/evolution/target_product_architecture.md",
+        "_reversa_sdd/evolution/evolution_roadmap.md",
+        "_reversa_sdd/evolution/traceability.md",
+        "_reversa_sdd/evolution/handoff.md"
+      ],
+      "next_phase": "Fase 0 - agente codificador"
     }
   },
   "engines": [
