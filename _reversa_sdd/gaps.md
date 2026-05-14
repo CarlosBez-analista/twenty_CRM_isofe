@@ -61,8 +61,15 @@
 
 ### GAP-M02 — Resolução de Variáveis entre Passos de Workflow
 **Módulo:** `fluxo-de-trabalho/design.md`
+**Status:** 🟡 PARCIALMENTE RESOLVIDO (2026-05-14)
 **Descrição:** O mecanismo de passagem de dados entre steps (output do step 1 como input do step 2) não foi confirmado pelo proprietário.
 **Ação recomendada:** Investigar o `WorkflowExecutorService` para identificar como o `state` JSON é construído e como as expressões de template são resolvidas.
+
+**Resolução parcial via spike `001-spike-tecnico-erp`:**
+
+- A abordagem técnica foi definida: registrar `Action Customizada` no registry do `WorkflowExecutorService` em vez de modificar o serviço core (vide `_reversa_forward/001-spike-tecnico-erp/investigation.md:18-21` e `roadmap.md:27` decisão D-04).
+- Implementação existe (T008 `EmissorFiscalWorkflowAction` + T009 registro), mas **falta teste de integração** validando que o payload de `Opportunity CLOSED_WON` chega íntegro na Action.
+- Pendência para fechamento total: criar teste de serialização ponta-a-ponta antes de declarar 🟢.
 
 ---
 

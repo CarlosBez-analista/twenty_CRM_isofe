@@ -155,9 +155,11 @@ Se a passagem de contexto funcionar, implementar o Workflow trigger. Se não, ab
 
 ## 5. Decisões Humanas Pendentes (Não Avançar sem Resposta)
 
+> **Atualização 2026-05-14:** Ordem de prioridade do roadmap formalizada em **ADR-0006**. Resumo: (1) `001-fundacao-modular` → (2) `002-crm-core` → (3) features sociais ISOFÉ → (4) features empresariais → (5) `00N-fiscal-emissor`. Decisões fiscais ficam diferidas até o passo 5.
+
 | ID | Decisão | Impacto direto | Urgência |
 |----|---------|---------------|---------|
-| **D1** | Parceiro fiscal: Focus NF-e ou Nuvem Fiscal | Define a API do `erp-fiscal-service` | 🔴 Antes de E1-22 |
+| ~~**D1**~~ ✅ Resolvida | ~~Parceiro fiscal: Focus NF-e ou Nuvem Fiscal~~ → **Substituída por ADR-0005** (camada multi-provedor via Adapter Pattern). Não há mais escolha única — cada workspace configura seu provedor; ISOFÉ usa `NullFiscalAdapter`. | Não bloqueia mais Fase 1 nem fundação. Detalhamento na feature `00N-fiscal-emissor` conforme ADR-0006. | ⚪ Diferida para feature fiscal |
 | **D2** | LLM para agente IA WhatsApp: GPT-4o, Claude, Gemini | Define custo e capacidade do P3-03 | 🟡 Antes de Fase 3 |
 | **D3** | Nome do produto final | Marketing e identidade | 🟡 Antes do lançamento |
 | **D4** | Modelo de negócio: open source + módulos premium ou fechado | Define o que é público no repositório | 🔴 Antes do V1 |
@@ -171,7 +173,7 @@ Se a passagem de contexto funcionar, implementar o Workflow trigger. Se não, ab
 |-----|------------|
 | **GAP-C01** — Orphan storage | Criar cron que lista arquivos no storage e verifica se UUID existe na tabela `Attachment`. Deletar órfãos. |
 | **GAP-C03** — Admin único | Em `WorkspaceMember`, antes de remover ou rebaixar, verificar: `if (adminCount == 1 && isRemovingAdmin) throw BusinessRuleError`. |
-| **GAP-M02** — Variáveis no Workflow | Investigar `WorkflowExecutorService`. Documentar antes de implementar `CLOSED_WON → Pedido`. |
+| **GAP-M02** — Variáveis no Workflow | 🟡 Parcialmente resolvido pelo spike `001-spike-tecnico-erp` (decisão D-04 — Action Customizada). Falta teste de integração ponta-a-ponta validando serialização do payload `Opportunity → Action`. Detalhes em `_reversa_sdd/gaps.md#gap-m02`. |
 | **GAP-C04** — FTS em Notas | Verificar se `body` tem GIN index. Se não, avaliar custo-benefício de `tsvector`. |
 
 ---

@@ -1,11 +1,24 @@
 # Tasks - Reversa Evolve: CRM -> CRM + ERP
 
-> **Projeto:** twenty-crm-erp
+> **Projeto:** twenty-crm-erp (produto NattivusECO)
 > **Fase:** Evolve
 > **Iniciado em:** 2026-05-11
-> **Atualizado em:** 2026-05-13
-> **Diretriz central:** O CRM serve ao ERP.
+> **Atualizado em:** 2026-05-14
+> **Diretriz central:** O CRM serve ao ERP. **Primeiro cliente: ISOFÉ (Perfil Social).**
 > **Status:** concluido para handoff da Fase 0.
+
+## Ordem de Prioridade do Roadmap (ADR-0006)
+
+| Ordem | Bloco | Cliente alvo |
+| --- | --- | --- |
+| 1 | `001-fundacao-modular` (em execução, ~26%) | Plataforma toda |
+| 2 | `002-crm-core` (Company, Person, Opportunity, Task) | Todos os perfis |
+| 3 | Features sociais (ISOFÉ-first): Beneficiário, Família, Programa, Atendimento, Doação, SROI | Perfil Social |
+| 4 | Features empresariais: Pedido, Estoque, Financeiro | Perfil Empresarial |
+| 5 | `00N-fiscal-emissor` (camada multi-provedor — ADR-0005) | Perfil Empresarial |
+| 6 | Adapters fiscais adicionais (Tecnospeed, NFe.io, prefeituras) | Sob demanda |
+
+**Regra:** o fiscal só entra depois do empresarial estar pronto. ISOFÉ não precisa de fiscal em V1 (usa `NullFiscalAdapter`).
 
 ---
 
@@ -83,8 +96,8 @@
 
 | ID | Status | Bloqueio | Impacto |
 |----|--------|----------|---------|
-| GAP-M02 | [~] | Investigar `WorkflowExecutorService` antes de automatizar `Opportunity CLOSED_WON -> Pedido`. | Bloqueia workflow automatico de Pedido. |
-| D1 | [~] | Escolher Focus NF-e ou Nuvem Fiscal. | Bloqueia implementacao fiscal NF-e/NFS-e. |
+| GAP-M02 | [/] | 🟡 Resolução parcial via spike `001-spike-tecnico-erp` (Action Customizada — decisão D-04). Falta teste de integração ponta-a-ponta. Ver `_reversa_sdd/gaps.md#gap-m02`. | Não bloqueia mais a fundação. |
+| D1 | [x] | ✅ Substituída por **ADR-0005** (Adapter Pattern multi-provedor). Não há mais escolha única — cada workspace configura seu provedor. ISOFÉ usa `NullFiscalAdapter`. | Diferida para feature `00N-fiscal-emissor` conforme **ADR-0006**. |
 | D4 | [~] | Decidir modelo de negocio: open source + premium ou fechado. | Bloqueia decisao de empacotamento/publicacao do V1. |
 | D5 | [~] | Definir metodologia SROI. | Bloqueia indicadores sociais de impacto financeiro. |
 | D2 | [~] | Escolher LLM para agente IA/WhatsApp. | Bloqueia canal IA/WhatsApp da Fase 3. |
@@ -132,7 +145,7 @@
 - [ ] Criar `packages/twenty-erp` via Nx generator.
 - [ ] Criar spike de `PedidoWorkspaceEntity` (minimal: numero, status, empresa).
 - [ ] Validar que herda Timeline, busca full-text, GraphQL e soft-delete automaticamente.
-- [ ] Investigar GAP-M02: `WorkflowExecutorService` — passagem de contexto entre steps antes de implementar `CLOSED_WON -> Pedido`.
+- [/] Investigar GAP-M02: `WorkflowExecutorService` — passagem de contexto entre steps. Abordagem definida (Action Customizada) e implementada no spike T008/T009; resta teste de integração serializando payload real `Opportunity → Action`.
 - [ ] Definir abordagem: `/reversa-requirements` (levantamento formal) ou `/reversa-coding` (execucao direta do handoff.md).
 
 ---
@@ -143,7 +156,7 @@
 
 | ID | Decisao | Urgencia |
 |----|---------|---------|
-| D1 | Parceiro fiscal: Focus NF-e ou Nuvem Fiscal | 🔴 Antes de E1-22 |
+| ~~D1~~ ✅ | ~~Parceiro fiscal: Focus NF-e ou Nuvem Fiscal~~ → resolvida por **ADR-0005** (multi-provedor) + **ADR-0006** (ordem de prioridade) | ⚪ Diferida — só relevante na feature `00N-fiscal-emissor` |
 | D2 | LLM para agente IA WhatsApp | 🟡 Antes da Fase 3 |
 | D3 | Nome do produto final | 🟡 Antes do lancamento |
 | D4 | Modelo de negocio: open source + premium ou fechado | 🔴 Antes do V1 |

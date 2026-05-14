@@ -281,12 +281,13 @@
                       ],
     "redator_progress":  "dashboard/edge-cases.md",
     "next_session_agenda":  {
-                                "topic":  "Fase 0 - Spike Tecnico do twenty-erp",
-                                "decision_needed":  "Iniciar com /reversa-requirements (levantamento formal) ou /reversa-coding (execucao direta do handoff.md)",
-                                "context":  "Etapa 10 (Design System ERP) concluida. Tokens delta mapeados, 8 componentes listados, 3 decisoes de estrategia visual tomadas.",
-                                "blocked_by":  [
-                                                   "D1 parceiro fiscal",
-                                                   "GAP-M02 WorkflowExecutorService"
-                                               ]
+                                "topic":  "Continuar execucao da feature 001-fundacao-modular (~26% concluido)",
+                                "decision_needed":  "Retomar /reversa-coding nas 68 acoes abertas de actions.md",
+                                "context":  "D1 e GAP-M02 RESOLVIDOS em 2026-05-14. D1 substituida por ADR-0005 (Adapter Pattern multi-provedor). GAP-M02 parcialmente resolvido pelo spike (Action Customizada). Ordem de prioridade formalizada em ADR-0006: ISOFE-first, fiscal adapters apos features sociais e empresariais.",
+                                "blocked_by":  [],
+                                "decisions_resolved":  [
+                                                            "D1 -> ADR-0005 (multi-provedor) + ADR-0006 (ordem de prioridade)",
+                                                            "GAP-M02 -> spike 001-spike-tecnico-erp (Action Customizada D-04), falta apenas teste de integracao"
+                                                       ]
                             }
 }
