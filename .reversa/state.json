@@ -8,15 +8,15 @@
     "doc_level":  "detalhado",
     "output_folder":  "_reversa_sdd",
     "forward_folder":  "_reversa_forward",
-    "phase":  "interpretacao",
+    "phase":  "concluido",
     "completed":  [
-                      "reconhecimento"
+                      "reconhecimento",
+                      "escavacao",
+                      "interpretacao",
+                      "geracao",
+                      "revisao"
                   ],
-    "pending":  [
-                    "interpretacao",
-                    "geracao",
-                    "revisao"
-                ],
+    "pending":  [],
     "checkpoints":  {
                         "scout":  {
                                       "completed_at":  "2026-05-14T02:35:00Z",
