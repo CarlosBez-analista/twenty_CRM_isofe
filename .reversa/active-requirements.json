@@ -1,9 +1,9 @@
 {
   "schema-version": 1,
-  "feature-dir": "_reversa_forward/001-spike-tecnico-erp",
+  "feature-dir": "_reversa_forward/001-fundacao-modular",
   "feature-id": "001",
-  "short-name": "spike-tecnico-erp",
-  "started-at": "2026-05-13T20:03:00Z",
+  "short-name": "fundacao-modular",
+  "started-at": "2026-05-14T00:00:00Z",
   "current-stage": "requirements",
   "stages-completed": [],
   "paused-features": []
