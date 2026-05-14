@@ -1,0 +1,19 @@
+{
+  "name": "twenty-erp",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/twenty-erp/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/twenty-erp",
+        "main": "packages/twenty-erp/src/index.ts",
+        "tsConfig": "packages/twenty-erp/tsconfig.lib.json",
+        "assets": ["packages/twenty-erp/*.md"]
+      }
+    }
+  }
+}

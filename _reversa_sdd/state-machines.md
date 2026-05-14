@@ -1,6 +1,6 @@
 # Máquinas de Estado
 
-Documentação das transições de estado para as principais entidades do CRM.
+Documentação das transições de estado para as principais entidades do CRM e ERP.
 
 ## Opportunity (Oportunidade)
 A oportunidade transita por diversos estágios do funil. O campo `stage` define o estado.
@@ -71,3 +71,37 @@ stateDiagram-v2
     ACTIVE --> [*]: Desconectado
 ```
 > Confiança: 🟡 INFERIDO
+
+---
+
+## Pedido (ERP — Emissão Fiscal)
+Ciclo de vida da entidade `PedidoWorkspaceEntity`. O campo `status` governa o fluxo de faturamento.
+
+```mermaid
+stateDiagram-v2
+    [*] --> RASCUNHO: Pedido criado
+    RASCUNHO --> AGUARDANDO_EMISSAO: Aprovação do operador
+    AGUARDANDO_EMISSAO --> EMITIDO: NF-e autorizada via SEFAZ
+    AGUARDANDO_EMISSAO --> ERRO_EMISSAO: Falha na comunicação SEFAZ
+    ERRO_EMISSAO --> AGUARDANDO_EMISSAO: Reenvio manual
+    EMITIDO --> CANCELADO: Cancelamento fiscal
+    EMITIDO --> [*]
+    CANCELADO --> [*]
+```
+> Confiança: 🟡 INFERIDO — O código atual usa apenas `RASCUNHO` como default. Os demais estados são projetados com base na lógica de emissão fiscal mapeada na `EmissorFiscalWorkflowAction` e no fluxo padrão SEFAZ.
+
+---
+
+## Workspace Activation
+Ciclo de vida do workspace durante o onboarding. Extraído do guard `SettingsPermissionGuard` que faz bypass durante criação.
+
+```mermaid
+stateDiagram-v2
+    [*] --> PENDING_CREATION: Workspace solicitado
+    PENDING_CREATION --> ONGOING_CREATION: Provisionamento iniciado
+    ONGOING_CREATION --> ACTIVE: Setup concluído
+    ACTIVE --> SUSPENDED: Billing expirado
+    SUSPENDED --> ACTIVE: Pagamento restabelecido
+    ACTIVE --> [*]
+```
+> Confiança: 🟡 INFERIDO — `PENDING_CREATION` e `ONGOING_CREATION` confirmados no guard. `SUSPENDED` inferido do módulo de billing.

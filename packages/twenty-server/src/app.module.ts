@@ -35,6 +35,7 @@ import { ModulesModule } from 'src/modules/modules.module';
 import { ClickHouseModule } from './database/clickHouse/clickHouse.module';
 import { CoreEngineModule } from './engine/core-modules/core-engine.module';
 import { I18nModule } from './engine/core-modules/i18n/i18n.module';
+import { ErpModule } from '../../twenty-erp/src/lib/erp.module';
 
 // TODO: Remove this middleware when all the rest endpoints are migrated to TwentyORM
 const MIGRATED_REST_METHODS = [
@@ -60,6 +61,8 @@ const MIGRATED_REST_METHODS = [
     CoreEngineModule,
     // Modules module, contains all business logic modules
     ModulesModule,
+    // ERP module
+    ErpModule,
     // Needed for the user workspace middleware
     WorkspaceCacheStorageModule,
     // Api modules

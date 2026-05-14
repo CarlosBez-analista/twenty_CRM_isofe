@@ -129,3 +129,14 @@ O Dashboard no Twenty CRM √© constru√≠do sobre a infraestrutura de Metadados de 
 - **OAuth Lifecycle:** Gerenciamento centralizado de `accessToken` e `refreshToken` com renova√ß√£o autom√°tica.
 - **Provedores Suportados:** Google, Microsoft e IMAP/SMTP/CALDAV gen√©rico.
 - **Provisionamento:** Serve como base para a cria√ß√£o autom√°tica de `MessageChannel` e `CalendarChannel`.
+
+
+## 3.12. twenty-erp
+?? CONFIRMADO
+**Complexidade:** Baixa
+**Responsabilidade:** MÛdulo customizado para emiss„o fiscal e gerenciamento de pedidos, estendendo as funcionalidades do CRM.
+
+- **Entidades:** Introduz PedidoWorkspaceEntity para registrar as vendas (com status, valor total e referÍncia ao companyId e opportunityId).
+- **ServiÁos:** FocusNfeHttpService atua como client para a API Focus NFe, incluindo um interceptor HTTP dedicado para logs de auditoria de performance e rastreabilidade ([AUDIT] HTTP Interceptor).
+- **Workflows:** Registra o EmissorFiscalWorkflowAction para ser orquestrado pelo motor de workflow do sistema legado, validando o contexto (dados do Pedido) e injetando o payload para emiss„o na SEFAZ via Focus NFe.
+

@@ -18,42 +18,43 @@
 
 ## Fase 2: Escavação 🏗️
 
-- [x] **Archaeologist** — Análise do módulo `company`
-- [x] **Archaeologist** — Análise do módulo `person`
-- [x] **Archaeologist** — Análise do módulo `opportunity`
-- [x] **Archaeologist** — Análise do módulo `task`
-- [x] **Archaeologist** — Análise do módulo `workflow`
-- [x] **Archaeologist** — Análise do módulo `messaging`
-- [x] **Archaeologist** — Análise do módulo `calendar`
-- [x] **Archaeologist** — Análise do módulo `note`
-- [x] **Archaeologist** — Análise do módulo `attachment`
-- [x] **Archaeologist** — Análise do módulo `workspace-member`
-- [x] **Archaeologist** — Análise do módulo `connected-account`
-- [x] **Archaeologist** — Análise do módulo `timeline`
-- [x] **Archaeologist** — Análise do módulo `dashboard`
+- [ ] **Archaeologist** — Análise do módulo `company`
+- [ ] **Archaeologist** — Análise do módulo `person`
+- [ ] **Archaeologist** — Análise do módulo `opportunity`
+- [ ] **Archaeologist** — Análise do módulo `task`
+- [ ] **Archaeologist** — Análise do módulo `workflow`
+- [ ] **Archaeologist** — Análise do módulo `messaging`
+- [ ] **Archaeologist** — Análise do módulo `calendar`
+- [ ] **Archaeologist** — Análise do módulo `note`
+- [ ] **Archaeologist** — Análise do módulo `attachment`
+- [ ] **Archaeologist** — Análise do módulo `workspace-member`
+- [ ] **Archaeologist** — Análise do módulo `connected-account`
+- [ ] **Archaeologist** — Análise do módulo `timeline`
+- [ ] **Archaeologist** — Análise do módulo `dashboard`
+- [ ] **Archaeologist** — Análise do módulo `twenty-erp`
 
 ## Fase 3: Interpretação 🧠
 
-- [x] **Detetive** — Arqueologia Git e ADRs retroativos
-- [x] **Detetive** — Regras de negócio implícitas e máquinas de estado
-- [x] **Detetive** — Matriz de permissões (RBAC/ACL)
-- [x] **Arquiteto** — Diagramas C4 (Contexto, Containers, Componentes)
-- [x] **Arquiteto** — ERD completo e integrações externas
-- [x] **Arquiteto** — Spec Impact Matrix
+- [x] **Detetive** — Arqueologia Git e ADRs retroativos (4 ADRs)
+- [x] **Detetive** — Regras de negócio implícitas e máquinas de estado (6 state machines, 14 regras)
+- [x] **Detetive** — Matriz de permissões (RBAC/ACL) (30 flags confirmadas, 3 guard types)
+- [ ] **Arquiteto** — Diagramas C4 (Contexto, Containers, Componentes)
+- [ ] **Arquiteto** — ERD completo e integrações externas
+- [ ] **Arquiteto** — Spec Impact Matrix
 
 ## Fase 4: Geração 📝
 
-- [x] **Redator** — Specs SDD por componente (`empresa`, `pessoa`, `oportunidade`, `tarefa`, `fluxo-de-trabalho`, `mensagens`)
-- [x] **Redator** — Specs SDD das units restantes
-- [x] **Redator** — OpenAPI (GraphQL Schema é o contrato principal)
-- [x] **Redator** — User Stories (Principais fluxos de valor gerados)
-- [x] **Redator** — Code/Spec Matrix (Gerada em traceability/)
+- [ ] **Redator** — Specs SDD por componente (`empresa`, `pessoa`, `oportunidade`, `tarefa`, `fluxo-de-trabalho`, `mensagens`)
+- [ ] **Redator** — Specs SDD das units restantes e ERP
+- [ ] **Redator** — OpenAPI (GraphQL Schema é o contrato principal)
+- [ ] **Redator** — User Stories (Principais fluxos de valor gerados)
+- [ ] **Redator** — Code/Spec Matrix (Gerada em traceability/)
 
 ## Fase 5: Revisão ✅
 
-- [x] **Revisor** — Revisão cruzada de specs
-- [x] **Revisor** — Resolução de lacunas com o usuário (42 perguntas respondidas em 3 arquivos)
-- [x] **Revisor** — Relatório de confiança final (`confidence-report.md`)
+- [ ] **Revisor** — Revisão cruzada de specs
+- [ ] **Revisor** — Resolução de lacunas com o usuário (42 perguntas respondidas em 3 arquivos)
+- [ ] **Revisor** — Relatório de confiança final (`confidence-report.md`)
 
 ---
 

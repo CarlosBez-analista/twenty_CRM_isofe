@@ -22,6 +22,7 @@ import { UpdateRecordWorkflowAction } from 'src/modules/workflow/workflow-execut
 import { UpsertRecordWorkflowAction } from 'src/modules/workflow/workflow-executor/workflow-actions/record-crud/upsert-record.workflow-action';
 import { ToolExecutorWorkflowAction } from 'src/modules/workflow/workflow-executor/workflow-actions/tool-executor-workflow-action';
 import { WorkflowActionType } from 'src/modules/workflow/workflow-executor/workflow-actions/types/workflow-action.type';
+import { EmissorFiscalWorkflowAction } from '../../../../../../twenty-erp/src/lib/actions/emissor-fiscal.workflow-action';
 
 @Injectable()
 export class WorkflowActionFactory {
@@ -41,6 +42,7 @@ export class WorkflowActionFactory {
     private readonly aiAgentWorkflowAction: AiAgentWorkflowAction,
     private readonly emptyWorkflowAction: EmptyWorkflowAction,
     private readonly delayWorkflowAction: DelayWorkflowAction,
+    private readonly emissorFiscalWorkflowAction: EmissorFiscalWorkflowAction,
   ) {}
 
   get(stepType: WorkflowActionType): WorkflowAction {
@@ -79,6 +81,8 @@ export class WorkflowActionFactory {
         return this.emptyWorkflowAction;
       case WorkflowActionType.DELAY:
         return this.delayWorkflowAction;
+      case WorkflowActionType.EMISSOR_FISCAL:
+        return this.emissorFiscalWorkflowAction as unknown as WorkflowAction;
       default:
         throw new WorkflowStepExecutorException(
           `Workflow step executor not found for step type '${stepType}'`,

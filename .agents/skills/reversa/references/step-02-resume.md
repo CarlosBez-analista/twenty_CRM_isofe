@@ -69,6 +69,17 @@ Exemplo:
 > 🔄 Escavação em andamento — módulos `auth` e `orders` analisados, `payments` e `users` pendentes
 > ⏳ Interpretação, Geração, Revisão"
 
+Em seguida, verifique os campos `checkpoints.brief` e `checkpoints.evolve` no state.json. Se existirem, exiba-os como linha adicional após o progresso do pipeline:
+
+> "Agentes/fluxos adicionais:
+> ✅ reversa-brief concluído em `<output_folder>/brief/` (<completed_at>)
+> ✅ reversa-evolve concluído — produto alvo: <product_target> · handoff em `<output_folder>/evolution/handoff.md`"
+
+Se apenas um deles existir, exiba só esse. Se nenhum existir, omita a linha inteira (não mencione ausência).
+
+Se `checkpoints.evolve` existir e `next_phase` for `"agente codificador"`, acrescente ao final:
+> "Próxima fase recomendada: agente codificador — use `handoff.md` como ponto de entrada."
+
 ## 5. Modo de resposta a lacunas
 
 Se `answer_mode` for `"file"`:

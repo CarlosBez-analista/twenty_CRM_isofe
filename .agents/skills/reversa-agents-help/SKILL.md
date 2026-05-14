@@ -119,6 +119,24 @@ O estilista cataloga o guarda-roupa: paleta de cores, tipografia, espaçamentos,
 
 ---
 
+## 📦 Brief — o biógrafo operacional
+**Comando:** `/reversa-brief`
+
+O biógrafo operacional lê tudo que o time de discovery produziu e destila numa única pasta densa: quem é o produto, como funciona por dentro, e um context pack pronto para colar em outro agente. Diferente do Soul Extractor (que é uma síntese rápida), o Brief é um pacote estruturado de 7 artefatos — incluindo rastreabilidade e tasks de handoff.
+
+> Use o Brief após o pipeline `/reversa` (ou quando quiser contexto compacto sem rodar o pipeline completo). É o caminho preferido em lugar do `/reversa-extract-soul` para novos usos.
+
+---
+
+## 🚀 Evolve — o arquiteto de produto
+**Comando:** `/reversa-evolve`
+
+O arquiteto de produto pega a planta do edifício existente e pergunta: "Se eu fosse construir esse prédio hoje, do zero, o que preservaria, o que expandiria, o que jogaria fora?" Ele não reforma — ele propõe um produto novo que herda o que tem valor e adiciona o que falta.
+
+> Use o Evolve após o Brief (ou direto após o pipeline) quando o objetivo não é reconstruir fielmente o legado, mas criar um produto expandido. Exemplo clássico: transformar um CRM em CRM+ERP.
+
+---
+
 ## Sequência recomendada
 
 ```
@@ -129,4 +147,7 @@ Scout → Archaeologist (N sessões) → Detective → Architect → Writer → 
 
 Opcionais em qualquer fase:
 Soul Extractor · Visor · Data Master · Design System
+
+Product Strategy (após o pipeline):
+/reversa-brief → /reversa-evolve → agente codificador
 ```

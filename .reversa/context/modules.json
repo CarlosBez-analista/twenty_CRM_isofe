@@ -231,6 +231,68 @@
       ],
       "algorithms": [],
       "complexity": "medium"
+    },
+    {
+      "name": "twenty-erp",
+      "path": "packages/twenty-erp",
+      "purpose": "Módulo customizado para emissão fiscal e gerenciamento de pedidos",
+      "primary_files": [
+        "packages/twenty-erp/src/lib/actions/emissor-fiscal.workflow-action.ts",
+        "packages/twenty-erp/src/lib/services/focus-nfe-http.service.ts",
+        "packages/twenty-erp/src/lib/entities/pedido.workspace-entity.ts"
+      ],
+      "functions": [
+        {
+          "name": "execute",
+          "file": "packages/twenty-erp/src/lib/actions/emissor-fiscal.workflow-action.ts",
+          "params": [
+            "context: any"
+          ],
+          "returns": "Promise<void>",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "emitirNfe",
+          "file": "packages/twenty-erp/src/lib/services/focus-nfe-http.service.ts",
+          "params": [
+            "payload: any"
+          ],
+          "returns": "Promise<any>",
+          "confidence": "confirmed"
+        }
+      ],
+      "entities": [
+        {
+          "name": "PedidoWorkspaceEntity",
+          "fields": [
+            { "name": "codigo", "type": "string", "required": true },
+            { "name": "status", "type": "string", "required": true },
+            { "name": "valorTotal", "type": "number", "required": true },
+            { "name": "dataEmissao", "type": "Date | null", "required": false },
+            { "name": "companyId", "type": "string", "required": true },
+            { "name": "opportunityId", "type": "string | null", "required": false }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        {
+          "description": "A emissão fiscal valida a presença de um pedido no contexto e dispara chamada via FocusNfeHttpService.",
+          "location": "packages/twenty-erp/src/lib/actions/emissor-fiscal.workflow-action.ts:14",
+          "confidence": "confirmed"
+        }
+      ],
+      "dependencies": [
+        "workflow"
+      ],
+      "algorithms": [
+        {
+          "name": "HTTP Interceptor Audit",
+          "description": "Grava latência de chamadas HTTP externas via interceptor genérico em FocusNfeHttpService.",
+          "confidence": "confirmed"
+        }
+      ],
+      "complexity": "low"
     }
   ]
 }

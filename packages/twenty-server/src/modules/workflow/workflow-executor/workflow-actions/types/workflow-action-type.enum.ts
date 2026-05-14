@@ -16,4 +16,5 @@ export enum WorkflowActionType {
   ITERATOR = 'ITERATOR',
   EMPTY = 'EMPTY',
   DELAY = 'DELAY',
+  EMISSOR_FISCAL = 'EMISSOR_FISCAL',
 }

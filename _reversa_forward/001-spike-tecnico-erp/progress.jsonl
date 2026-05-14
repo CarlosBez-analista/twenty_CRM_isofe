@@ -1,0 +1,10 @@
+{"ts":"2026-05-14T00:54:00Z","action":"T001","status":"done","files":["packages/twenty-erp/project.json"]}
+{"ts":"2026-05-14T00:54:00Z","action":"T002","status":"done","files":["packages/twenty-erp/src/lib/erp.module.ts"]}
+{"ts":"2026-05-14T00:54:00Z","action":"T003","status":"done","files":["packages/twenty-server/src/app.module.ts"]}
+{"ts":"2026-05-14T00:54:00Z","action":"T004","status":"done","files":["packages/twenty-erp/src/lib/erp.module.spec.ts"]}
+{"ts":"2026-05-14T00:54:00Z","action":"T005","status":"done","files":["packages/twenty-erp/src/lib/entities/pedido.workspace-entity.ts"]}
+{"ts":"2026-05-14T00:54:00Z","action":"T006","status":"done","files":["packages/twenty-erp/src/lib/erp.module.ts"]}
+{"ts":"2026-05-14T00:54:00Z","action":"T007","status":"done","files":["packages/twenty-erp/src/lib/services/focus-nfe-http.service.ts"]}
+{"ts":"2026-05-14T00:54:00Z","action":"T008","status":"done","files":["packages/twenty-erp/src/lib/actions/emissor-fiscal.workflow-action.ts"]}
+{"ts":"2026-05-14T00:54:00Z","action":"T009","status":"done","files":["packages/twenty-server/src/modules/workflow/workflow-executor/workflow-executor.module.ts","packages/twenty-server/src/modules/workflow/workflow-executor/workflow-actions/types/workflow-action-type.enum.ts","packages/twenty-server/src/modules/workflow/workflow-executor/factories/workflow-action.factory.ts"]}
+{"ts":"2026-05-14T00:54:00Z","action":"T010","status":"done","files":["packages/twenty-erp/src/lib/services/focus-nfe-http.service.ts"]}

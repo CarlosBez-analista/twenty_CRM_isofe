@@ -520,3 +520,18 @@ Representa um arquivo anexado. Utiliza uma estrutura polimÃ³rfica para vinculaÃ§
 ---
 
 
+
+
+## PedidoWorkspaceEntity (Módulo twenty-erp)
+**Mesa / Tabela:** pedido
+**Descrição:** Armazena informações de pedidos para emissão fiscal no contexto do ERP.
+
+| Campo | Tipo | Obrigatório | Padrão | Descrição |
+|-------|------|-------------|---------|-----------|
+| codigo | varchar(255) | Sim | - | Identificador único ou número do pedido. |
+| status | varchar(50) | Sim | 'RASCUNHO' | Status atual do pedido (ex: RASCUNHO, FATURADO). |
+| alorTotal | decimal(10,2) | Sim | - | Valor bruto total do pedido. |
+| dataEmissao | timestamp | Não | null | Data e hora em que a nota/pedido foi emitido. |
+| companyId | uuid | Sim | - | ID da empresa cliente vinculada ao pedido. |
+| opportunityId | uuid | Não | null | ID da oportunidade do CRM que gerou o pedido (se aplicável). |
+

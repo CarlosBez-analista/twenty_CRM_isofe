@@ -36,6 +36,30 @@ Este arquivo persiste o estado completo da análise entre sessões. O Reversa l�
         "_reversa_sdd/data-dictionary.md",
         ".reversa/context/modules.json"
       ]
+    },
+    "brief": {
+      "completed_at": "2026-04-27T09:00:00Z",
+      "output_folder": "_reversa_sdd/brief/",
+      "files": [
+        "_reversa_sdd/brief/repo_brief.md",
+        "_reversa_sdd/brief/llm_context_pack.md",
+        "_reversa_sdd/brief/architecture_digest.md",
+        "_reversa_sdd/brief/domain_logic_digest.md",
+        "_reversa_sdd/brief/build_like_this.md",
+        "_reversa_sdd/brief/traceability.md",
+        "_reversa_sdd/brief/tasks.md"
+      ]
+    },
+    "evolve": {
+      "completed_at": "2026-04-27T11:00:00Z",
+      "output_folder": "_reversa_sdd/evolution/",
+      "product_target": "CRM + ERP",
+      "next_phase": "agente codificador",
+      "files": [
+        "_reversa_sdd/evolution/tasks.md",
+        "_reversa_sdd/evolution/product_intent.md",
+        "_reversa_sdd/evolution/handoff.md"
+      ]
     }
   },
   "created_files": [
