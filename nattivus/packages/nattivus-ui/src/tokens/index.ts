@@ -1,9 +1,9 @@
 /**
- * T068: Tokens de Design Nattivus Default
- * 
- * Centraliza os valores base de design (paleta, tipografia, espaçamentos).
- * Estes tokens devem ser expostos via CSS Variables (`--ntv-*`) para 
- * permitir override fácil a nível de Workspace.
+ * T068 + T014: Tokens de Design Nattivus
+ *
+ * Paleta base + extensão ERP (pipeline stages, status, severity).
+ * Expostos via CSS Variables (`--ntv-*`) injetáveis por workspace.
+ * Ref: _reversa_sdd/design-system/tokens.md
  */
 
 export const nattivusTokens = {
@@ -71,21 +71,47 @@ export const nattivusTokens = {
     sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
     md: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
     lg: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
-  }
+  },
+
+  // Tokens específicos de CRM — pipeline stages e status (T014)
+  crm: {
+    stage: {
+      new:               '#94a3b8', // slate-400
+      meetingScheduled:  '#60a5fa', // blue-400
+      demoScheduled:     '#818cf8', // indigo-400
+      discovery:         '#a78bfa', // violet-400
+      proposalSent:      '#fb923c', // orange-400
+      negotiation:       '#facc15', // yellow-400
+      closedWon:         '#34d399', // emerald-400
+      closedLost:        '#f87171', // red-400
+    },
+    icp: {
+      true:  '#10b981', // ICP confirmado
+      false: '#94a3b8', // ICP desconhecido
+    },
+  },
 };
 
-/**
- * Converte os tokens do JS para uma string de CSS Variables.
- * Ideal para ser injetado no :root ou .nattivus-theme.
- */
-export function generateCssVariables(tokens: any = nattivusTokens, prefix = '--ntv'): string {
+/** Converte os tokens JS em CSS Variables injetáveis no :root ou .nattivus-theme */
+export function generateCssVariables(
+  tokens: Record<string, unknown> = nattivusTokens,
+  prefix = '--ntv',
+): string {
   let css = '';
   for (const [key, value] of Object.entries(tokens)) {
-    if (typeof value === 'object') {
-      css += generateCssVariables(value, `${prefix}-${key}`);
+    if (value !== null && typeof value === 'object') {
+      css += generateCssVariables(value as Record<string, unknown>, `${prefix}-${key}`);
     } else {
-      css += `${prefix}-${key}: ${value};\n`;
+      css += `${prefix}-${key}: ${String(value)};\n`;
     }
   }
   return css;
+}
+
+/**
+ * Gera o bloco :root completo pronto para injetar em um <style>.
+ * Útil no bootstrap do frontend Nattivus.
+ */
+export function generateRootBlock(tokens: Record<string, unknown> = nattivusTokens): string {
+  return `:root {\n${generateCssVariables(tokens)}}`;
 }

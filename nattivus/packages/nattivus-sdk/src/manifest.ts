@@ -7,6 +7,19 @@
  * Referência: _reversa_forward/001-fundacao-modular/interfaces/sdk-contract.md
  */
 
+/**
+ * Referência virtual a uma entidade de outro módulo.
+ *
+ * Não cria FK no banco — o shell valida existência em nível de aplicação.
+ * Decisão T001: módulos independentes, sem acoplamento de schema. Ver ADR-0007.
+ */
+export interface ModuleRef {
+  /** moduleId do módulo alvo */
+  moduleId: string;
+  /** Nome da entidade alvo (PascalCase) */
+  entityName: string;
+}
+
 /** Especificação de uma entidade exposta pelo módulo */
 export interface EntitySpec {
   /** Nome da entidade (PascalCase) */
@@ -17,9 +30,15 @@ export interface EntitySpec {
   standardObject: boolean;
   /** Dimensão do vetor de embedding (0 = sem embedding) */
   embeddingDimensions?: number;
+  /**
+   * Referências virtuais a entidades de outros módulos.
+   * Declaradas aqui para documentação e validação em aplicação;
+   * nunca geram FK no banco.
+   */
+  references?: ModuleRef[];
 }
 
-/** Especificação de uma rota exposta pelo módulo */
+/** Especificação de uma rota REST exposta pelo módulo */
 export interface RouteSpec {
   /** Método HTTP */
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
@@ -28,6 +47,26 @@ export interface RouteSpec {
   /** Descrição para documentação */
   description?: string;
   /** Permissões necessárias (referência a PermissionFlag) */
+  permissions?: string[];
+  /** Nome do handler no controller (ex: 'CompanyController.findAll') */
+  handler?: string;
+}
+
+/**
+ * Especificação de uma operação GraphQL exposta pelo módulo.
+ *
+ * Decisão T002: abordagem híbrida REST+GraphQL.
+ * REST — integrações externas e CRUD simples.
+ * GraphQL — queries complexas com filtros e dados relacionados.
+ */
+export interface GraphQLOperationSpec {
+  /** 'query' | 'mutation' | 'subscription' */
+  kind: 'query' | 'mutation' | 'subscription';
+  /** Nome da operação no schema GraphQL */
+  operationName: string;
+  /** Descrição para documentação */
+  description?: string;
+  /** Permissões necessárias */
   permissions?: string[];
 }
 
@@ -43,8 +82,10 @@ export interface IModule {
   sdkVersion: string;
   /** Entidades declaradas */
   entities: EntitySpec[];
-  /** Rotas declaradas */
+  /** Rotas REST declaradas */
   routes: RouteSpec[];
+  /** Operações GraphQL declaradas (opcional — T002) */
+  graphqlOperations?: GraphQLOperationSpec[];
   /** Permissões declaradas pelo módulo */
   permissions: string[];
   /** Dependências de outros módulos (moduleId[]) */

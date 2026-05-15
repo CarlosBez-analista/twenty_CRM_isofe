@@ -1,2 +1,2 @@
 // @nattivus/ui — Design system e componentes React do NattivusECO
-export {};
+export { nattivusTokens, generateCssVariables, generateRootBlock } from './tokens';

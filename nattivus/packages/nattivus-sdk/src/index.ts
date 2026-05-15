@@ -1,5 +1,5 @@
 // @nattivus/sdk — SDK público para extensões NattivusECO
-export type { IModule, IModuleManifest, EntitySpec, RouteSpec } from './manifest';
+export type { IModule, IModuleManifest, EntitySpec, RouteSpec, GraphQLOperationSpec, ModuleRef } from './manifest';
 export { createManifest, defineEntity } from './manifest';
 
 export type { PermissionFlag, DomainRuleSpec } from './permissions';

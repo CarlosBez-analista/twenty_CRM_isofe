@@ -1,10 +1,18 @@
 {
   "schema-version": 1,
-  "feature-dir": "_reversa_forward/001-fundacao-modular",
-  "feature-id": "001",
-  "short-name": "fundacao-modular",
-  "started-at": "2026-05-14T00:00:00Z",
-  "current-stage": "requirements",
-  "stages-completed": [],
-  "paused-features": []
+  "feature-dir": "_reversa_forward/002-modulos-crm",
+  "feature-id": "002",
+  "short-name": "modulos-crm",
+  "started-at": "2026-05-15T00:00:00Z",
+  "current-stage": "coding",
+  "stages-completed": ["requirements", "plan", "to-do"],
+  "paused-features": [
+    {
+      "feature-dir": "_reversa_forward/001-fundacao-modular",
+      "feature-id": "001",
+      "short-name": "fundacao-modular",
+      "paused-at": "2026-05-15T00:00:00Z",
+      "status": "completed"
+    }
+  ]
 }
