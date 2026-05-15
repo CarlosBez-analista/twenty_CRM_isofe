@@ -52,3 +52,9 @@
 {"task":"T060","title":"CLI seed-admin","status":"done","ts":"2026-05-15T01:27:09Z"}
 {"task":"T061","title":"CLI unlock-user","status":"done","ts":"2026-05-15T01:27:09Z"}
 {"task":"T062","title":"shell package.json + SDK .npmrc publish config","status":"done","ts":"2026-05-15T01:27:09Z"}
+{"task":"T063","title":"Logger estruturado pino + X-Request-Id","status":"done","ts":"2026-05-15T01:41:01Z"}
+{"task":"T064","title":"Auth Rate Limit Guard (IP/Email)","status":"done","ts":"2026-05-15T01:41:01Z"}
+{"task":"T065","title":"README nattivus-shell","status":"done","ts":"2026-05-15T01:41:01Z"}
+{"task":"T066","title":"README nattivus-sdk","status":"done","ts":"2026-05-15T01:41:01Z"}
+{"task":"T067","title":"README hello-world module","status":"done","ts":"2026-05-15T01:41:01Z"}
+{"task":"T068","title":"Tokens de design Nattivus default (nattivus-ui)","status":"done","ts":"2026-05-15T01:41:01Z"}

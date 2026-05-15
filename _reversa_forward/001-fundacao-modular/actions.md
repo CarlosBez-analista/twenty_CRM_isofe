@@ -1,4 +1,4 @@
-﻿# Actions: FundaÃ§Ã£o Modular NattivusECO
+# Actions: FundaÃ§Ã£o Modular NattivusECO
 
 > Identificador: `001-fundacao-modular`
 > Data: `2026-05-14`
@@ -106,7 +106,7 @@
 | T065 | README do `nattivus-shell` (visÃ£o, comandos `dev`, `db:init`, `db:migrate`, `seed-admin`, troubleshooting) | T058 | `[//]` | `packages/nattivus-shell/README.md` | ðŸŸ¢ | ``[X]`` |
 | T066 | README pÃºblico do `@nattivus/sdk` (instalaÃ§Ã£o, exemplo do Â§10 do `sdk-contract.md`, polÃ­tica SemVer) | T062 | `[//]` | `packages/nattivus-sdk/README.md` | ðŸŸ¢ | ``[X]`` |
 | T067 | README do mÃ³dulo `hello-world` como template para terceiros ("Como criar um mÃ³dulo NattivusECO") | T059 | `[//]` | `packages/modules/hello-world/README.md` | ðŸŸ¢ | ``[X]`` |
-| T068 | Aplicar tokens de design Nattivus default no `nattivus-ui` (paleta, tipografia, espaÃ§amentos) e expor CSS variables para override por workspace | T007 | `[//]` | `packages/nattivus-ui/src/tokens/index.ts` | ðŸŸ¡ | `[ ]` |
+| T068 | Aplicar tokens de design Nattivus default no `nattivus-ui` (paleta, tipografia, espaÃ§amentos) e expor CSS variables para override por workspace | T007 | `[//]` | `packages/nattivus-ui/src/tokens/index.ts` | ðŸŸ¡ | `[X]` |
 
 ## Notas de execuÃ§Ã£o
 
