@@ -1,0 +1,28 @@
+{
+  "languages": [
+    { "name": "TypeScript", "count": 2500 },
+    { "name": "JavaScript", "count": 100 }
+  ],
+  "frameworks": ["React", "NestJS", "Node.js"],
+  "package_managers": ["Yarn"],
+  "entry_points": ["packages/twenty-server/src/main.ts", "packages/twenty-front/src/index.tsx"],
+  "test_frameworks": ["Jest", "Vitest", "Playwright"],
+  "organization_suggestion": {
+    "granularity": "module",
+    "rationale": "Código dividido em pacotes Nx e subpastas de domínio dentro do backend.",
+    "signals": [
+      {
+        "type": "Pastas top-level com nomes de domínio",
+        "evidence": [
+          "packages/twenty-server/src/modules/company",
+          "packages/twenty-server/src/modules/person",
+          "packages/twenty-server/src/modules/opportunity",
+          "packages/twenty-server/src/modules/task",
+          "packages/twenty-server/src/modules/workflow",
+          "packages/twenty-server/src/modules/messaging",
+          "packages/twenty-erp"
+        ]
+      }
+    ]
+  }
+}

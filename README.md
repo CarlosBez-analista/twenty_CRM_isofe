@@ -6,6 +6,12 @@
 
 <h2 align="center" >O #1 CRM Open-Source</h2>
 
+> 🚨 **ATENÇÃO: TRANSIÇÃO PARA NATTIVUS CRM+ERP** 🚨
+>
+> Este repositório do Twenty CRM serviu como fundação legada. Todo o trabalho futuro, incluindo o mapeamento de arquitetura, histórico de decisões (Reversa Framework) e a construção dos módulos de ERP, foi ejetado para o diretório isolado: [`nattivus/`](./nattivus). 
+> 
+> A documentação ativa e o código da evolução encontram-se dentro de `nattivus/`.
+
 <p align="center"><a href="https://twenty.com">🌐 Website</a> · <a href="https://docs.twenty.com">📚 Documentação</a> · <a href="https://github.com/orgs/twentyhq/projects/1"><img src="./packages/twenty-website/public/images/readme/planner-icon.svg" width="12" height="12"/> Roadmap</a> · <a href="https://discord.gg/cx5n4Jzs57"><img src="./packages/twenty-website/public/images/readme/discord-icon.svg" width="12" height="12"/> Discord</a> · <a href="https://www.figma.com/file/xt8O9mFeLl46C5InWwoMrN/Twenty"><img src="./packages/twenty-website/public/images/readme/figma-icon.png"  width="12" height="12"/>  Figma</a> · <a href="./REVERSA_STATUS.md">🕵️ Status Reversa</a></p>
 
 <br />

@@ -1,0 +1,639 @@
+{
+  "_meta": {
+    "generated_at": "2026-05-15T00:00:00Z",
+    "project": "NattivusECO",
+    "description": "Architecture snapshot — aggregated from .reversa/ state + nattivus/ source scan",
+    "sources": [
+      ".reversa/state.json",
+      ".reversa/active-requirements.json",
+      ".reversa/context/modules.json",
+      ".reversa/context/surface.json",
+      ".reversa/setup.json",
+      "nattivus/packages/nattivus-shell/src/main.ts",
+      "nattivus/packages/nattivus-sdk/src/manifest.ts",
+      "nattivus/packages/nattivus-shell/src/modules/",
+      "nattivus/packages/modules/"
+    ]
+  },
+
+  "project": {
+    "name": "NattivusECO",
+    "full_name": "Nattivus CRM+ERP Modular Platform",
+    "version": "0.1.0",
+    "phase": "coding",
+    "confidence": "75%",
+    "reversa_phase": "concluido",
+    "active_feature": "002-modulos-crm",
+    "paused_features": ["001-fundacao-modular (completed)"],
+    "next_agenda": "Retomar /reversa-coding nas 68 ações abertas de actions.md",
+    "tech_stack": {
+      "runtime": "Node.js",
+      "language": "TypeScript",
+      "backend_framework": "NestJS (parcial — bootstrap manual por ora)",
+      "database": "PostgreSQL + pgvector",
+      "cache": "Redis",
+      "search": ["pgvector (local)", "Qdrant (cloud)"],
+      "monorepo": "Nx + Yarn 4",
+      "test_frameworks": ["Jest", "Vitest", "Playwright"]
+    }
+  },
+
+  "boot_sequence": {
+    "description": "Sequência de inicialização do NattivusECO Shell (main.ts)",
+    "file": "nattivus/packages/nattivus-shell/src/main.ts",
+    "steps": [
+      {
+        "id": 1,
+        "label": "Validar DATABASE_URL",
+        "detail": "Lança erro fatal se a variável de ambiente DATABASE_URL estiver ausente.",
+        "file": "main.ts:43",
+        "layer": "infra"
+      },
+      {
+        "id": 2,
+        "label": "Conectar ao Postgres",
+        "detail": "new Client({ connectionString }) + dbClient.connect(). Bloqueia o boot se falhar.",
+        "file": "main.ts:45-47",
+        "layer": "infra"
+      },
+      {
+        "id": 3,
+        "label": "Conectar ao Redis (opcional)",
+        "detail": "createClient() + redis.connect(). Erros são logados como warning — boot continua sem cache.",
+        "file": "main.ts:50-58",
+        "layer": "infra"
+      },
+      {
+        "id": 4,
+        "label": "Inicializar JWT KeyStore",
+        "detail": "InMemoryKeyStore.addKey('primary') — gera chave HMAC em memória.",
+        "file": "main.ts:61-62",
+        "layer": "auth"
+      },
+      {
+        "id": 5,
+        "label": "Inicializar serviços Auth",
+        "detail": "PasswordService, TotpService, BackupCodeService, UserService, RefreshTokenService.",
+        "file": "main.ts:65-71",
+        "layer": "auth"
+      },
+      {
+        "id": 6,
+        "label": "Inicializar serviços Workspace",
+        "detail": "WorkspaceService, WorkspaceMemberService — operam sobre tabelas de tenant.",
+        "file": "main.ts:73-74",
+        "layer": "workspace"
+      },
+      {
+        "id": 7,
+        "label": "Inicializar Module System",
+        "detail": "ModuleRegistryService → ModuleActivationService → ModuleDiscoveryService.",
+        "file": "main.ts:77-79",
+        "layer": "modules"
+      },
+      {
+        "id": 8,
+        "label": "Executar Module Discovery",
+        "detail": "discoverAll(): glob packages/modules/*/dist/module.manifest.js → valida shape → upsert no module_registry.",
+        "file": "main.ts:81-90",
+        "layer": "modules"
+      },
+      {
+        "id": 9,
+        "label": "Inicializar Semantic Search",
+        "detail": "VectorIndexRegistryService + PgvectorStrategy + QdrantStrategy + SemanticSearchService.",
+        "file": "main.ts:94-104",
+        "layer": "semantic"
+      },
+      {
+        "id": 10,
+        "label": "Inicializar Audit Log",
+        "detail": "AuditLogService(dbClient) — grava ações críticas na tabela audit_log.",
+        "file": "main.ts:107",
+        "layer": "audit"
+      },
+      {
+        "id": 11,
+        "label": "Subir HTTP Server",
+        "detail": "http.createServer() em PORT (default 3000). GET /health retorna { status: 'healthy' }.",
+        "file": "main.ts:110-121",
+        "layer": "presentation"
+      },
+      {
+        "id": 12,
+        "label": "Registrar Graceful Shutdown",
+        "detail": "SIGTERM/SIGINT → server.close() → redis.quit() → dbClient.end() → process.exit(0).",
+        "file": "main.ts:128-135",
+        "layer": "infra"
+      }
+    ]
+  },
+
+  "state_management": {
+    "description": "Como o estado é gerenciado no sistema",
+    "sections": [
+      {
+        "id": "sm-1",
+        "name": "JWT KeyStore (In-Memory)",
+        "type": "in-process",
+        "file": "nattivus/packages/nattivus-shell/src/auth/jwt.service.ts",
+        "detail": "Chaves JWT armazenadas em mapa em memória. Rotação de chave via addKey(). Estado perdido no restart — sem persistência externa por ora.",
+        "state_keys": ["primary key (HMAC)", "key rotation map"]
+      },
+      {
+        "id": "sm-2",
+        "name": "Redis Session Cache",
+        "type": "external-cache",
+        "file": "main.ts:50-58",
+        "detail": "Redis é opcional. Quando disponível, armazena dados de sessão e cache de resultados. Boot continua sem ele.",
+        "state_keys": ["session tokens", "rate limit counters"]
+      },
+      {
+        "id": "sm-3",
+        "name": "PostgreSQL (Fonte de Verdade)",
+        "type": "persistent",
+        "file": "nattivus/packages/nattivus-shell/src/database/data-source.ts",
+        "detail": "Todas as entidades persistentes vivem no Postgres. Soft-delete via BaseEntity. Multi-tenant por workspace_id.",
+        "state_keys": ["users", "workspaces", "module_registry", "workspace_modules", "audit_log", "refresh_tokens"]
+      },
+      {
+        "id": "sm-4",
+        "name": "Module Registry (Postgres)",
+        "type": "persistent",
+        "file": "nattivus/packages/nattivus-shell/src/modules/module-registry.service.ts",
+        "detail": "Tabela module_registry armazena manifesto JSON completo de cada módulo descoberto. Upsert no boot.",
+        "state_keys": ["moduleId", "version", "manifest (JSON)", "disabled_globally"]
+      },
+      {
+        "id": "sm-5",
+        "name": "Vector Index Registry (Postgres)",
+        "type": "persistent",
+        "file": "nattivus/packages/nattivus-shell/src/semantic/vector-index-registry.service.ts",
+        "detail": "Rastreia quais entidades têm índices vetoriais e qual provider (pgvector ou qdrant) usam.",
+        "state_keys": ["entityName", "provider", "dimensions", "indexName"]
+      }
+    ]
+  },
+
+  "data_flow": {
+    "description": "Caminho de uma requisição HTTP do cliente até o banco",
+    "flows": [
+      {
+        "id": "df-rest",
+        "name": "Fluxo REST (leitura/escrita)",
+        "steps": [
+          { "n": 1, "actor": "Cliente HTTP", "action": "Envia requisição com Bearer token" },
+          { "n": 2, "actor": "TenantContext Middleware", "action": "Extrai X-Workspace-Id do header → injeta no contexto" },
+          { "n": 3, "actor": "RateLimitGuard", "action": "Verifica contador no Redis por IP/user" },
+          { "n": 4, "actor": "AuthGuard", "action": "Valida JWT com JwtService.verify() → extrai userId + workspaceId" },
+          { "n": 5, "actor": "PermissionGuard", "action": "Verifica permissões do usuário contra o manifesto do módulo" },
+          { "n": 6, "actor": "DomainGuard", "action": "Valida se workspace tem domínio autorizado (se configurado)" },
+          { "n": 7, "actor": "Controller", "action": "Recebe request tipado, chama service" },
+          { "n": 8, "actor": "Service", "action": "Lógica de negócio + query ao Postgres com workspace_id filter" },
+          { "n": 9, "actor": "AuditLogService", "action": "Grava ação crítica em audit_log (mutations)" },
+          { "n": 10, "actor": "Controller", "action": "Serializa e retorna resposta JSON" }
+        ],
+        "file": "nattivus/packages/nattivus-shell/src/auth/"
+      },
+      {
+        "id": "df-auth-login",
+        "name": "Fluxo Auth — Login com MFA",
+        "steps": [
+          { "n": 1, "actor": "Cliente", "action": "POST /auth/login { email, password, deviceFingerprint }" },
+          { "n": 2, "actor": "AuthController", "action": "UserService.findByEmail() → checa conta bloqueada" },
+          { "n": 3, "actor": "PasswordService", "action": "Argon2id verify(hash, password) — timing-safe" },
+          { "n": 4, "actor": "AuthController", "action": "Se MFA enrollado: retorna { requiresMfa: true, userId }" },
+          { "n": 5, "actor": "Cliente", "action": "POST /auth/totp/verify { userId, token }" },
+          { "n": 6, "actor": "TotpService", "action": "Verifica token TOTP ou backup code" },
+          { "n": 7, "actor": "RefreshTokenService", "action": "Emite refresh token com rotação obrigatória" },
+          { "n": 8, "actor": "JwtService", "action": "Assina access token JWT (sub, wid, roles)" },
+          { "n": 9, "actor": "AuthController", "action": "Retorna { accessToken, refreshToken }" }
+        ],
+        "file": "nattivus/packages/nattivus-shell/src/auth/auth.controller.ts"
+      },
+      {
+        "id": "df-module-discovery",
+        "name": "Fluxo Module Discovery (Boot)",
+        "steps": [
+          { "n": 1, "actor": "main.ts", "action": "moduleDiscoveryService.discoverAll() no bootstrap" },
+          { "n": 2, "actor": "ModuleDiscoveryService", "action": "fs.readdirSync(packages/modules/) — lista diretórios" },
+          { "n": 3, "actor": "ModuleDiscoveryService", "action": "Para cada módulo: carrega dist/module.manifest.js (ou src/ em dev)" },
+          { "n": 4, "actor": "ModuleDiscoveryService", "action": "isValidManifest() — valida shape obrigatório (moduleId, version, sdkVersion, entities, routes, permissions)" },
+          { "n": 5, "actor": "ModuleDiscoveryService", "action": "semver.satisfies(SUPPORTED_SDK_VERSION, manifest.sdkVersion) — compatibilidade" },
+          { "n": 6, "actor": "ModuleRegistryService", "action": "upsert(manifest) — INSERT ON CONFLICT UPDATE no module_registry" },
+          { "n": 7, "actor": "main.ts", "action": "Loga resultados: N registered, M failed" }
+        ],
+        "file": "nattivus/packages/nattivus-shell/src/modules/module-discovery.service.ts"
+      }
+    ]
+  },
+
+  "input_management": {
+    "description": "Como entradas de usuário e APIs externas são tratadas",
+    "layers": [
+      {
+        "id": "in-1",
+        "name": "REST API (NestJS Controllers)",
+        "type": "http",
+        "detail": "DTOs tipados recebem e validam payloads. AuthController usa LoginDto, TotpVerifyDto, BackupCodeDto, RefreshDto.",
+        "validation": "TypeScript type checking (runtime DTO classes, sem class-validator por ora)",
+        "files": [
+          "nattivus/packages/nattivus-shell/src/auth/auth.controller.ts",
+          "nattivus/packages/nattivus-shell/src/modules/module-admin.controller.ts",
+          "nattivus/packages/nattivus-shell/src/semantic/semantic.controller.ts",
+          "nattivus/packages/nattivus-shell/src/system/system.controller.ts"
+        ]
+      },
+      {
+        "id": "in-2",
+        "name": "GraphQL API",
+        "type": "graphql",
+        "detail": "Resolvers expose queries/mutations declaradas nos manifestos de módulo. Operações usam permissões do manifesto.",
+        "files": ["nattivus/packages/nattivus-shell/src/modules/module-admin.resolver.ts"]
+      },
+      {
+        "id": "in-3",
+        "name": "CLI Commands",
+        "type": "cli",
+        "detail": "Scripts de administração: db.ts (reset/migrate), seed-admin.ts (cria admin inicial), unlock-user.ts.",
+        "files": [
+          "nattivus/packages/nattivus-shell/src/cli/db.ts",
+          "nattivus/packages/nattivus-shell/src/cli/seed-admin.ts",
+          "nattivus/packages/nattivus-shell/src/cli/unlock-user.ts"
+        ]
+      },
+      {
+        "id": "in-4",
+        "name": "Environment Variables",
+        "type": "config",
+        "detail": "Configuração via env vars. Sem arquivo .env em produção — injetado pelo orquestrador.",
+        "vars": [
+          { "name": "DATABASE_URL", "required": true },
+          { "name": "REDIS_URL", "default": "redis://localhost:6379" },
+          { "name": "PORT", "default": "3000" },
+          { "name": "QDRANT_URL", "default": "http://localhost:6333" },
+          { "name": "QDRANT_API_KEY", "required": false }
+        ]
+      }
+    ]
+  },
+
+  "models": {
+    "description": "Entidades de dados e suas localizações",
+    "packages": [
+      {
+        "id": "pkg-shell",
+        "name": "nattivus-shell",
+        "path": "nattivus/packages/nattivus-shell/",
+        "entities": [
+          {
+            "name": "User",
+            "table": "users",
+            "file": "src/auth/user.service.ts",
+            "fields": ["id (uuid)", "email", "passwordHash", "mfaEnrolledAt", "failedLoginCount", "lockedUntil", "createdAt"]
+          },
+          {
+            "name": "RefreshToken",
+            "table": "refresh_tokens",
+            "file": "src/auth/refresh-token.service.ts",
+            "fields": ["id", "userId", "tokenHash", "deviceFingerprint", "expiresAt", "revokedAt"]
+          },
+          {
+            "name": "Workspace",
+            "table": "workspaces",
+            "file": "src/workspace/workspace.service.ts",
+            "fields": ["id (uuid)", "name", "slug", "plan", "createdAt"]
+          },
+          {
+            "name": "WorkspaceMember",
+            "table": "workspace_members",
+            "file": "src/workspace/workspace.service.ts",
+            "fields": ["id", "workspaceId", "userId", "role", "joinedAt"]
+          },
+          {
+            "name": "ModuleRegistry",
+            "table": "module_registry",
+            "file": "src/modules/module-registry.service.ts",
+            "fields": ["id", "moduleId", "version", "manifest (jsonb)", "discoveredAt", "disabledGlobally"]
+          },
+          {
+            "name": "WorkspaceModule",
+            "table": "workspace_modules",
+            "file": "migrations/003-create-workspace-tables.sql",
+            "fields": ["id", "workspaceId", "moduleId", "activatedAt", "deactivatedAt"]
+          },
+          {
+            "name": "AuditLog",
+            "table": "audit_log",
+            "file": "src/audit/audit-log.service.ts",
+            "fields": ["id", "workspaceId", "userId", "action", "resourceType", "resourceId", "payload (jsonb)", "createdAt"]
+          },
+          {
+            "name": "VectorIndexRegistry",
+            "table": "vector_index_registry",
+            "file": "src/semantic/vector-index-registry.service.ts",
+            "fields": ["id", "entityName", "provider", "dimensions", "indexName", "createdAt"]
+          }
+        ]
+      },
+      {
+        "id": "pkg-shared",
+        "name": "nattivus-shared",
+        "path": "nattivus/packages/nattivus-shared/",
+        "entities": [
+          {
+            "name": "BaseEntity",
+            "table": "(abstract)",
+            "file": "src/base-entity.ts",
+            "fields": ["id (uuid, PK)", "workspaceId (uuid)", "createdAt", "updatedAt", "deletedAt (soft-delete)"]
+          }
+        ]
+      },
+      {
+        "id": "pkg-mod-company",
+        "name": "module: company",
+        "path": "nattivus/packages/modules/company/",
+        "entities": [
+          {
+            "name": "Company",
+            "table": "company",
+            "file": "src/company.entity.ts",
+            "fields": ["id", "workspaceId", "name", "domain", "employees", "address", "createdAt", "deletedAt"],
+            "standardObject": true,
+            "embeddingDimensions": 0
+          }
+        ]
+      },
+      {
+        "id": "pkg-mod-person",
+        "name": "module: person",
+        "path": "nattivus/packages/modules/person/",
+        "entities": [
+          {
+            "name": "Person",
+            "table": "person",
+            "file": "src/person.entity.ts",
+            "fields": ["id", "workspaceId", "firstName", "lastName", "email", "phone", "jobTitle", "companyId (virtual ref)", "createdAt", "deletedAt"],
+            "standardObject": true,
+            "references": [{ "moduleId": "nattivus.crm.company", "entityName": "Company" }]
+          }
+        ]
+      },
+      {
+        "id": "pkg-mod-opportunity",
+        "name": "module: opportunity",
+        "path": "nattivus/packages/modules/opportunity/",
+        "entities": [
+          {
+            "name": "Opportunity",
+            "table": "opportunity",
+            "file": "src/opportunity.entity.ts",
+            "fields": ["id", "workspaceId", "name", "stage", "amount", "currency", "closeDate", "companyId (virtual ref)", "createdAt", "deletedAt"],
+            "standardObject": true,
+            "references": [
+              { "moduleId": "nattivus.crm.company", "entityName": "Company" },
+              { "moduleId": "nattivus.crm.person", "entityName": "Person" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+
+  "modules": {
+    "description": "Módulos de domínio do sistema",
+    "sdk_version_supported": "0.0.1",
+    "discovery_path": "packages/modules/*/dist/module.manifest.js",
+    "list": [
+      {
+        "moduleId": "nattivus.crm.company",
+        "name": "Company",
+        "version": "0.1.0",
+        "status": "active",
+        "complexity": "medium",
+        "path": "nattivus/packages/modules/company/",
+        "manifest": "src/module.manifest.ts",
+        "permissions": ["nattivus.crm.company:read", "nattivus.crm.company:write"],
+        "routes_count": 5,
+        "graphql_ops_count": 5,
+        "dependencies": [],
+        "business_rules": [
+          "Empresas identificadas unicamente pelo domínio normalizado",
+          "Domain Enrichment via API externa"
+        ]
+      },
+      {
+        "moduleId": "nattivus.crm.person",
+        "name": "Person",
+        "version": "0.1.0",
+        "status": "active",
+        "complexity": "medium",
+        "path": "nattivus/packages/modules/person/",
+        "manifest": "src/module.manifest.ts",
+        "permissions": ["nattivus.crm.person:read", "nattivus.crm.person:write"],
+        "routes_count": 5,
+        "graphql_ops_count": 5,
+        "dependencies": ["nattivus.crm.company"],
+        "business_rules": [
+          "Contatos vinculados a empresas via domínio de e-mail profissional",
+          "Name Parsing heurístico do handle do e-mail"
+        ]
+      },
+      {
+        "moduleId": "nattivus.crm.opportunity",
+        "name": "Opportunity",
+        "version": "0.1.0",
+        "status": "active",
+        "complexity": "low",
+        "path": "nattivus/packages/modules/opportunity/",
+        "manifest": "src/module.manifest.ts",
+        "permissions": ["nattivus.crm.opportunity:read", "nattivus.crm.opportunity:write"],
+        "routes_count": 5,
+        "graphql_ops_count": 5,
+        "dependencies": ["nattivus.crm.company", "nattivus.crm.person"],
+        "business_rules": [
+          "Kanban agrupa por stage e soma amount",
+          "Stage progression: PROSPECTING → QUALIFICATION → PROPOSAL → NEGOTIATION → CLOSED_WON/CLOSED_LOST"
+        ]
+      },
+      {
+        "moduleId": "nattivus.shell.hello-world",
+        "name": "Hello World",
+        "version": "0.0.1",
+        "status": "example",
+        "complexity": "low",
+        "path": "nattivus/packages/modules/hello-world/",
+        "manifest": "src/module.manifest.ts",
+        "permissions": [],
+        "routes_count": 0,
+        "graphql_ops_count": 0,
+        "dependencies": [],
+        "business_rules": ["Módulo de exemplo para validação do contrato SDK"]
+      }
+    ]
+  },
+
+  "auth_system": {
+    "description": "Sistema de autenticação e segurança",
+    "components": [
+      {
+        "id": "auth-jwt",
+        "name": "JwtService + InMemoryKeyStore",
+        "file": "nattivus/packages/nattivus-shell/src/auth/jwt.service.ts",
+        "detail": "Assina e verifica JWTs. Chaves HMAC em memória com suporte a rotação. Sem persistência de chave por ora.",
+        "payload": "{ sub: userId, wid: workspaceId, roles: string[] }"
+      },
+      {
+        "id": "auth-password",
+        "name": "PasswordService",
+        "file": "nattivus/packages/nattivus-shell/src/auth/password.service.ts",
+        "detail": "Hash com Argon2id. Dummy verify para timing-safe em email não encontrado."
+      },
+      {
+        "id": "auth-totp",
+        "name": "TotpService",
+        "file": "nattivus/packages/nattivus-shell/src/auth/totp.service.ts",
+        "detail": "Geração de segredo TOTP, produção de otpauth URL, verificação de token. MFA obrigatório se enrollado."
+      },
+      {
+        "id": "auth-backup",
+        "name": "BackupCodeService",
+        "file": "nattivus/packages/nattivus-shell/src/auth/backup-code.service.ts",
+        "detail": "Gera 10 códigos de backup, formata como XXXXX-XXXXX, armazena hashes."
+      },
+      {
+        "id": "auth-refresh",
+        "name": "RefreshTokenService",
+        "file": "nattivus/packages/nattivus-shell/src/auth/refresh-token.service.ts",
+        "detail": "Emissão e rotação obrigatória de refresh tokens. Revogação por token ou por usuário inteiro."
+      },
+      {
+        "id": "auth-ratelimit",
+        "name": "RateLimitGuard",
+        "file": "nattivus/packages/nattivus-shell/src/auth/rate-limit.guard.ts",
+        "detail": "Limita tentativas de login por IP/email. Usa Redis para contadores."
+      },
+      {
+        "id": "auth-permission",
+        "name": "PermissionGuard",
+        "file": "nattivus/packages/nattivus-shell/src/auth/permission.guard.ts",
+        "detail": "Verifica flags de permissão do JWT contra as permissões declaradas na rota pelo manifesto do módulo."
+      }
+    ]
+  },
+
+  "semantic_search": {
+    "description": "Busca semântica por vetores",
+    "strategies": [
+      {
+        "id": "sem-pgvector",
+        "name": "PgvectorStrategy",
+        "file": "nattivus/packages/nattivus-shell/src/semantic/pgvector.strategy.ts",
+        "detail": "Usa extensão pgvector no Postgres. Índice IVFFlat ou HNSW. Ideal para volumes menores sem infraestrutura adicional.",
+        "when": "Default em desenvolvimento e deployments simples"
+      },
+      {
+        "id": "sem-qdrant",
+        "name": "QdrantStrategy",
+        "file": "nattivus/packages/nattivus-shell/src/semantic/qdrant.strategy.ts",
+        "detail": "Qdrant Cloud ou self-hosted. Melhor performance em volumes grandes. Requer QDRANT_URL + QDRANT_API_KEY.",
+        "when": "Produção com volume de embeddings > 100k"
+      }
+    ],
+    "orchestration": {
+      "service": "SemanticSearchService",
+      "file": "nattivus/packages/nattivus-shell/src/semantic/semantic-search.service.ts",
+      "detail": "Seleciona strategy baseado no VectorIndexRegistry. Cada entidade com embeddingDimensions > 0 tem índice registrado."
+    }
+  },
+
+  "events": {
+    "description": "Eventos e hooks do sistema",
+    "categories": [
+      {
+        "id": "ev-module-lifecycle",
+        "name": "Module Lifecycle Hooks",
+        "events": [
+          {
+            "name": "onActivate",
+            "trigger": "ModuleActivationService ativa módulo num workspace",
+            "payload": "{ workspaceId: string }",
+            "example": "[company] Activated for workspace: wks-123"
+          },
+          {
+            "name": "onDeactivate",
+            "trigger": "Admin desativa módulo num workspace",
+            "payload": "{ workspaceId: string }",
+            "example": "[company] Deactivated for workspace: wks-123"
+          }
+        ]
+      },
+      {
+        "id": "ev-auth",
+        "name": "Auth Events",
+        "events": [
+          { "name": "login.success", "trigger": "Login bem-sucedido", "audit": true },
+          { "name": "login.failed", "trigger": "Senha incorreta — incrementa failedLoginCount", "audit": true },
+          { "name": "login.locked", "trigger": "Conta bloqueada por excesso de falhas", "audit": true },
+          { "name": "token.refreshed", "trigger": "POST /auth/refresh com rotação de token", "audit": false },
+          { "name": "token.revoked", "trigger": "POST /auth/logout — revoga todos os tokens do user", "audit": true },
+          { "name": "mfa.enrolled", "trigger": "Usuário completa enrollment TOTP", "audit": true },
+          { "name": "backup_codes.regenerated", "trigger": "POST /auth/backup-codes/regenerate", "audit": true }
+        ]
+      },
+      {
+        "id": "ev-system",
+        "name": "System Events",
+        "events": [
+          { "name": "boot.start", "trigger": "bootstrap() chamado", "log": "[nattivus] Starting NattivusECO Shell..." },
+          { "name": "boot.complete", "trigger": "Todos serviços prontos", "log": "[nattivus] Boot complete ✓" },
+          { "name": "shutdown.graceful", "trigger": "SIGTERM ou SIGINT recebido", "log": "[nattivus] Shutdown complete" },
+          { "name": "redis.unavailable", "trigger": "Redis não conecta no boot", "severity": "warning", "behavior": "Boot continua sem cache" },
+          { "name": "module.discovery.failed", "trigger": "Módulo com manifesto inválido ou SDK incompatível", "severity": "warning" }
+        ]
+      }
+    ]
+  },
+
+  "migrations": {
+    "description": "Ordem de aplicação das migrations SQL",
+    "files": [
+      { "order": 1, "file": "migrations/001-create-extensions.sql", "description": "Habilita uuid-ossp, pgcrypto, vector (pgvector)" },
+      { "order": 2, "file": "migrations/002-create-auth-tables.sql", "description": "Tabelas users e refresh_tokens" },
+      { "order": 3, "file": "migrations/003-create-workspace-tables.sql", "description": "Tabelas workspaces, workspace_members, workspace_modules" },
+      { "order": 4, "file": "migrations/004-create-module-registry.sql", "description": "Tabela module_registry com campo manifest JSONB" },
+      { "order": 5, "file": "migrations/005-create-audit-log.sql", "description": "Tabela audit_log com índices em workspaceId + createdAt" },
+      { "order": 6, "file": "migrations/006-create-vector-index-registry.sql", "description": "Tabela vector_index_registry" },
+      { "order": 7, "file": "migrations/007-enable-rls.sql", "description": "Row Level Security por workspace_id em todas as tabelas de módulo" },
+      { "order": 8, "file": "migrations/008-triggers.sql", "description": "Triggers de updated_at automático e audit log automático" }
+    ]
+  },
+
+  "active_development": {
+    "feature": "002-modulos-crm",
+    "description": "Company, Person, Opportunity + SDK extensions",
+    "status": "coding",
+    "stages_completed": ["requirements", "plan", "to-do"],
+    "completed_feature": "001-fundacao-modular",
+    "next_steps": [
+      "Completar controllers REST dos módulos CRM",
+      "Integrar GraphQL resolvers por módulo",
+      "Teste de integração: tenant isolation",
+      "Teste de integração: semantic search"
+    ],
+    "decisions_resolved": [
+      "D1 → ADR-0005: Adapter Pattern multi-provedor",
+      "D1 → ADR-0006: ISOFE-first, fiscal adapters depois",
+      "GAP-M02 → spike 001-spike-tecnico-erp (Action Customizada D-04)"
+    ],
+    "adrs": [
+      { "id": "ADR-0001", "title": "ClickHouse para Metered Billing" },
+      { "id": "ADR-0002", "title": "Batch Role Resolution com DataLoader" },
+      { "id": "ADR-0003", "title": "Webhook v2 como Metadata Entity" },
+      { "id": "ADR-0004", "title": "ERP Integration via Telegram" },
+      { "id": "ADR-0005", "title": "Adapter Pattern Multi-Provedor" },
+      { "id": "ADR-0006", "title": "Ordem de Prioridade: ISOFE-first" },
+      { "id": "ADR-0007", "title": "Módulos independentes — sem FK entre schemas" }
+    ]
+  }
+}

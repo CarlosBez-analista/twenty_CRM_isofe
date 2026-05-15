@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p \"_reversa_forward/001-fundacao-modular\" && rtk ls _reversa_sdd/ && echo \"---PRINCIPLES---\" && test -f .reversa/principles.md && echo \"EXISTS\" || echo \"NO_PRINCIPLES\")",
+      "PowerShell(if \\(-not \\(Test-Path \"_reversa_forward/001-fundacao-modular\"\\)\\) { New-Item -ItemType Directory -Force -Path \"_reversa_forward/001-fundacao-modular\" | Out-Null }; Get-ChildItem _reversa_forward/001-fundacao-modular | Select-Object Name; \"---SDD ROOT---\"; Get-ChildItem _reversa_sdd -Name; \"---PRINCIPLES---\"; if \\(Test-Path .reversa/principles.md\\) { \"EXISTS\" } else { \"NO_PRINCIPLES\" })",
+      "Bash(rtk grep *)",
+      "Bash(dir /s /b _reversa_sdd\\\\*.md)",
+      "Bash(Get-ChildItem -Path _reversa_sdd -Recurse -Filter \"*.md\")",
+      "Bash(Select-Object FullName)",
+      "Bash(Sort-Object FullName)"
+    ],
+    "additionalDirectories": [
+      "C:\\app-dev\\twenty_CRM_isofe\\_reversa_forward"
+    ]
+  }
+}

@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NattivusECO — Architecture Viewer</title>
+<style>
+  :root {
+    --bg: #0f1117; --surface: #1a1d27; --surface2: #21253a;
+    --border: #2e3350; --accent: #6c8aff; --accent2: #a78bfa;
+    --green: #34d399; --yellow: #fbbf24; --red: #f87171; --orange: #fb923c;
+    --text: #e2e8f0; --text2: #94a3b8; --text3: #64748b;
+    --sidebar-w: 270px; --header-h: 52px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; font-size: 14px; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+
+  /* ── Header ─────────────────────────────────── */
+  #header { height: var(--header-h); background: var(--surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 16px; padding: 0 20px; flex-shrink: 0; }
+  #header h1 { font-size: 16px; font-weight: 700; letter-spacing: .5px; }
+  #header .tag { font-size: 11px; background: var(--accent); color: #fff; border-radius: 4px; padding: 2px 7px; font-weight: 600; }
+  #header .status { margin-left: auto; display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text2); }
+  #pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1}50%{opacity:.3} }
+  #last-update { font-size: 11px; color: var(--text3); }
+
+  /* ── Layout ─────────────────────────────────── */
+  #layout { display: flex; flex: 1; overflow: hidden; }
+
+  /* ── Sidebar ─────────────────────────────────── */
+  #sidebar { width: var(--sidebar-w); flex-shrink: 0; background: var(--surface); border-right: 1px solid var(--border); overflow-y: auto; padding: 12px 0; }
+  .nav-section { margin-bottom: 2px; }
+  .nav-section-header { display: flex; align-items: center; gap: 8px; padding: 8px 16px; cursor: pointer; user-select: none; color: var(--text2); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; transition: color .15s; }
+  .nav-section-header:hover { color: var(--text); }
+  .nav-section-header .chevron { margin-left: auto; transition: transform .2s; font-size: 10px; }
+  .nav-section-header.open .chevron { transform: rotate(90deg); }
+  .nav-items { display: none; padding: 0 0 4px 0; }
+  .nav-items.open { display: block; }
+  .nav-item { padding: 7px 16px 7px 32px; cursor: pointer; color: var(--text2); font-size: 13px; border-left: 2px solid transparent; transition: all .12s; display: flex; align-items: center; gap: 8px; }
+  .nav-item:hover { color: var(--text); background: var(--surface2); }
+  .nav-item.active { color: var(--accent); border-left-color: var(--accent); background: rgba(108,138,255,.08); }
+
+  /* ── Main content ─────────────────────────────────── */
+  #main { flex: 1; overflow-y: auto; padding: 28px 32px; }
+  #main.diagram-mode { padding: 0; overflow: hidden; display: flex; flex-direction: column; }
+
+  /* ── Standard section styles ─────────────────────────────────── */
+  .section-title { font-size: 22px; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 12px; }
+  .section-subtitle { color: var(--text2); font-size: 14px; margin-bottom: 24px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; margin-bottom: 16px; transition: border-color .2s; }
+  .card:hover { border-color: var(--accent); }
+  .card-title { font-weight: 600; font-size: 15px; margin-bottom: 6px; display: flex; align-items: center; gap: 10px; }
+  .card-meta { color: var(--text3); font-size: 12px; margin-bottom: 8px; font-family: monospace; }
+  .card-body { color: var(--text2); font-size: 13px; line-height: 1.65; }
+  .steps-list { display: flex; flex-direction: column; gap: 0; }
+  .step { display: flex; gap: 0; cursor: pointer; }
+  .step:hover .step-body { border-color: var(--accent); }
+  .step.active .step-body { border-color: var(--accent); background: rgba(108,138,255,.07); }
+  .step-number-col { display: flex; flex-direction: column; align-items: center; width: 40px; flex-shrink: 0; }
+  .step-num { width: 28px; height: 28px; border-radius: 50%; background: var(--surface2); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--text2); flex-shrink: 0; }
+  .step.active .step-num { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .step-line { width: 2px; flex: 1; background: var(--border); margin: 0 auto; }
+  .step:last-child .step-line { display: none; }
+  .step-body { flex: 1; margin-left: 12px; margin-bottom: 8px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; transition: border-color .15s, background .15s; }
+  .step-label { font-weight: 600; font-size: 13px; margin-bottom: 4px; color: var(--text); }
+  .step-detail { font-size: 12px; color: var(--text2); line-height: 1.6; }
+  .step-file { font-family: monospace; font-size: 11px; color: var(--accent2); margin-top: 6px; }
+  .layer-badge { font-size: 10px; padding: 2px 6px; border-radius: 4px; margin-left: 8px; font-weight: 600; }
+  .layer-infra { background: rgba(251,191,36,.15); color: var(--yellow); }
+  .layer-auth { background: rgba(167,139,250,.15); color: var(--accent2); }
+  .layer-modules { background: rgba(52,211,153,.15); color: var(--green); }
+  .layer-semantic { background: rgba(108,138,255,.15); color: var(--accent); }
+  .layer-audit { background: rgba(248,113,113,.15); color: var(--red); }
+  .layer-workspace { background: rgba(251,146,60,.15); color: var(--orange); }
+  .layer-presentation { background: rgba(148,163,184,.15); color: var(--text2); }
+  .flow-container { display: flex; flex-direction: column; gap: 4px; }
+  .flow-step { display: flex; align-items: flex-start; gap: 12px; cursor: pointer; padding: 8px 12px; border-radius: 8px; transition: background .12s; }
+  .flow-step:hover { background: var(--surface2); }
+  .flow-step.active { background: rgba(108,138,255,.1); }
+  .flow-n { min-width: 24px; height: 24px; border-radius: 4px; background: var(--surface2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--text3); flex-shrink: 0; }
+  .flow-step.active .flow-n { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .flow-arrow { color: var(--border); margin: 0 0 0 36px; font-size: 12px; }
+  .flow-actor { font-size: 12px; font-weight: 600; color: var(--accent); }
+  .flow-action { font-size: 12px; color: var(--text2); }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .tag-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .tag-item { font-size: 11px; padding: 2px 8px; border-radius: 12px; border: 1px solid var(--border); color: var(--text2); }
+  .tag-item.perm { color: var(--accent2); border-color: rgba(167,139,250,.3); }
+  .tag-item.dep { color: var(--orange); border-color: rgba(251,146,60,.3); }
+  .tag-item.event { color: var(--green); border-color: rgba(52,211,153,.3); }
+  .tag-item.rule { color: var(--yellow); border-color: rgba(251,191,36,.3); }
+  .tag-item.mono { font-family: monospace; }
+  .module-status { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+  .status-active { background: var(--green); }
+  .status-example { background: var(--yellow); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; padding: 8px 12px; color: var(--text3); font-size: 11px; font-weight: 700; text-transform: uppercase; border-bottom: 1px solid var(--border); }
+  td { padding: 9px 12px; border-bottom: 1px solid rgba(46,51,80,.5); color: var(--text2); vertical-align: top; }
+  tr:hover td { background: var(--surface2); }
+  td code { font-family: monospace; font-size: 12px; color: var(--accent); background: rgba(108,138,255,.1); padding: 1px 5px; border-radius: 3px; }
+  td .mono { font-family: monospace; font-size: 12px; color: var(--text3); }
+  #content-sections > div { display: none; }
+  #content-sections > div.active { display: block; }
+  #content-sections > div.active.diagram-wrap { display: flex; }
+  .pill { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; padding: 3px 10px; border-radius: 20px; border: 1px solid var(--border); color: var(--text2); }
+  .pill.green { background: rgba(52,211,153,.1); border-color: rgba(52,211,153,.3); color: var(--green); }
+  .pill.yellow { background: rgba(251,191,36,.1); border-color: rgba(251,191,36,.3); color: var(--yellow); }
+  .pill.red { background: rgba(248,113,113,.1); border-color: rgba(248,113,113,.3); color: var(--red); }
+  .section-info { background: rgba(108,138,255,.06); border: 1px solid rgba(108,138,255,.2); border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; font-size: 13px; color: var(--text2); line-height: 1.6; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 22px 0; }
+  h3 { font-size: 15px; font-weight: 600; margin-bottom: 14px; color: var(--text); display: flex; align-items: center; gap: 8px; }
+  h3 .count { font-size: 12px; background: var(--surface2); border-radius: 10px; padding: 1px 8px; color: var(--text3); font-weight: 400; }
+  .adrs-list { display: flex; flex-direction: column; gap: 8px; }
+  .adr-item { padding: 10px 14px; background: var(--surface2); border-radius: 8px; display: flex; gap: 12px; align-items: center; }
+  .adr-id { font-size: 11px; font-weight: 700; color: var(--accent2); font-family: monospace; min-width: 80px; }
+
+  /* ── DIAGRAM section ─────────────────────────────────── */
+  .diagram-wrap { flex: 1; overflow: hidden; display: flex; flex-direction: row; min-height: 0; }
+  .diagram-canvas-area { flex: 1; overflow: auto; background: var(--bg); position: relative; }
+  .diagram-legend { position: absolute; top: 12px; left: 12px; display: flex; gap: 10px; flex-wrap: wrap; z-index: 10; pointer-events: none; }
+  .legend-dot { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text2); }
+  .legend-dot span { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+  /* Right flows panel */
+  .flows-panel { width: 300px; flex-shrink: 0; background: var(--surface); border-left: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
+  .flows-panel-header { padding: 14px 16px 10px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--text3); border-bottom: 1px solid var(--border); flex-shrink: 0; }
+  .flows-list { flex-shrink: 0; border-bottom: 1px solid var(--border); overflow-y: auto; max-height: 55%; }
+  .flow-btn { padding: 12px 16px; cursor: pointer; border-left: 3px solid transparent; transition: all .15s; }
+  .flow-btn:hover { background: var(--surface2); }
+  .flow-btn.active { background: rgba(108,138,255,.06); }
+  .flow-btn-label { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+  .flow-btn-desc { font-size: 11px; color: var(--text3); line-height: 1.5; }
+  .flow-btn-legend { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; }
+  .flow-color-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .flows-steps-header { padding: 12px 16px 8px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--text3); flex-shrink: 0; }
+  .flows-steps { flex: 1; overflow-y: auto; padding: 0 0 16px; }
+  .flow-step-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 16px; cursor: pointer; transition: background .12s; }
+  .flow-step-item:hover { background: var(--surface2); }
+  .flow-step-item.active { background: rgba(108,138,255,.08); }
+  .fsi-n { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: #fff; flex-shrink: 0; margin-top: 1px; }
+  .fsi-text { font-size: 12px; color: var(--text2); line-height: 1.55; }
+  .no-flow { padding: 24px 16px; color: var(--text3); font-size: 12px; text-align: center; line-height: 1.7; }
+
+  /* SVG node styles */
+  .svg-node { cursor: pointer; }
+  .svg-node rect { rx: 7; ry: 7; transition: filter .2s; }
+  .svg-node:hover rect { filter: brightness(1.25); }
+  .svg-node.highlighted rect { filter: brightness(1.4); }
+
+  /* Column header color bands */
+  .col-band { opacity: .04; }
+</style>
+</head>
+<body>
+
+<div id="header">
+  <span style="font-size:18px">⚙</span>
+  <h1>NattivusECO</h1>
+  <span class="tag">Architecture Viewer</span>
+  <div class="status">
+    <div id="pulse"></div>
+    <span>Live</span>
+    <span id="last-update">—</span>
+  </div>
+</div>
+
+<div id="layout">
+  <nav id="sidebar"></nav>
+  <main id="main">
+    <div id="content-sections"></div>
+  </main>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// DATA & STATE
+// ═══════════════════════════════════════════════════════════════════
+let data = null;
+let activeSection = 'diagram';
+let activeDiagramFlow = null;
+let activeDiagramStep = null;
+
+// ═══════════════════════════════════════════════════════════════════
+// NAV CONFIG
+// ═══════════════════════════════════════════════════════════════════
+const NAV = [
+  {
+    id: 'diagrama', label: 'Diagrama', icon: '⬟',
+    items: [{ id: 'diagram', label: 'Mapa Interativo' }]
+  },
+  {
+    id: 'overview', label: 'Visão Geral', icon: '◉',
+    items: [{ id: 'boot', label: 'Boot Sequence' }]
+  },
+  {
+    id: 'arch', label: 'Arquitetura', icon: '⬡',
+    items: [
+      { id: 'state',    label: 'Estado & Cache' },
+      { id: 'dataflow', label: 'Fluxo de Dados' },
+      { id: 'input',    label: 'Inputs & API' },
+    ]
+  },
+  {
+    id: 'domain', label: 'Domínio', icon: '◈',
+    items: [
+      { id: 'modules',    label: 'Módulos CRM' },
+      { id: 'models',     label: 'Entidades & Modelos' },
+      { id: 'migrations', label: 'Migrations SQL' },
+    ]
+  },
+  {
+    id: 'security', label: 'Segurança', icon: '⊛',
+    items: [{ id: 'auth', label: 'Auth System' }]
+  },
+  {
+    id: 'infra', label: 'Infraestrutura', icon: '⬡',
+    items: [
+      { id: 'semantic', label: 'Busca Semântica' },
+      { id: 'events',   label: 'Eventos & Audit' },
+    ]
+  },
+  {
+    id: 'dev', label: 'Desenvolvimento', icon: '⊕',
+    items: [{ id: 'active', label: 'Feature Ativa' }]
+  },
+];
+
+// ═══════════════════════════════════════════════════════════════════
+// DIAGRAM DATA
+// ═══════════════════════════════════════════════════════════════════
+const NODE_W = 148, NODE_H = 50, COL_GAP = 44, ROW_H = 74;
+const COL_COUNT = 7;
+const SVG_PAD_L = 16, SVG_PAD_T = 72;
+
+function colX(c) { return SVG_PAD_L + c * (NODE_W + COL_GAP); }
+function rowY(r) { return SVG_PAD_T + r * ROW_H; }
+const SVG_W = colX(COL_COUNT - 1) + NODE_W + SVG_PAD_L;
+const SVG_H = rowY(9) + 20;
+
+const D_COLS = [
+  { label: 'ATORES',         color: '#6c8aff' },
+  { label: 'ENTRADA',        color: '#a78bfa' },
+  { label: 'GUARD / MW',     color: '#f87171' },
+  { label: 'CONTROLADORES',  color: '#fb923c' },
+  { label: 'SERVIÇOS',       color: '#fbbf24' },
+  { label: 'DADOS',          color: '#34d399' },
+  { label: 'EXTERNOS',       color: '#94a3b8' },
+];
+
+// c = column index, r = row index
+const D_NODES = {
+  'user':      { c: 0, r: 0, label: 'End User',       sub: 'Browser / App' },
+  'admin':     { c: 0, r: 2, label: 'Admin',           sub: 'CLI / Dashboard' },
+  'ext':       { c: 0, r: 4, label: 'Sist. Externo',  sub: 'Webhook / API' },
+  'http':      { c: 1, r: 0, label: 'HTTP Client',    sub: 'REST / GraphQL' },
+  'cli':       { c: 1, r: 3, label: 'CLI',            sub: 'db / seed / unlock' },
+  'tc':        { c: 2, r: 0, label: 'TenantContext',  sub: 'X-Workspace-Id' },
+  'rl':        { c: 2, r: 1, label: 'RateLimitGuard', sub: 'Redis counter' },
+  'ag':        { c: 2, r: 2, label: 'AuthGuard',      sub: 'JWT verify' },
+  'pg_g':      { c: 2, r: 3, label: 'PermissionGuard',sub: 'Manifest flags' },
+  'dg':        { c: 2, r: 4, label: 'DomainGuard',    sub: 'Workspace domain' },
+  'auth-ctrl': { c: 3, r: 0, label: 'AuthController', sub: '/auth/*' },
+  'mod-ctrl':  { c: 3, r: 2, label: 'ModuleAdmin',    sub: '/modules/*' },
+  'sem-ctrl':  { c: 3, r: 3, label: 'SemanticCtrl',   sub: '/semantic/*' },
+  'sys-ctrl':  { c: 3, r: 4, label: 'SystemCtrl',     sub: '/health' },
+  'jwt':       { c: 4, r: 0, label: 'JwtService',     sub: 'InMemoryKeyStore' },
+  'pwd':       { c: 4, r: 1, label: 'PasswordSvc',    sub: 'Argon2id' },
+  'totp':      { c: 4, r: 2, label: 'TotpService',    sub: 'TOTP / Backup' },
+  'mdiscov':   { c: 4, r: 3, label: 'ModDiscovery',   sub: 'packages/modules/*' },
+  'mreg':      { c: 4, r: 4, label: 'ModRegistry',    sub: 'module_registry' },
+  'mact':      { c: 4, r: 5, label: 'ModActivation',  sub: 'workspace_modules' },
+  'wksvc':     { c: 4, r: 6, label: 'WorkspaceSvc',   sub: 'workspaces' },
+  'semsvc':    { c: 4, r: 7, label: 'SemanticSearch', sub: 'vector strategies' },
+  'audit':     { c: 4, r: 8, label: 'AuditLog',       sub: 'audit_log' },
+  'pg_db':     { c: 5, r: 1, label: 'PostgreSQL',     sub: 'Fonte de Verdade' },
+  'redis':     { c: 5, r: 4, label: 'Redis',          sub: 'Cache / Sessions' },
+  'pgvec':     { c: 5, r: 7, label: 'pgvector',       sub: 'Extensão Postgres' },
+  'qdrant':    { c: 6, r: 0, label: 'Qdrant',         sub: 'Vector DB Cloud' },
+  'focusnfe':  { c: 6, r: 3, label: 'Focus NFe',      sub: 'Fiscal API' },
+  'enrich':    { c: 6, r: 5, label: 'Enrichment API', sub: 'Domain lookup' },
+};
+
+const D_FLOWS = [
+  {
+    id: 'rest',
+    label: 'REST Autenticado',
+    desc: 'Ciclo completo de uma requisição REST autenticada com permissão',
+    color: '#6c8aff',
+    steps: [
+      { from: 'user',      to: 'http',      desc: 'Cliente envia request com Bearer token' },
+      { from: 'http',      to: 'tc',        desc: 'TenantContext extrai X-Workspace-Id do header' },
+      { from: 'tc',        to: 'rl',        desc: 'RateLimitGuard verifica contador no Redis' },
+      { from: 'rl',        to: 'ag',        desc: 'AuthGuard valida JWT — extrai userId + workspaceId' },
+      { from: 'ag',        to: 'pg_g',      desc: 'PermissionGuard checa flags contra manifesto do módulo' },
+      { from: 'pg_g',      to: 'mod-ctrl',  desc: 'Controller recebe request tipado' },
+      { from: 'mod-ctrl',  to: 'mreg',      desc: 'Service query com workspace_id filter (RLS)' },
+      { from: 'mreg',      to: 'pg_db',     desc: 'Postgres retorna dados isolados por Row Level Security' },
+      { from: 'mod-ctrl',  to: 'audit',     desc: 'AuditLogService grava ação (mutations)' },
+      { from: 'audit',     to: 'pg_db',     desc: 'Persiste registro em audit_log' },
+    ]
+  },
+  {
+    id: 'login-mfa',
+    label: 'Login com MFA',
+    desc: 'Autenticação 2FA: senha Argon2id + TOTP ou backup code',
+    color: '#a78bfa',
+    steps: [
+      { from: 'user',      to: 'http',      desc: 'POST /auth/login { email, password, deviceFingerprint }' },
+      { from: 'http',      to: 'auth-ctrl', desc: 'AuthController.login() — sem middleware de auth' },
+      { from: 'auth-ctrl', to: 'pwd',       desc: 'PasswordService.verify() — Argon2id timing-safe' },
+      { from: 'auth-ctrl', to: 'pg_db',     desc: 'UserService.findByEmail() + recordFailedLogin/Success' },
+      { from: 'auth-ctrl', to: 'totp',      desc: 'POST /auth/totp/verify — TotpService.verifyToken()' },
+      { from: 'auth-ctrl', to: 'jwt',       desc: 'JwtService.sign({ sub, wid, roles }) — access token' },
+      { from: 'auth-ctrl', to: 'pg_db',     desc: 'RefreshTokenService.issue() — persiste refresh token' },
+    ]
+  },
+  {
+    id: 'boot',
+    label: 'Module Discovery (Boot)',
+    desc: 'Descoberta e registro automático de módulos no startup do shell',
+    color: '#34d399',
+    steps: [
+      { from: 'sys-ctrl', to: 'mdiscov', desc: 'main.ts: moduleDiscoveryService.discoverAll()' },
+      { from: 'mdiscov',  to: 'mreg',    desc: 'Valida manifesto: isValidManifest() + semver.satisfies()' },
+      { from: 'mreg',     to: 'pg_db',   desc: 'INSERT ON CONFLICT UPDATE no module_registry' },
+      { from: 'mact',     to: 'mreg',    desc: 'ModuleActivation consulta registry por workspace' },
+      { from: 'mact',     to: 'pg_db',   desc: 'Atualiza workspace_modules com status de ativação' },
+    ]
+  },
+  {
+    id: 'activation',
+    label: 'Ativação de Módulo',
+    desc: 'Admin ativa um módulo para um workspace — chama onActivate()',
+    color: '#fbbf24',
+    steps: [
+      { from: 'admin',    to: 'http',     desc: 'POST /modules/:id/activate { workspaceId }' },
+      { from: 'http',     to: 'ag',       desc: 'AuthGuard — requer admin role no JWT' },
+      { from: 'ag',       to: 'mod-ctrl', desc: 'ModuleAdminController.activate()' },
+      { from: 'mod-ctrl', to: 'mreg',     desc: 'ModuleRegistryService.findById() — checa disabled_globally' },
+      { from: 'mod-ctrl', to: 'mact',     desc: 'ModuleActivationService.activate() — chama manifest.onActivate()' },
+      { from: 'mact',     to: 'pg_db',    desc: 'INSERT em workspace_modules' },
+      { from: 'mod-ctrl', to: 'audit',    desc: 'AuditLog: module.activated para o workspace' },
+    ]
+  },
+  {
+    id: 'semantic',
+    label: 'Busca Semântica',
+    desc: 'Busca vetorial com seleção automática de strategy (pgvector ou Qdrant)',
+    color: '#fb923c',
+    steps: [
+      { from: 'user',     to: 'http',     desc: 'POST /semantic/search { query, entity, workspaceId }' },
+      { from: 'http',     to: 'ag',       desc: 'AuthGuard valida JWT do request' },
+      { from: 'ag',       to: 'sem-ctrl', desc: 'SemanticController.search() recebe query tipada' },
+      { from: 'sem-ctrl', to: 'semsvc',   desc: 'SemanticSearchService.search() seleciona strategy via VectorIndexRegistry' },
+      { from: 'semsvc',   to: 'pgvec',   desc: 'PgvectorStrategy: cosine similarity query (default / dev)' },
+      { from: 'semsvc',   to: 'qdrant',  desc: 'QdrantStrategy: REST search (produção, volume > 100k)' },
+    ]
+  },
+];
+
+// ═══════════════════════════════════════════════════════════════════
+// FETCH & POLL
+// ═══════════════════════════════════════════════════════════════════
+async function fetchData() {
+  try {
+    const res = await fetch('./nattivus-arch.json?_=' + Date.now());
+    if (!res.ok) return;
+    data = await res.json();
+    document.getElementById('last-update').textContent =
+      'Atualizado às ' + new Date().toLocaleTimeString('pt-BR');
+    if (activeSection !== 'diagram') render();
+  } catch (e) { console.warn('Fetch:', e.message); }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// SIDEBAR
+// ═══════════════════════════════════════════════════════════════════
+function renderSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  sidebar.innerHTML = NAV.map(group => `
+    <div class="nav-section">
+      <div class="nav-section-header open" data-group="${group.id}">
+        <span>${group.icon}</span> ${group.label}
+        <span class="chevron">▶</span>
+      </div>
+      <div class="nav-items open">
+        ${group.items.map(item => `
+          <div class="nav-item ${activeSection === item.id ? 'active' : ''}" data-section="${item.id}">
+            ${item.label}
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+  sidebar.querySelectorAll('.nav-section-header').forEach(h => {
+    h.addEventListener('click', () => {
+      h.classList.toggle('open');
+      h.nextElementSibling.classList.toggle('open');
+    });
+  });
+  sidebar.querySelectorAll('.nav-item').forEach(el => {
+    el.addEventListener('click', () => {
+      activeSection = el.dataset.section;
+      activeDiagramFlow = null; activeDiagramStep = null;
+      renderSidebar(); renderContent();
+    });
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// CONTENT ROUTER
+// ═══════════════════════════════════════════════════════════════════
+function renderContent() {
+  const main = document.getElementById('main');
+  const container = document.getElementById('content-sections');
+  container.innerHTML = '';
+
+  const isDiagram = (activeSection === 'diagram');
+  main.classList.toggle('diagram-mode', isDiagram);
+
+  const div = document.createElement('div');
+  div.classList.add('active');
+  if (isDiagram) div.classList.add('diagram-wrap');
+  div.innerHTML = renderSection(activeSection);
+  container.appendChild(div);
+
+  // Bind events after DOM insert
+  if (isDiagram) {
+    bindDiagramEvents();
+  } else {
+    bindStepEvents(container);
+  }
+}
+
+function bindStepEvents(container) {
+  container.querySelectorAll('.step[data-step]').forEach(el => {
+    el.addEventListener('click', () => {
+      container.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+      el.classList.toggle('active');
+    });
+  });
+  container.querySelectorAll('.flow-step[data-n]').forEach(el => {
+    el.addEventListener('click', () => {
+      container.querySelectorAll('.flow-step').forEach(s => s.classList.remove('active'));
+      el.classList.toggle('active');
+    });
+  });
+}
+
+function renderSection(id) {
+  switch (id) {
+    case 'diagram':    return renderDiagram();
+    case 'boot':       return renderBoot();
+    case 'state':      return renderState();
+    case 'dataflow':   return renderDataflow();
+    case 'input':      return renderInput();
+    case 'modules':    return renderModules();
+    case 'models':     return renderModels();
+    case 'migrations': return renderMigrations();
+    case 'auth':       return renderAuth();
+    case 'semantic':   return renderSemantic();
+    case 'events':     return renderEvents();
+    case 'active':     return renderActive();
+    default:           return '<p style="padding:24px;color:var(--text2)">Seção não encontrada.</p>';
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// DIAGRAM — SVG BUILDER
+// ═══════════════════════════════════════════════════════════════════
+function nodeCX(id) { const n = D_NODES[id]; return colX(n.c) + NODE_W / 2; }
+function nodeCY(id) { const n = D_NODES[id]; return rowY(n.r) + NODE_H / 2; }
+function colX(c) { return SVG_PAD_L + c * (NODE_W + COL_GAP); }
+function rowY(r) { return SVG_PAD_T + r * ROW_H; }
+
+function buildPath(fromId, toId) {
+  const a = D_NODES[fromId], b = D_NODES[toId];
+  if (!a || !b || a.c === b.c) return null; // skip same-column
+
+  // forward (left to right)
+  const sx = colX(a.c) + NODE_W, sy = rowY(a.r) + NODE_H / 2;
+  const ex = colX(b.c),          ey = rowY(b.r) + NODE_H / 2;
+  const mx = (sx + ex) / 2;
+  return `M ${sx} ${sy} C ${mx} ${sy} ${mx} ${ey} ${ex} ${ey}`;
+}
+
+function midpoint(fromId, toId) {
+  const a = D_NODES[fromId], b = D_NODES[toId];
+  if (!a || !b) return null;
+  const sx = colX(a.c) + NODE_W, sy = rowY(a.r) + NODE_H / 2;
+  const ex = colX(b.c),          ey = rowY(b.r) + NODE_H / 2;
+  return { x: (sx + ex) / 2, y: (sy + ey) / 2 };
+}
+
+function renderDiagram() {
+  // Collect all unique connections from all flows
+  const allEdges = new Set();
+  D_FLOWS.forEach(f => f.steps.forEach(s => {
+    if (D_NODES[s.from] && D_NODES[s.to] && D_NODES[s.from].c !== D_NODES[s.to].c)
+      allEdges.add(`${s.from}__${s.to}`);
+  }));
+
+  // Determine active flow edges + step numbers
+  const activeEdges = new Map(); // "from__to" → { color, steps: [n,...] }
+  const highlightedNodes = new Set();
+  if (activeDiagramFlow) {
+    const flow = D_FLOWS.find(f => f.id === activeDiagramFlow);
+    if (flow) {
+      flow.steps.forEach((s, i) => {
+        const key = `${s.from}__${s.to}`;
+        if (!activeEdges.has(key)) activeEdges.set(key, { color: flow.color, nums: [] });
+        activeEdges.get(key).nums.push(i + 1);
+        highlightedNodes.add(s.from);
+        highlightedNodes.add(s.to);
+      });
+    }
+  }
+
+  // SVG: column bands
+  const bands = D_COLS.map((col, c) => `
+    <rect class="col-band" x="${colX(c)}" y="${SVG_PAD_T - 16}"
+      width="${NODE_W}" height="${SVG_H - SVG_PAD_T + 16}"
+      fill="${col.color}" rx="0"/>
+  `).join('');
+
+  // SVG: column headers
+  const headers = D_COLS.map((col, c) => `
+    <text x="${colX(c) + NODE_W / 2}" y="28"
+      text-anchor="middle" font-size="10" font-weight="700"
+      letter-spacing=".8" fill="${col.color}" opacity=".85"
+      font-family="'Segoe UI',system-ui,sans-serif">${col.label}</text>
+    <line x1="${colX(c)}" y1="38" x2="${colX(c) + NODE_W}" y2="38"
+      stroke="${col.color}" stroke-width="1.5" opacity=".25"/>
+  `).join('');
+
+  // SVG: all edges (muted)
+  const edgePaths = [...allEdges].map(key => {
+    const [from, to] = key.split('__');
+    const d = buildPath(from, to);
+    if (!d) return '';
+    const isActive = activeEdges.has(key);
+    const edgeInfo = activeEdges.get(key);
+    return `<path d="${d}" fill="none"
+      stroke="${isActive ? edgeInfo.color : '#2e3350'}"
+      stroke-width="${isActive ? 2 : 1}"
+      opacity="${activeDiagramFlow ? (isActive ? 1 : .2) : .6}"
+      marker-end="url(#${isActive ? 'arrow-active-' + activeDiagramFlow : 'arrow-muted'})"
+      style="${isActive ? 'filter:drop-shadow(0 0 4px ' + edgeInfo.color + '55)' : ''}"/>`;
+  }).join('');
+
+  // SVG: step number circles on active edges
+  const stepCircles = activeDiagramFlow ? [...activeEdges.entries()].map(([key, info]) => {
+    const [from, to] = key.split('__');
+    const mid = midpoint(from, to);
+    if (!mid) return '';
+    return info.nums.map(n => `
+      <circle cx="${mid.x}" cy="${mid.y}" r="11" fill="${info.color}"/>
+      <text x="${mid.x}" y="${mid.y + 4}" text-anchor="middle"
+        font-size="10" font-weight="700" fill="#fff"
+        font-family="'Segoe UI',system-ui,sans-serif">${n}</text>
+    `).join('');
+  }).join('') : '';
+
+  // SVG: nodes
+  const nodesSvg = Object.entries(D_NODES).map(([id, n]) => {
+    const x = colX(n.c), y = rowY(n.r);
+    const colColor = D_COLS[n.c].color;
+    const isHighlighted = highlightedNodes.has(id);
+    const isActive = activeDiagramFlow && isHighlighted;
+    const bgOpacity = activeDiagramFlow ? (isActive ? .18 : .04) : .1;
+    const borderOpacity = activeDiagramFlow ? (isActive ? 1 : .2) : .5;
+    const textOpacity = activeDiagramFlow ? (isActive ? 1 : .3) : 1;
+    return `
+      <g class="svg-node ${isActive ? 'highlighted' : ''}" data-node-id="${id}">
+        <rect x="${x}" y="${y}" width="${NODE_W}" height="${NODE_H}" rx="7" ry="7"
+          fill="${colColor}" fill-opacity="${bgOpacity}"
+          stroke="${colColor}" stroke-width="${isActive ? 1.5 : 1}" stroke-opacity="${borderOpacity}"/>
+        <text x="${x + NODE_W/2}" y="${y + 19}" text-anchor="middle"
+          font-size="12" font-weight="600" fill="${colColor}" fill-opacity="${textOpacity}"
+          font-family="'Segoe UI',system-ui,sans-serif">${n.label}</text>
+        <text x="${x + NODE_W/2}" y="${y + 35}" text-anchor="middle"
+          font-size="10" fill="${colColor}" fill-opacity="${textOpacity * .55}"
+          font-family="'Segoe UI',system-ui,sans-serif">${n.sub}</text>
+        ${isActive ? `<rect x="${x}" y="${y}" width="${NODE_W}" height="${NODE_H}" rx="7" ry="7"
+          fill="none" stroke="${colColor}" stroke-width="1.5" opacity=".4"/>` : ''}
+      </g>`;
+  }).join('');
+
+  // Arrow markers
+  const activeFlow = D_FLOWS.find(f => f.id === activeDiagramFlow);
+  const markers = `
+    <defs>
+      <marker id="arrow-muted" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L8,3 z" fill="#2e3350"/>
+      </marker>
+      ${activeDiagramFlow && activeFlow ? `
+      <marker id="arrow-active-${activeDiagramFlow}" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L8,3 z" fill="${activeFlow.color}"/>
+      </marker>` : ''}
+    </defs>`;
+
+  const svgContent = `
+    <svg id="arch-svg" width="${SVG_W}" height="${SVG_H}"
+      xmlns="http://www.w3.org/2000/svg" style="min-width:${SVG_W}px">
+      ${markers}
+      ${bands}
+      ${headers}
+      ${edgePaths}
+      ${stepCircles}
+      ${nodesSvg}
+    </svg>`;
+
+  // Legend
+  const legend = D_COLS.map((col) => `
+    <div class="legend-dot">
+      <span style="background:${col.color}"></span>
+      <span>${col.label}</span>
+    </div>`).join('');
+
+  // Right panel — flows list
+  const flowsHtml = D_FLOWS.map(f => `
+    <div class="flow-btn ${activeDiagramFlow === f.id ? 'active' : ''}"
+      data-flow-id="${f.id}"
+      style="border-left-color:${activeDiagramFlow === f.id ? f.color : 'transparent'}">
+      <div class="flow-btn-legend">
+        <div class="flow-color-dot" style="background:${f.color}"></div>
+        <div class="flow-btn-label">${f.label}</div>
+      </div>
+      <div class="flow-btn-desc">${f.desc}</div>
+    </div>
+  `).join('');
+
+  // Right panel — steps list
+  let stepsHtml = '';
+  if (activeDiagramFlow) {
+    const flow = D_FLOWS.find(f => f.id === activeDiagramFlow);
+    stepsHtml = flow.steps.map((s, i) => `
+      <div class="flow-step-item ${activeDiagramStep === i ? 'active' : ''}" data-step-idx="${i}">
+        <div class="fsi-n" style="background:${flow.color}">${i + 1}</div>
+        <div class="fsi-text">
+          <b style="color:var(--text)">${D_NODES[s.from]?.label || s.from} → ${D_NODES[s.to]?.label || s.to}</b><br/>
+          ${s.desc}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  return `
+    <div class="diagram-canvas-area">
+      <div class="diagram-legend">${legend}</div>
+      ${svgContent}
+    </div>
+    <div class="flows-panel">
+      <div class="flows-panel-header">FLOWS</div>
+      <div class="flows-list" id="flows-list">${flowsHtml}</div>
+      <div class="flows-steps-header">STEPS ${activeDiagramFlow ? '— ' + (D_FLOWS.find(f=>f.id===activeDiagramFlow)?.label||'') : ''}</div>
+      <div class="flows-steps" id="flows-steps">
+        ${activeDiagramFlow ? stepsHtml : '<div class="no-flow">Selecione um flow<br/>para ver os steps</div>'}
+      </div>
+    </div>`;
+}
+
+function bindDiagramEvents() {
+  document.querySelectorAll('.flow-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.flowId;
+      activeDiagramFlow = activeDiagramFlow === id ? null : id;
+      activeDiagramStep = null;
+      renderContent();
+    });
+  });
+  document.querySelectorAll('.flow-step-item').forEach(el => {
+    el.addEventListener('click', () => {
+      const idx = parseInt(el.dataset.stepIdx, 10);
+      activeDiagramStep = activeDiagramStep === idx ? null : idx;
+      document.querySelectorAll('.flow-step-item').forEach(e => e.classList.remove('active'));
+      if (activeDiagramStep !== null) el.classList.add('active');
+    });
+  });
+  document.querySelectorAll('.svg-node').forEach(el => {
+    el.addEventListener('click', () => {
+      const nodeId = el.dataset.nodeId;
+      const n = D_NODES[nodeId];
+      if (!n) return;
+      // Find flows that use this node
+      const relevantFlows = D_FLOWS.filter(f => f.steps.some(s => s.from === nodeId || s.to === nodeId));
+      if (relevantFlows.length === 1) {
+        activeDiagramFlow = relevantFlows[0].id;
+        activeDiagramStep = null;
+        renderContent();
+      }
+    });
+    el.style.cursor = 'pointer';
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// SECTION RENDERERS (data-driven)
+// ═══════════════════════════════════════════════════════════════════
+function layerBadge(layer) {
+  if (!layer) return '';
+  return `<span class="layer-badge layer-${layer}">${layer}</span>`;
+}
+
+function renderBoot() {
+  if (!data) return '<p style="padding:24px;color:var(--text2)">Carregando...</p>';
+  const b = data.boot_sequence;
+  return `
+    <div class="section-title">⚡ Boot Sequence</div>
+    <div class="section-subtitle">${b.description}</div>
+    <div class="section-info">Clique em cada step para destacá-lo. <code style="color:var(--accent2);font-family:monospace">${b.file}</code></div>
+    <div class="steps-list">${b.steps.map(s => `
+      <div class="step" data-step="${s.id}">
+        <div class="step-number-col"><div class="step-num">${s.id}</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <div class="step-label">${s.label} ${layerBadge(s.layer)}</div>
+          <div class="step-detail">${s.detail}</div>
+          <div class="step-file">${s.file}</div>
+        </div>
+      </div>`).join('')}
+    </div>`;
+}
+
+function renderState() {
+  if (!data) return '';
+  const sm = data.state_management;
+  const typeColors = { 'in-process': 'accent', 'external-cache': 'yellow', 'persistent': 'green' };
+  return `
+    <div class="section-title">📦 Estado & Cache</div>
+    <div class="section-subtitle">${sm.description}</div>
+    ${sm.sections.map(s => `
+      <div class="card">
+        <div class="card-title">${s.name} <span class="pill ${typeColors[s.type]||''}">${s.type}</span></div>
+        <div class="card-meta">${s.file}</div>
+        <div class="card-body">${s.detail}</div>
+        <div class="tag-list">${(s.state_keys||[]).map(k=>`<span class="tag-item">${k}</span>`).join('')}</div>
+      </div>`).join('')}`;
+}
+
+function renderDataflow() {
+  if (!data) return '';
+  const df = data.data_flow;
+  return `
+    <div class="section-title">→ Fluxo de Dados</div>
+    <div class="section-subtitle">${df.description}</div>
+    ${df.flows.map(flow => `
+      <div class="card">
+        <div class="card-title">↔ ${flow.name}</div>
+        <div class="card-meta">${flow.file||''}</div>
+        <div class="flow-container" style="margin-top:12px">
+          ${flow.steps.map(s => `
+            <div class="flow-step" data-n="${s.n}">
+              <div class="flow-n">${s.n}</div>
+              <div><div class="flow-actor">${s.actor}</div><div class="flow-action">${s.action}</div></div>
+            </div>
+            ${s.n < flow.steps.length ? '<div class="flow-arrow">↓</div>' : ''}`).join('')}
+        </div>
+      </div>`).join('')}`;
+}
+
+function renderInput() {
+  if (!data) return '';
+  const inp = data.input_management;
+  const icons = { http:'🌐', graphql:'◈', cli:'$', config:'⚙' };
+  return `
+    <div class="section-title">⌨ Inputs & API</div>
+    <div class="section-subtitle">${inp.description}</div>
+    ${inp.layers.map(l => `
+      <div class="card">
+        <div class="card-title">${icons[l.type]||'◉'} ${l.name} <span class="pill">${l.type}</span></div>
+        <div class="card-body">${l.detail}</div>
+        ${l.vars ? `<table style="margin-top:12px"><thead><tr><th>Variável</th><th>Obrigatório</th><th>Default</th></tr></thead><tbody>
+          ${l.vars.map(v=>`<tr><td><code>${v.name}</code></td><td>${v.required?'✓':''}</td><td class="mono">${v.default||'—'}</td></tr>`).join('')}
+        </tbody></table>` : ''}
+        ${l.files ? `<div class="tag-list">${l.files.map(f=>`<span class="tag-item mono">${f.split('/').slice(-2).join('/')}</span>`).join('')}</div>` : ''}
+      </div>`).join('')}`;
+}
+
+function renderModules() {
+  if (!data) return '';
+  const mods = data.modules;
+  return `
+    <div class="section-title">◈ Módulos CRM</div>
+    <div class="section-subtitle">${mods.description}</div>
+    <div class="section-info">SDK: <code style="color:var(--accent);font-family:monospace">${mods.sdk_version_supported}</code> &nbsp;•&nbsp; Discovery: <code style="color:var(--accent2);font-family:monospace">${mods.discovery_path}</code></div>
+    <div class="grid-2">${mods.list.map(m => `
+      <div class="card">
+        <div class="card-title"><span class="module-status status-${m.status}"></span>${m.name}
+          <span class="pill" style="font-size:10px">${m.version}</span>
+          <span class="pill ${m.complexity==='medium'?'yellow':m.complexity==='high'?'red':'green'}" style="margin-left:auto">${m.complexity}</span>
+        </div>
+        <div class="card-meta">${m.moduleId}</div>
+        <div style="display:flex;gap:16px;margin:10px 0;font-size:12px;color:var(--text2)">
+          <span>REST: <b style="color:var(--text)">${m.routes_count}</b></span>
+          <span>GraphQL: <b style="color:var(--text)">${m.graphql_ops_count}</b></span>
+        </div>
+        ${m.dependencies.length ? `<div class="tag-list">${m.dependencies.map(d=>`<span class="tag-item dep">${d}</span>`).join('')}</div>` : ''}
+        <div class="tag-list" style="margin-top:8px">${m.permissions.map(p=>`<span class="tag-item perm">${p}</span>`).join('')}</div>
+        <div class="tag-list">${m.business_rules.map(r=>`<span class="tag-item rule">${r}</span>`).join('')}</div>
+      </div>`).join('')}</div>`;
+}
+
+function renderModels() {
+  if (!data) return '';
+  const models = data.models;
+  return `
+    <div class="section-title">🗃 Entidades & Modelos</div>
+    <div class="section-subtitle">${models.description}</div>
+    ${models.packages.map(pkg => `
+      <div class="card">
+        <div class="card-title">📂 ${pkg.name}</div>
+        <div class="card-meta">${pkg.path}</div>
+        ${pkg.entities.map(e => `
+          <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border)">
+            <div style="font-weight:600;font-size:13px;margin-bottom:8px">
+              ${e.name}
+              ${e.standardObject !== undefined ? `<span class="pill ${e.standardObject?'green':''}" style="font-size:10px">${e.standardObject?'standard':'custom'}</span>` : ''}
+            </div>
+            <div style="font-size:12px;color:var(--text3);margin-bottom:8px;font-family:monospace">table: ${e.table}</div>
+            <div class="tag-list">${(e.fields||[]).map(f=>`<span class="tag-item mono">${f}</span>`).join('')}</div>
+            ${e.references ? `<div class="tag-list" style="margin-top:6px">${e.references.map(r=>`<span class="tag-item dep">${r.moduleId}::${r.entityName}</span>`).join('')}</div>` : ''}
+          </div>`).join('')}
+      </div>`).join('')}`;
+}
+
+function renderMigrations() {
+  if (!data) return '';
+  const mig = data.migrations;
+  return `
+    <div class="section-title">🗄 Migrations SQL</div>
+    <div class="section-subtitle">${mig.description}</div>
+    <div class="section-info">Aplicar em ordem. Cada migration é idempotente quando possível.</div>
+    <div class="steps-list">${mig.files.map(m => `
+      <div class="step" data-step="mig-${m.order}">
+        <div class="step-number-col"><div class="step-num">${m.order}</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <div class="step-label">${m.description}</div>
+          <div class="step-file">${m.file}</div>
+        </div>
+      </div>`).join('')}
+    </div>`;
+}
+
+function renderAuth() {
+  if (!data) return '';
+  const auth = data.auth_system;
+  const loginFlow = data.data_flow.flows.find(f => f.id === 'df-auth-login') || {};
+  return `
+    <div class="section-title">🔐 Auth System</div>
+    <div class="section-subtitle">${auth.description}</div>
+    <div class="grid-2" style="margin-bottom:28px">${auth.components.map(c => `
+      <div class="card">
+        <div class="card-title">🔐 ${c.name}</div>
+        <div class="card-meta">${c.file.split('/').slice(-2).join('/')}</div>
+        <div class="card-body">${c.detail}</div>
+        ${c.payload ? `<div style="margin-top:8px;font-family:monospace;font-size:12px;color:var(--accent2)">Payload: ${c.payload}</div>` : ''}
+      </div>`).join('')}</div>
+    <hr/>
+    <h3>↔ Fluxo de Login com MFA</h3>
+    <div class="flow-container">
+      ${(loginFlow.steps||[]).map(s => `
+        <div class="flow-step" data-n="${s.n}">
+          <div class="flow-n">${s.n}</div>
+          <div><div class="flow-actor">${s.actor}</div><div class="flow-action">${s.action}</div></div>
+        </div>
+        ${s.n < loginFlow.steps.length ? '<div class="flow-arrow">↓</div>' : ''}`).join('')}
+    </div>`;
+}
+
+function renderSemantic() {
+  if (!data) return '';
+  const sem = data.semantic_search;
+  return `
+    <div class="section-title">🔍 Busca Semântica</div>
+    <div class="section-subtitle">${sem.description}</div>
+    <div class="grid-2">
+      ${sem.strategies.map(s => `
+        <div class="card">
+          <div class="card-title">⬡ ${s.name}</div>
+          <div class="card-meta">${s.file.split('/').slice(-2).join('/')}</div>
+          <div class="card-body">${s.detail}</div>
+          <div style="margin-top:10px;font-size:12px;color:var(--text3)">Usar quando:</div>
+          <div class="card-body" style="margin-top:4px">${s.when}</div>
+        </div>`).join('')}
+    </div>
+    <div class="card" style="margin-top:14px">
+      <div class="card-title">⚙ ${sem.orchestration.service}</div>
+      <div class="card-meta">${sem.orchestration.file.split('/').slice(-2).join('/')}</div>
+      <div class="card-body">${sem.orchestration.detail}</div>
+    </div>`;
+}
+
+function renderEvents() {
+  if (!data) return '';
+  const ev = data.events;
+  return `
+    <div class="section-title">⚡ Eventos & Audit</div>
+    <div class="section-subtitle">${ev.description}</div>
+    ${ev.categories.map(cat => `
+      <div class="card">
+        <div class="card-title">⚡ ${cat.name}</div>
+        <table style="margin-top:12px">
+          <thead><tr><th>Evento</th><th>Trigger</th>
+            ${cat.events[0]?.audit !== undefined ? '<th>Audit</th>' : ''}
+            ${cat.events[0]?.severity !== undefined ? '<th>Severidade</th>' : ''}
+            ${cat.events[0]?.log !== undefined ? '<th>Log</th>' : ''}
+          </tr></thead>
+          <tbody>
+            ${cat.events.map(e => `<tr>
+              <td><span class="tag-item event">${e.name}</span></td>
+              <td style="font-size:12px;color:var(--text2)">${e.trigger}</td>
+              ${e.audit !== undefined ? `<td>${e.audit ? '✓' : ''}</td>` : ''}
+              ${e.severity !== undefined ? `<td><span class="pill ${e.severity==='warning'?'yellow':''}">${e.severity||'info'}</span></td>` : ''}
+              ${e.log !== undefined ? `<td style="font-family:monospace;font-size:11px;color:var(--text3)">${e.log||''}</td>` : ''}
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>`).join('')}`;
+}
+
+function renderActive() {
+  if (!data) return '';
+  const ad = data.active_development;
+  const proj = data.project;
+  return `
+    <div class="section-title">🚀 Feature Ativa</div>
+    <div class="section-subtitle">Estado atual do ciclo Reversa</div>
+    <div class="card">
+      <div class="card-title">${ad.feature} <span class="pill green">${ad.status}</span></div>
+      <div class="card-body" style="margin-bottom:12px">${ad.description}</div>
+      <div class="tag-list">${ad.stages_completed.map(s=>`<span class="tag-item event">${s}</span>`).join('')}</div>
+    </div>
+    <h3 style="margin-top:24px">Próximos Steps</h3>
+    <div class="steps-list">
+      ${ad.next_steps.map((s,i) => `
+        <div class="step" data-step="ns-${i}">
+          <div class="step-number-col"><div class="step-num">${i+1}</div><div class="step-line"></div></div>
+          <div class="step-body"><div class="step-label">${s}</div></div>
+        </div>`).join('')}
+    </div>
+    <hr/>
+    <h3>Decisões Resolvidas</h3>
+    ${ad.decisions_resolved.map(d=>`<div class="card" style="padding:10px 14px;margin-bottom:8px"><span style="color:var(--green);margin-right:8px">✓</span>${d}</div>`).join('')}
+    <hr/>
+    <h3>ADRs <span class="count">${ad.adrs.length}</span></h3>
+    <div class="adrs-list">
+      ${ad.adrs.map(a=>`<div class="adr-item"><div class="adr-id">${a.id}</div><div>${a.title}</div></div>`).join('')}
+    </div>
+    <hr/>
+    <div class="card">
+      <div class="card-title">📊 Métricas Reversa</div>
+      <table style="margin-top:10px"><tbody>
+        <tr><td>Confiança</td><td><span class="pill yellow">${proj.confidence}</span></td></tr>
+        <tr><td>Fase</td><td><span class="pill green">${proj.reversa_phase}</span></td></tr>
+        <tr><td>Feature ativa</td><td><code>${proj.active_feature}</code></td></tr>
+      </tbody></table>
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════════
+function render() {
+  renderSidebar();
+  renderContent();
+}
+
+render(); // render diagram immediately (no data needed)
+fetchData();
+setInterval(fetchData, 30000);
+</script>
+</body>
+</html>
