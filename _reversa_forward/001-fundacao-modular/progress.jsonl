@@ -1,0 +1,41 @@
+{"task":"T032","title":"PasswordService (Argon2id)","status":"done","ts":"2026-05-15T00:49:22Z"}
+{"task":"T033","title":"UserService (CRUD + lock)","status":"done","ts":"2026-05-15T00:50:13Z"}
+{"task":"T034","title":"TotpService (otplib + AES-GCM)","status":"done","ts":"2026-05-15T00:49:32Z"}
+{"task":"T035","title":"BackupCodeService (bcrypt)","status":"done","ts":"2026-05-15T00:49:34Z"}
+{"task":"T036","title":"JwtService (EdDSA + KeyStore)","status":"done","ts":"2026-05-15T00:50:29Z"}
+{"task":"T037","title":"RefreshTokenService (opaque + rotation)","status":"done","ts":"2026-05-15T00:50:31Z"}
+{"task":"T038","title":"TenantContextMiddleware","status":"done","ts":"2026-05-15T00:50:58Z"}
+{"task":"T039","title":"AuthGuard","status":"done","ts":"2026-05-15T00:51:06Z"}
+{"task":"T040","title":"PermissionGuard","status":"done","ts":"2026-05-15T00:51:13Z"}
+{"task":"T041","title":"DomainGuard","status":"done","ts":"2026-05-15T00:51:16Z"}
+{"task":"T042","title":"ModuleRegistryService","status":"done","ts":"2026-05-15T00:51:49Z"}
+{"task":"T043","title":"ModuleDiscoveryService","status":"done","ts":"2026-05-15T00:52:03Z"}
+{"task":"T044","title":"ModuleActivationService","status":"done","ts":"2026-05-15T00:52:14Z"}
+{"task":"T045","title":"VectorIndexRegistryService","status":"done","ts":"2026-05-15T00:52:16Z"}
+{"task":"T046","title":"PgvectorStrategy","status":"done","ts":"2026-05-15T00:52:56Z"}
+{"task":"T047","title":"QdrantStrategy","status":"done","ts":"2026-05-15T00:53:10Z"}
+{"task":"T048","title":"SemanticSearchService (facade)","status":"done","ts":"2026-05-15T00:53:23Z"}
+{"task":"T049","title":"AuditLogService","status":"done","ts":"2026-05-15T00:53:44Z"}
+{"task":"T050","title":"WorkspaceService + WorkspaceMemberService","status":"done","ts":"2026-05-15T00:53:46Z"}
+{"ts":"2026-05-15T00:32:00Z","action":"T001","status":"done","files":["nattivus/package.json","nattivus/nx.json","nattivus/tsconfig.base.json","nattivus/.yarnrc.yml"]}
+{"ts":"2026-05-15T00:32:00Z","action":"T002","status":"done","files":["nattivus/docker/compose.dev.yml"]}
+{"ts":"2026-05-15T00:32:00Z","action":"T003","status":"done","files":["nattivus/.env.example","nattivus/.gitignore","nattivus/.editorconfig","nattivus/.prettierrc"]}
+{"ts":"2026-05-15T00:32:30Z","action":"T004","status":"done","files":["nattivus/packages/nattivus-shared/project.json","nattivus/packages/nattivus-shared/tsconfig.json","nattivus/packages/nattivus-shared/src/index.ts"]}
+{"ts":"2026-05-15T00:32:30Z","action":"T005","status":"done","files":["nattivus/packages/nattivus-shell/project.json","nattivus/packages/nattivus-shell/tsconfig.json","nattivus/packages/nattivus-shell/src/app.module.ts","nattivus/packages/nattivus-shell/src/main.ts"]}
+{"ts":"2026-05-15T00:32:30Z","action":"T006","status":"done","files":["nattivus/packages/nattivus-sdk/project.json","nattivus/packages/nattivus-sdk/tsconfig.esm.json","nattivus/packages/nattivus-sdk/tsconfig.cjs.json","nattivus/packages/nattivus-sdk/src/index.ts"]}
+{"ts":"2026-05-15T00:33:00Z","action":"T007","status":"done","files":["nattivus/packages/nattivus-ui/project.json","nattivus/packages/nattivus-ui/tsconfig.json","nattivus/packages/nattivus-ui/src/index.ts"]}
+{"ts":"2026-05-15T00:33:00Z","action":"T008","status":"done","files":["nattivus/packages/modules/hello-world/project.json","nattivus/packages/modules/hello-world/tsconfig.json","nattivus/packages/modules/hello-world/src/module.manifest.ts"]}
+{"ts":"2026-05-15T00:34:30Z","action":"T009","status":"done","files":["nattivus/packages/nattivus-shared/src/base-entity.ts"]}
+{"ts":"2026-05-15T00:35:00Z","action":"T010","status":"done","files":["nattivus/packages/nattivus-sdk/src/manifest.ts"]}
+{"ts":"2026-05-15T00:35:10Z","action":"T011","status":"done","files":["nattivus/packages/nattivus-sdk/src/permissions.ts"]}
+{"ts":"2026-05-15T00:35:20Z","action":"T012","status":"done","files":["nattivus/packages/nattivus-sdk/src/shell-client.ts"]}
+{"ts":"2026-05-15T00:35:40Z","action":"T013","status":"done","files":["nattivus/packages/nattivus-shell/migrations/001-create-extensions.sql"]}
+{"ts":"2026-05-15T00:35:50Z","action":"T014","status":"done","files":["nattivus/packages/nattivus-shell/migrations/002-create-auth-tables.sql"]}
+{"ts":"2026-05-15T00:36:00Z","action":"T015","status":"done","files":["nattivus/packages/nattivus-shell/migrations/003-create-workspace-tables.sql"]}
+{"ts":"2026-05-15T00:36:05Z","action":"T016","status":"done","files":["nattivus/packages/nattivus-shell/migrations/004-create-module-registry.sql"]}
+{"ts":"2026-05-15T00:36:08Z","action":"T017","status":"done","files":["nattivus/packages/nattivus-shell/migrations/005-create-audit-log.sql"]}
+{"ts":"2026-05-15T00:36:14Z","action":"T018","status":"done","files":["nattivus/packages/nattivus-shell/migrations/006-create-vector-index-registry.sql"]}
+{"ts":"2026-05-15T00:36:24Z","action":"T019","status":"done","files":["nattivus/packages/nattivus-shell/migrations/007-enable-rls.sql"]}
+{"ts":"2026-05-15T00:36:26Z","action":"T020","status":"done","files":["nattivus/packages/nattivus-shell/migrations/008-triggers.sql"]}
+{"ts":"2026-05-15T00:37:34Z","action":"T021","status":"done","files":["nattivus/packages/nattivus-shell/src/database/data-source.ts"]}
+{"ts":"2026-05-15T00:37:36Z","action":"T022","status":"done","files":["nattivus/packages/nattivus-shell/src/cli/db.ts"]}

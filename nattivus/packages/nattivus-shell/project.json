@@ -1,0 +1,54 @@
+{
+  "name": "@nattivus/shell",
+  "version": "0.0.1",
+  "private": true,
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/nattivus-shell/src",
+  "projectType": "application",
+  "tags": ["scope:shell"],
+  "targets": {
+    "serve": {
+      "executor": "@nx/js:node",
+      "options": {
+        "buildTarget": "nattivus-shell:build"
+      }
+    },
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/nattivus-shell",
+        "main": "packages/nattivus-shell/src/main.ts",
+        "tsConfig": "packages/nattivus-shell/tsconfig.json"
+      }
+    },
+    "db:init": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "ts-node -r tsconfig-paths/register src/cli/db.ts init",
+        "cwd": "packages/nattivus-shell"
+      }
+    },
+    "db:migrate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "ts-node -r tsconfig-paths/register src/cli/db.ts migrate",
+        "cwd": "packages/nattivus-shell"
+      }
+    },
+    "db:reset": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "ts-node -r tsconfig-paths/register src/cli/db.ts reset",
+        "cwd": "packages/nattivus-shell"
+      }
+    },
+    "seed-admin": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "ts-node -r tsconfig-paths/register src/cli/seed-admin.ts",
+        "cwd": "packages/nattivus-shell"
+      }
+    }
+  }
+}

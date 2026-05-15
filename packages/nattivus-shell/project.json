@@ -1,0 +1,50 @@
+{
+  "name": "nattivus-shell",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/nattivus-shell/src",
+  "projectType": "application",
+  "tags": ["scope:nattivus", "type:backend"],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/nattivus-shell",
+        "main": "packages/nattivus-shell/src/main.ts",
+        "tsConfig": "packages/nattivus-shell/tsconfig.app.json"
+      },
+      "dependsOn": ["^build"]
+    },
+    "start": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "dependsOn": ["build"],
+      "options": {
+        "command": "node dist/packages/nattivus-shell/main.js"
+      }
+    },
+    "db:init": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "tsx packages/nattivus-shell/src/cli/db.ts init"
+      }
+    },
+    "db:migrate": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "tsx packages/nattivus-shell/src/cli/db.ts migrate"
+      }
+    },
+    "db:reset": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "tsx packages/nattivus-shell/src/cli/db.ts reset"
+      }
+    },
+    "typecheck": {},
+    "test": {}
+  }
+}

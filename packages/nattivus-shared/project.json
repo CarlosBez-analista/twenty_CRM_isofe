@@ -1,0 +1,20 @@
+{
+  "name": "nattivus-shared",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/nattivus-shared/src",
+  "projectType": "library",
+  "tags": ["scope:nattivus", "type:shared"],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/nattivus-shared",
+        "main": "packages/nattivus-shared/src/index.ts",
+        "tsConfig": "packages/nattivus-shared/tsconfig.lib.json"
+      }
+    },
+    "typecheck": {},
+    "test": {}
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "@nattivus/module-hello-world",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "@nattivus/sdk": "workspace:*",
+    "@nattivus/shared": "workspace:*"
+  }
+}

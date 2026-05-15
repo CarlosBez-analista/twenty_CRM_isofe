@@ -1,0 +1,10 @@
+{
+  "name": "@nattivus/module-hello-world",
+  "version": "0.0.1",
+  "private": true,
+  "main": "src/module.manifest.ts",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/modules/hello-world/src",
+  "projectType": "library",
+  "tags": ["scope:module"]
+}

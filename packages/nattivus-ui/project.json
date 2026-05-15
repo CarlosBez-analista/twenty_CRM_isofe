@@ -1,0 +1,20 @@
+{
+  "name": "nattivus-ui",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/nattivus-ui/src",
+  "projectType": "library",
+  "tags": ["scope:nattivus", "type:ui"],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/nattivus-ui",
+        "main": "packages/nattivus-ui/src/index.ts",
+        "tsConfig": "packages/nattivus-ui/tsconfig.lib.json"
+      }
+    },
+    "typecheck": {},
+    "test": {}
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "nattivus-sdk",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/nattivus-sdk/src",
+  "projectType": "library",
+  "tags": ["scope:nattivus", "type:sdk"],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/nattivus-sdk",
+        "main": "packages/nattivus-sdk/src/index.ts",
+        "tsConfig": "packages/nattivus-sdk/tsconfig.lib.json"
+      }
+    },
+    "typecheck": {},
+    "test": {}
+  }
+}

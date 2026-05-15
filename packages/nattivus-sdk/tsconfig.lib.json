@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "declaration": true,
+    "outDir": "../../dist/packages/nattivus-sdk",
+    "rootDir": "src"
+  },
+  "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts"]
+}

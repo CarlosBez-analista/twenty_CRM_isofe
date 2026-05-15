@@ -1,0 +1,42 @@
+{
+  "name": "@nattivus/root",
+  "version": "0.0.1",
+  "private": true,
+  "license": "UNLICENSED",
+  "packageManager": "yarn@4.5.3",
+  "workspaces": [
+    "packages/*",
+    "packages/modules/*"
+  ],
+  "scripts": {
+    "dev": "nx run nattivus-shell:serve",
+    "build": "nx run-many --target=build --all",
+    "test": "nx run-many --target=test --all",
+    "lint": "nx run-many --target=lint --all",
+    "db:init": "nx run nattivus-shell:db:init",
+    "db:migrate": "nx run nattivus-shell:db:migrate",
+    "db:reset": "nx run nattivus-shell:db:reset",
+    "seed-admin": "nx run nattivus-shell:seed-admin"
+  },
+  "devDependencies": {
+    "@nx/js": "^20.0.0",
+    "@nx/nest": "^20.0.0",
+    "@nx/node": "^20.0.0",
+    "@types/bcrypt": "^6.0.0",
+    "@types/node": "^22.0.0",
+    "@types/semver": "^7.7.1",
+    "nx": "^20.0.0",
+    "prettier": "^3.4.0",
+    "typescript": "^5.6.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "argon2": "^0.44.0",
+    "bcrypt": "^6.0.0",
+    "jose": "^6.2.3",
+    "otplib": "^13.4.0",
+    "semver": "^7.8.0"
+  }
+}

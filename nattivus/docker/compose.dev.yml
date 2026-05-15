@@ -1,0 +1,52 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: nattivus-postgres
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: nattivus
+      POSTGRES_PASSWORD: nattivus_dev
+      POSTGRES_DB: nattivus_dev
+    volumes:
+      - nattivus-pg-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nattivus -d nattivus_dev"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: nattivus-redis
+    ports:
+      - "6380:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - nattivus-redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  qdrant:
+    image: qdrant/qdrant:v1.12.6
+    container_name: nattivus-qdrant
+    ports:
+      - "6334:6333"
+      - "6335:6334"
+    volumes:
+      - nattivus-qdrant-data:/qdrant/storage
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:6333/healthz || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  nattivus-pg-data:
+  nattivus-redis-data:
+  nattivus-qdrant-data:

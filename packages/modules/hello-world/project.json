@@ -1,0 +1,20 @@
+{
+  "name": "nattivus-module-hello-world",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/modules/hello-world/src",
+  "projectType": "library",
+  "tags": ["scope:nattivus", "type:module"],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/modules/hello-world",
+        "main": "packages/modules/hello-world/src/index.ts",
+        "tsConfig": "packages/modules/hello-world/tsconfig.lib.json"
+      }
+    },
+    "typecheck": {},
+    "test": {}
+  }
+}

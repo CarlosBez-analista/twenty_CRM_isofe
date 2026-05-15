@@ -1,0 +1,21 @@
+{
+  "name": "@nattivus/shell",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/main.js",
+  "scripts": {
+    "db:init": "tsx src/cli/db.ts init",
+    "db:migrate": "tsx src/cli/db.ts migrate",
+    "db:reset": "tsx src/cli/db.ts reset"
+  },
+  "dependencies": {
+    "@nattivus/sdk": "workspace:*",
+    "@nattivus/shared": "workspace:*",
+    "@nestjs/common": "11.1.16",
+    "@nestjs/core": "11.1.16",
+    "@nestjs/platform-express": "11.1.16",
+    "@nestjs/typeorm": "11.0.0",
+    "typeorm": "^0.3.28"
+  }
+}

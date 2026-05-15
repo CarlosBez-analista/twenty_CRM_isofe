@@ -3,6 +3,9 @@
 > Identificador: `001-fundacao-modular`
 > Data: `2026-05-14`
 > Roadmap: `_reversa_forward/001-fundacao-modular/roadmap.md`
+> ADR: `_reversa_sdd/adrs/0007-nattivus-subdiretorio-isolado.md`
+>
+> **Convenção de caminhos**: todos os caminhos de arquivo neste documento são relativos à raiz `nattivus/` (subdiretório isolado dentro do repo do Twenty, conforme ADR-0007). Exemplo: `package.json` → `nattivus/package.json`.
 
 ## Resumo
 
@@ -16,28 +19,28 @@
 
 | ID | Descrição | Dependências | Paralelismo | Arquivo alvo | Confidência | Status |
 |----|-----------|--------------|-------------|--------------|-------------|--------|
-| T001 | Bootstrap do monorepo Nx + Yarn 4 (raiz: `package.json`, `nx.json`, `tsconfig.base.json`, `.yarnrc.yml`) | - | `[//]` | `package.json` | 🟢 | `[ ]` |
-| T002 | Criar `docker/compose.dev.yml` com serviços Postgres (imagem `pgvector/pgvector:pg16`), Redis 7 e Qdrant 1.x | - | `[//]` | `docker/compose.dev.yml` | 🟢 | `[ ]` |
-| T003 | Criar `.env.example`, `.gitignore`, `.editorconfig`, `.prettierrc` na raiz | - | `[//]` | `.env.example` | 🟢 | `[ ]` |
-| T004 | Criar pacote `nattivus-shared` como Nx library TS pura (estrutura, `project.json`, `tsconfig`) | T001 | `[//]` | `packages/nattivus-shared/project.json` | 🟢 | `[ ]` |
-| T005 | Criar pacote `nattivus-shell` como Nx app NestJS (estrutura, `project.json`, `main.ts` stub, `app.module.ts`) | T001 | `[//]` | `packages/nattivus-shell/project.json` | 🟢 | `[ ]` |
-| T006 | Criar pacote `nattivus-sdk` como Nx library publicável (estrutura, `project.json`, scripts de build dual ESM/CJS) | T001 | `[//]` | `packages/nattivus-sdk/project.json` | 🟢 | `[ ]` |
-| T007 | Criar pacote `nattivus-ui` como Nx library de componentes React + Linaria (estrutura) | T001 | `[//]` | `packages/nattivus-ui/project.json` | 🟡 | `[ ]` |
-| T008 | Criar `packages/modules/hello-world` como Nx library com `module.manifest.ts` mínimo | T001 | `[//]` | `packages/modules/hello-world/project.json` | 🟢 | `[ ]` |
-| T009 | Implementar `BaseEntity` em `nattivus-shared/src/base-entity.ts` com colunas-base e decorators TypeORM | T004 | - | `packages/nattivus-shared/src/base-entity.ts` | 🟢 | `[ ]` |
-| T010 | Implementar `IModule`, `IModuleManifest`, `EntitySpec`, `RouteSpec`, helpers `createManifest`/`defineEntity` no SDK | T006, T009 | - | `packages/nattivus-sdk/src/manifest.ts` | 🟢 | `[ ]` |
-| T011 | Implementar `PermissionFlag` type, helper `definePermission` e decorators `@RequireAuth`/`@RequirePermission`/`@RequireDomain` no SDK | T006 | - | `packages/nattivus-sdk/src/permissions.ts` | 🟢 | `[ ]` |
-| T012 | Implementar interface `ShellClient` no SDK (stubs para `semanticSearch`, `audit`, `getCurrentWorkspace`, `getCurrentUser`) | T006 | - | `packages/nattivus-sdk/src/shell-client.ts` | 🟢 | `[ ]` |
-| T013 | Criar `migrations/001-create-extensions.sql` (`uuid-ossp`, `pgcrypto`, `citext`, `vector`) | T005 | - | `packages/nattivus-shell/migrations/001-create-extensions.sql` | 🟢 | `[ ]` |
-| T014 | Criar `migrations/002-create-auth-tables.sql` (`user`, `mfa_secret`, `backup_code`, `refresh_token` conforme `data-delta.md` §2.1–2.4) | T013 | - | `packages/nattivus-shell/migrations/002-create-auth-tables.sql` | 🟢 | `[ ]` |
-| T015 | Criar `migrations/003-create-workspace-tables.sql` (`workspace`, `workspace_member` conforme `data-delta.md` §2.5–2.6) | T013 | - | `packages/nattivus-shell/migrations/003-create-workspace-tables.sql` | 🟢 | `[ ]` |
-| T016 | Criar `migrations/004-create-module-registry.sql` (`module_registry`, `module_activation` conforme `data-delta.md` §2.7–2.8) | T015 | - | `packages/nattivus-shell/migrations/004-create-module-registry.sql` | 🟢 | `[ ]` |
-| T017 | Criar `migrations/005-create-audit-log.sql` (`audit_log` conforme `data-delta.md` §2.9) | T013 | - | `packages/nattivus-shell/migrations/005-create-audit-log.sql` | 🟢 | `[ ]` |
-| T018 | Criar `migrations/006-create-vector-index-registry.sql` (`vector_index_registry` §2.10) | T013 | - | `packages/nattivus-shell/migrations/006-create-vector-index-registry.sql` | 🟢 | `[ ]` |
-| T019 | Criar `migrations/007-enable-rls.sql` com policies `tenant_isolation` em todas tabelas com `workspace_id` e policy especial em `workspace_member` | T014, T015, T016 | - | `packages/nattivus-shell/migrations/007-enable-rls.sql` | 🟢 | `[ ]` |
-| T020 | Criar functions `tg_set_updated_at`, `tg_update_search_vector`, `tg_audit_row` e wiring de triggers nas tabelas relevantes | T019 | - | `packages/nattivus-shell/migrations/008-triggers.sql` | 🟢 | `[ ]` |
-| T021 | Configurar TypeORM `DataSource` em `nattivus-shell` com entidades correspondentes às 10 tabelas + carregamento dinâmico de entidades de módulos | T009, T020 | - | `packages/nattivus-shell/src/database/data-source.ts` | 🟢 | `[ ]` |
-| T022 | Implementar comandos CLI `db:init`, `db:migrate`, `db:reset` (yarn scripts + runner Node) | T021 | - | `packages/nattivus-shell/src/cli/db.ts` | 🟢 | `[ ]` |
+| T001 | Bootstrap do monorepo Nx + Yarn 4 em `nattivus/` (raiz: `package.json`, `nx.json`, `tsconfig.base.json`, `.yarnrc.yml`) — ADR-0007 | - | `[//]` | `nattivus/package.json` | 🟢 | `[X]` |
+| T002 | Criar `docker/compose.dev.yml` com serviços Postgres (imagem `pgvector/pgvector:pg16`), Redis 7 e Qdrant 1.x | - | `[//]` | `docker/compose.dev.yml` | 🟢 | `[X]` |
+| T003 | Criar `.env.example`, `.gitignore`, `.editorconfig`, `.prettierrc` na raiz | - | `[//]` | `.env.example` | 🟢 | `[X]` |
+| T004 | Criar pacote `nattivus-shared` como Nx library TS pura (estrutura, `project.json`, `tsconfig`) | T001 | `[//]` | `packages/nattivus-shared/project.json` | 🟢 | `[X]` |
+| T005 | Criar pacote `nattivus-shell` como Nx app NestJS (estrutura, `project.json`, `main.ts` stub, `app.module.ts`) | T001 | `[//]` | `packages/nattivus-shell/project.json` | 🟢 | `[X]` |
+| T006 | Criar pacote `nattivus-sdk` como Nx library publicável (estrutura, `project.json`, scripts de build dual ESM/CJS) | T001 | `[//]` | `packages/nattivus-sdk/project.json` | 🟢 | `[X]` |
+| T007 | Criar pacote `nattivus-ui` como Nx library de componentes React + Linaria (estrutura) | T001 | `[//]` | `packages/nattivus-ui/project.json` | 🟡 | `[X]` |
+| T008 | Criar `packages/modules/hello-world` como Nx library com `module.manifest.ts` mínimo | T001 | `[//]` | `packages/modules/hello-world/project.json` | 🟢 | `[X]` |
+| T009 | Implementar `BaseEntity` em `nattivus-shared/src/base-entity.ts` com colunas-base e decorators TypeORM | T004 | - | `packages/nattivus-shared/src/base-entity.ts` | 🟢 | `[X]` |
+| T010 | Implementar `IModule`, `IModuleManifest`, `EntitySpec`, `RouteSpec`, helpers `createManifest`/`defineEntity` no SDK | T006, T009 | - | `packages/nattivus-sdk/src/manifest.ts` | 🟢 | `[X]` |
+| T011 | Implementar `PermissionFlag` type, helper `definePermission` e decorators `@RequireAuth`/`@RequirePermission`/`@RequireDomain` no SDK | T006 | - | `packages/nattivus-sdk/src/permissions.ts` | 🟢 | `[X]` |
+| T012 | Implementar interface `ShellClient` no SDK (stubs para `semanticSearch`, `audit`, `getCurrentWorkspace`, `getCurrentUser`) | T006 | - | `packages/nattivus-sdk/src/shell-client.ts` | 🟢 | `[X]` |
+| T013 | Criar `migrations/001-create-extensions.sql` (`uuid-ossp`, `pgcrypto`, `citext`, `vector`) | T005 | - | `packages/nattivus-shell/migrations/001-create-extensions.sql` | 🟢 | `[X]` |
+| T014 | Criar `migrations/002-create-auth-tables.sql` (`user`, `mfa_secret`, `backup_code`, `refresh_token` conforme `data-delta.md` §2.1–2.4) | T013 | - | `packages/nattivus-shell/migrations/002-create-auth-tables.sql` | 🟢 | `[X]` |
+| T015 | Criar `migrations/003-create-workspace-tables.sql` (`workspace`, `workspace_member` conforme `data-delta.md` §2.5–2.6) | T013 | - | `packages/nattivus-shell/migrations/003-create-workspace-tables.sql` | 🟢 | `[X]` |
+| T016 | Criar `migrations/004-create-module-registry.sql` (`module_registry`, `module_activation` conforme `data-delta.md` §2.7–2.8) | T015 | - | `packages/nattivus-shell/migrations/004-create-module-registry.sql` | 🟢 | `[X]` |
+| T017 | Criar `migrations/005-create-audit-log.sql` (`audit_log` conforme `data-delta.md` §2.9) | T013 | - | `packages/nattivus-shell/migrations/005-create-audit-log.sql` | 🟢 | `[X]` |
+| T018 | Criar `migrations/006-create-vector-index-registry.sql` (`vector_index_registry` §2.10) | T013 | - | `packages/nattivus-shell/migrations/006-create-vector-index-registry.sql` | 🟢 | `[X]` |
+| T019 | Criar `migrations/007-enable-rls.sql` com policies `tenant_isolation` em todas tabelas com `workspace_id` e policy especial em `workspace_member` | T014, T015, T016 | - | `packages/nattivus-shell/migrations/007-enable-rls.sql` | 🟢 | `[X]` |
+| T020 | Criar functions `tg_set_updated_at`, `tg_update_search_vector`, `tg_audit_row` e wiring de triggers nas tabelas relevantes | T019 | - | `packages/nattivus-shell/migrations/008-triggers.sql` | 🟢 | `[X]` |
+| T021 | Configurar TypeORM `DataSource` em `nattivus-shell` com entidades correspondentes às 10 tabelas + carregamento dinâmico de entidades de módulos | T009, T020 | - | `packages/nattivus-shell/src/database/data-source.ts` | 🟢 | `[X]` |
+| T022 | Implementar comandos CLI `db:init`, `db:migrate`, `db:reset` (yarn scripts + runner Node) | T021 | - | `packages/nattivus-shell/src/cli/db.ts` | 🟢 | `[X]` |
 
 ## Fase 2, Testes
 
@@ -57,25 +60,25 @@
 
 | ID | Descrição | Dependências | Paralelismo | Arquivo alvo | Confidência | Status |
 |----|-----------|--------------|-------------|--------------|-------------|--------|
-| T032 | Implementar `PasswordService` com Argon2id (`hash`, `verify`, parâmetros `memoryCost=64MB`, `timeCost=3`, `parallelism=4`) | T021 | - | `packages/nattivus-shell/src/auth/password.service.ts` | 🟢 | `[ ]` |
-| T033 | Implementar `UserService` (criar, buscar por email, marcar lock, reset `failed_login_count`, marcar `mfa_enrolled_at`) | T032 | - | `packages/nattivus-shell/src/auth/user.service.ts` | 🟢 | `[ ]` |
-| T034 | Implementar `TotpService` com `otplib` (gerar segredo, gerar QR `otpauth://`, verificar token, criptografar segredo em `mfa_secret.secret_encrypted` com AES-256-GCM) | T021 | - | `packages/nattivus-shell/src/auth/totp.service.ts` | 🟢 | `[ ]` |
-| T035 | Implementar `BackupCodeService` (gerar conjunto de 10 códigos, hash bcrypt cost 12, consumir, revogar conjunto inteiro) | T021 | - | `packages/nattivus-shell/src/auth/backup-code.service.ts` | 🟢 | `[ ]` |
-| T036 | Implementar `JwtService` (EdDSA, header com `kid`, store de chaves rotacionável, verificação com lookup de kid) | T021 | - | `packages/nattivus-shell/src/auth/jwt.service.ts` | 🟢 | `[ ]` |
-| T037 | Implementar `RefreshTokenService` com rotação obrigatória, detecção de reuso (revoga toda família do user), hash SHA-256 de token opaco | T036 | - | `packages/nattivus-shell/src/auth/refresh-token.service.ts` | 🟢 | `[ ]` |
-| T038 | Implementar `TenantContextMiddleware` que extrai `workspaceId` do header `X-Workspace-Id`, valida membership e roda `SET LOCAL app.workspace_id` + `app.user_id` na conexão do request | T021, T036 | - | `packages/nattivus-shell/src/multi-tenant/tenant-context.middleware.ts` | 🟢 | `[ ]` |
-| T039 | Implementar `AuthGuard` (NestJS) que valida `Authorization: Bearer <jwt>`, popula request com user/workspaces | T036 | - | `packages/nattivus-shell/src/auth/auth.guard.ts` | 🟢 | `[ ]` |
-| T040 | Implementar `PermissionGuard` que lê metadado de `@RequirePermission(flag)` e verifica contra roles do workspace member | T039 | - | `packages/nattivus-shell/src/auth/permission.guard.ts` | 🟢 | `[ ]` |
-| T041 | Implementar `DomainGuard` extensível (recebe `DomainRuleSpec` via decorator e delega ao handler do módulo) | T040 | - | `packages/nattivus-shell/src/auth/domain.guard.ts` | 🟢 | `[ ]` |
-| T042 | Implementar `ModuleRegistryService` (CRUD em `module_registry`, comparação de versão, marcação `incompatible`) | T021 | - | `packages/nattivus-shell/src/modules/module-registry.service.ts` | 🟢 | `[ ]` |
-| T043 | Implementar `ModuleDiscoveryService`: glob `packages/modules/*/dist/module.manifest.js`, valida shape, compara `sdkVersion` com range suportado, upsert no registry | T010, T042 | - | `packages/nattivus-shell/src/modules/module-discovery.service.ts` | 🟢 | `[ ]` |
-| T044 | Implementar `ModuleActivationService`: dependências, transação, aplicar migrações do módulo, `onActivate`/`onDeactivate`, registro dinâmico de rotas | T042 | - | `packages/nattivus-shell/src/modules/module-activation.service.ts` | 🟡 | `[ ]` |
-| T045 | Implementar `VectorIndexRegistryService` (CRUD em `vector_index_registry`) | T021 | - | `packages/nattivus-shell/src/semantic/vector-index-registry.service.ts` | 🟢 | `[ ]` |
-| T046 | Implementar `PgvectorStrategy` (criar coluna `embedding vector(N)` em tabela alvo, índice HNSW, upsert, search por `<->`/`<#>`) | T045 | - | `packages/nattivus-shell/src/semantic/pgvector.strategy.ts` | 🟢 | `[ ]` |
-| T047 | Implementar `QdrantStrategy` (cliente HTTP/gRPC do Qdrant: create collection, upsert, search, delete) | T045 | - | `packages/nattivus-shell/src/semantic/qdrant.strategy.ts` | 🟢 | `[ ]` |
-| T048 | Implementar `SemanticSearchService` que despacha para `PgvectorStrategy` ou `QdrantStrategy` conforme `vector_index_registry.backend` | T046, T047 | - | `packages/nattivus-shell/src/semantic/semantic-search.service.ts` | 🟢 | `[ ]` |
-| T049 | Implementar `AuditLogService` (insert append-only, suporte a `requestId` correlation, action enum-like com strings literais) | T021 | - | `packages/nattivus-shell/src/audit/audit-log.service.ts` | 🟢 | `[ ]` |
-| T050 | Implementar `WorkspaceService` + `WorkspaceMemberService` (criar workspace, convite por email com token, aceite, roles, soft-delete) | T021 | - | `packages/nattivus-shell/src/workspace/workspace.service.ts` | 🟢 | `[ ]` |
+| T032 | Implementar `PasswordService` com Argon2id (`hash`, `verify`, parâmetros `memoryCost=64MB`, `timeCost=3`, `parallelism=4`) | T021 | - | `packages/nattivus-shell/src/auth/password.service.ts` | 🟢 | `[X]` |
+| T033 | Implementar `UserService` (criar, buscar por email, marcar lock, reset `failed_login_count`, marcar `mfa_enrolled_at`) | T032 | - | `packages/nattivus-shell/src/auth/user.service.ts` | 🟢 | `[X]` |
+| T034 | Implementar `TotpService` com `otplib` (gerar segredo, gerar QR `otpauth://`, verificar token, criptografar segredo em `mfa_secret.secret_encrypted` com AES-256-GCM) | T021 | - | `packages/nattivus-shell/src/auth/totp.service.ts` | 🟢 | `[X]` |
+| T035 | Implementar `BackupCodeService` (gerar conjunto de 10 códigos, hash bcrypt cost 12, consumir, revogar conjunto inteiro) | T021 | - | `packages/nattivus-shell/src/auth/backup-code.service.ts` | 🟢 | `[X]` |
+| T036 | Implementar `JwtService` (EdDSA, header com `kid`, store de chaves rotacionável, verificação com lookup de kid) | T021 | - | `packages/nattivus-shell/src/auth/jwt.service.ts` | 🟢 | `[X]` |
+| T037 | Implementar `RefreshTokenService` com rotação obrigatória, detecção de reuso (revoga toda família do user), hash SHA-256 de token opaco | T036 | - | `packages/nattivus-shell/src/auth/refresh-token.service.ts` | 🟢 | `[X]` |
+| T038 | Implementar `TenantContextMiddleware` que extrai `workspaceId` do header `X-Workspace-Id`, valida membership e roda `SET LOCAL app.workspace_id` + `app.user_id` na conexão do request | T021, T036 | - | `packages/nattivus-shell/src/multi-tenant/tenant-context.middleware.ts` | 🟢 | `[X]` |
+| T039 | Implementar `AuthGuard` (NestJS) que valida `Authorization: Bearer <jwt>`, popula request com user/workspaces | T036 | - | `packages/nattivus-shell/src/auth/auth.guard.ts` | 🟢 | `[X]` |
+| T040 | Implementar `PermissionGuard` que lê metadado de `@RequirePermission(flag)` e verifica contra roles do workspace member | T039 | - | `packages/nattivus-shell/src/auth/permission.guard.ts` | 🟢 | `[X]` |
+| T041 | Implementar `DomainGuard` extensível (recebe `DomainRuleSpec` via decorator e delega ao handler do módulo) | T040 | - | `packages/nattivus-shell/src/auth/domain.guard.ts` | 🟢 | `[X]` |
+| T042 | Implementar `ModuleRegistryService` (CRUD em `module_registry`, comparação de versão, marcação `incompatible`) | T021 | - | `packages/nattivus-shell/src/modules/module-registry.service.ts` | 🟢 | `[X]` |
+| T043 | Implementar `ModuleDiscoveryService`: glob `packages/modules/*/dist/module.manifest.js`, valida shape, compara `sdkVersion` com range suportado, upsert no registry | T010, T042 | - | `packages/nattivus-shell/src/modules/module-discovery.service.ts` | 🟢 | `[X]` |
+| T044 | Implementar `ModuleActivationService`: dependências, transação, aplicar migrações do módulo, `onActivate`/`onDeactivate`, registro dinâmico de rotas | T042 | - | `packages/nattivus-shell/src/modules/module-activation.service.ts` | 🟡 | `[X]` |
+| T045 | Implementar `VectorIndexRegistryService` (CRUD em `vector_index_registry`) | T021 | - | `packages/nattivus-shell/src/semantic/vector-index-registry.service.ts` | 🟢 | `[X]` |
+| T046 | Implementar `PgvectorStrategy` (criar coluna `embedding vector(N)` em tabela alvo, índice HNSW, upsert, search por `<->`/`<#>`) | T045 | - | `packages/nattivus-shell/src/semantic/pgvector.strategy.ts` | 🟢 | `[X]` |
+| T047 | Implementar `QdrantStrategy` (cliente HTTP/gRPC do Qdrant: create collection, upsert, search, delete) | T045 | - | `packages/nattivus-shell/src/semantic/qdrant.strategy.ts` | 🟢 | `[X]` |
+| T048 | Implementar `SemanticSearchService` que despacha para `PgvectorStrategy` ou `QdrantStrategy` conforme `vector_index_registry.backend` | T046, T047 | - | `packages/nattivus-shell/src/semantic/semantic-search.service.ts` | 🟢 | `[X]` |
+| T049 | Implementar `AuditLogService` (insert append-only, suporte a `requestId` correlation, action enum-like com strings literais) | T021 | - | `packages/nattivus-shell/src/audit/audit-log.service.ts` | 🟢 | `[X]` |
+| T050 | Implementar `WorkspaceService` + `WorkspaceMemberService` (criar workspace, convite por email com token, aceite, roles, soft-delete) | T021 | - | `packages/nattivus-shell/src/workspace/workspace.service.ts` | 🟢 | `[X]` |
 
 ## Fase 4, Integração
 
@@ -114,3 +117,4 @@
 | Data | Alteração | Autor |
 |------|-----------|-------|
 | 2026-05-14 | Versão inicial gerada por `/reversa-to-do` — 68 ações em 5 fases, 19 paralelizáveis | reversa |
+| 2026-05-14 | ADR-0007: todos os caminhos agora relativos a `nattivus/` (subdiretório isolado) | reversa-coding |
