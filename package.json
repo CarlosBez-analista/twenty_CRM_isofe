@@ -215,7 +215,12 @@
       "packages/twenty-cli",
       "packages/create-twenty-app",
       "packages/twenty-oxlint-rules",
-      "packages/twenty-companion"
+      "packages/twenty-companion",
+      "packages/nattivus-shared",
+      "packages/nattivus-shell",
+      "packages/nattivus-sdk",
+      "packages/nattivus-ui",
+      "packages/modules/hello-world"
     ]
   },
   "prettier": {
