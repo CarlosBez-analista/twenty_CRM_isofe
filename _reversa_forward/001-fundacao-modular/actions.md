@@ -117,4 +117,5 @@
 | Data | Alteração | Autor |
 |------|-----------|-------|
 | 2026-05-14 | Versão inicial gerada por `/reversa-to-do` — 68 ações em 5 fases, 19 paralelizáveis | reversa |
-| 2026-05-14 | ADR-0007: todos os caminhos agora relativos a `nattivus/` (subdiretório isolado) | reversa-coding |
+| 2026-05-14 | Fases 1–3 concluídas (T001–T050): monorepo, migrações, SDK, guards, services, semantic search | reversa-coding |
+| 2026-05-14 | Push: `b602db23df` → `origin/main` (135 arquivos, deps: argon2 otplib jose bcrypt semver) | reversa-coding |
