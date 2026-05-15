@@ -40,3 +40,15 @@
 {"ts":"2026-05-15T00:36:26Z","action":"T020","status":"done","files":["nattivus/packages/nattivus-shell/migrations/008-triggers.sql"]}
 {"ts":"2026-05-15T00:37:34Z","action":"T021","status":"done","files":["nattivus/packages/nattivus-shell/src/database/data-source.ts"]}
 {"ts":"2026-05-15T00:37:36Z","action":"T022","status":"done","files":["nattivus/packages/nattivus-shell/src/cli/db.ts"]}
+{"task":"T051","title":"AuthController - login + totp/verify + totp/enroll","status":"done","ts":"2026-05-15T01:27:09Z"}
+{"task":"T052","title":"AuthController - refresh + logout","status":"done","ts":"2026-05-15T01:27:09Z"}
+{"task":"T053","title":"AuthController - backup-codes/regenerate","status":"done","ts":"2026-05-15T01:27:09Z"}
+{"task":"T054","title":"ModuleAdminController - CRUD + activate/deactivate","status":"done","ts":"2026-05-15T01:27:09Z"}
+{"task":"T055","title":"MeController + HealthController","status":"done","ts":"2026-05-15T01:27:09Z"}
+{"task":"T056","title":"SemanticController - register + upsert + search","status":"done","ts":"2026-05-15T01:27:09Z"}
+{"task":"T057","title":"ModuleAdminResolver - GraphQL SDL + resolvers","status":"done","ts":"2026-05-15T01:27:09Z"}
+{"task":"T058","title":"main.ts - bootstrap completo + graceful shutdown","status":"done","ts":"2026-05-15T01:27:09Z"}
+{"task":"T059","title":"hello-world module completo - entity + manifest + migration","status":"done","ts":"2026-05-15T01:27:09Z"}
+{"task":"T060","title":"CLI seed-admin","status":"done","ts":"2026-05-15T01:27:09Z"}
+{"task":"T061","title":"CLI unlock-user","status":"done","ts":"2026-05-15T01:27:09Z"}
+{"task":"T062","title":"shell package.json + SDK .npmrc publish config","status":"done","ts":"2026-05-15T01:27:09Z"}

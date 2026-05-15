@@ -1,0 +1,38 @@
+{
+  "name": "@nattivus/shell",
+  "version": "0.0.1",
+  "description": "NattivusECO Shell — runtime, auth, module system",
+  "private": true,
+  "main": "dist/main.js",
+  "scripts": {
+    "build":        "tsc -p tsconfig.json",
+    "start":        "node dist/main.js",
+    "start:dev":    "ts-node -r tsconfig-paths/register src/main.ts",
+    "db:reset":     "ts-node src/cli/db.ts reset",
+    "db:migrate":   "ts-node src/cli/db.ts migrate",
+    "seed:admin":   "ts-node src/cli/seed-admin.ts",
+    "unlock:user":  "ts-node src/cli/unlock-user.ts",
+    "test":         "jest --config jest.config.ts",
+    "test:watch":   "jest --config jest.config.ts --watch",
+    "test:coverage":"jest --config jest.config.ts --coverage"
+  },
+  "dependencies": {
+    "argon2":  "*",
+    "bcrypt":  "*",
+    "jose":    "*",
+    "otplib":  "*",
+    "pg":      "*",
+    "redis":   "*",
+    "semver":  "*",
+    "@nattivus/sdk":    "workspace:*",
+    "@nattivus/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "*",
+    "@types/node":   "*",
+    "@types/pg":     "*",
+    "ts-node":       "*",
+    "tsconfig-paths":"*",
+    "typescript":    "*"
+  }
+}
